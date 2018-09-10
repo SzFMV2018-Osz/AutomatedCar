@@ -2,7 +2,7 @@
 # based on https://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/
 # and https://github.com/ReadyTalk/swt-bling/blob/master/.utility/push-javadoc-to-gh-pages.sh
 
-if [ "$TRAVIS_REPO_SLUG" == "SzFMV2018-Osz/AutomatedCar" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk10" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "SzFMV2018-Osz/AutomatedCar-A" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk10" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
   echo -e "Publishing javadoc...\n"
 
@@ -11,7 +11,7 @@ if [ "$TRAVIS_REPO_SLUG" == "SzFMV2018-Osz/AutomatedCar" ] && [ "$TRAVIS_JDK_VER
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
-  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/SzFMV2018-Osz/AutomatedCar gh-pages > /dev/null
+  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/SzFMV2018-Osz/AutomatedCar-A gh-pages > /dev/null
 
   cd gh-pages
   git rm -rf ./javadoc

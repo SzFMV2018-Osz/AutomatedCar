@@ -42,7 +42,7 @@ end
 
 # set variables
 $owner = "SzFMV2018-Osz"
-$repo = "AutomatedCar"
+$repo = "AutomatedCar-A"
 $branch = "master"
 $tag = "nightly"
 $filename = "./target/AutomatedCar-jar-with-dependencies.jar"
