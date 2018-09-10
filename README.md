@@ -5,7 +5,7 @@
 [![forum](https://img.shields.io/badge/forum-Everyone-94B2E0.svg)](https://github.com/orgs/SzFMV2018-Osz/teams/everyone)
 [![forum](https://img.shields.io/badge/forum-Group%20A-6FCB9F.svg)](https://github.com/orgs/SzFMV2018-Osz/teams/group-a)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-4D394B.svg)](https://szfmv2018-osz.slack.com)
-[![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://github.com/SzFMV2018-Osz/AutomatedCar-A/wiki)
+[![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://github.com/SzFMV2018-Osz/handout/blob/master/README.md)
 
 
 # AutomatedCar A
