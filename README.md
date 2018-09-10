@@ -8,7 +8,7 @@
 [![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://github.com/SzFMV2018-Osz/AutomatedCar/wiki)
 
 
-# AutomatedCar
+# AutomatedCar A
 
 The program simulates the behavior of a passenger vehicle on the public road, equipped with driver assistance functions.
 
