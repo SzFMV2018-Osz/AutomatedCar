@@ -4,14 +4,14 @@
 'UTF-8'
 -protected
 -sourcepath
-'/home/travis/build/SzFMV2018-Osz/AutomatedCar/src/main/java'
+'/home/travis/build/SzFMV2018-Osz/AutomatedCar-A/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2018. All rights reserved.'
 -charset
 'UTF-8'
 -d
-'/home/travis/build/SzFMV2018-Osz/AutomatedCar/target/site/apidocs'
+'/home/travis/build/SzFMV2018-Osz/AutomatedCar-A/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
