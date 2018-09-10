@@ -1,11 +1,11 @@
-﻿[![Build Status](https://travis-ci.org/SzFMV2018-Osz/AutomatedCar.svg?branch=master)](https://travis-ci.org/SzFMV2018-Osz/AutomatedCar)
-[![CodeFactor](https://www.codefactor.io/repository/github/szfmv2018-osz/automatedcar/badge)](https://www.codefactor.io/repository/github/szfmv2018-osz/automatedcar)
-[![codecov](https://codecov.io/gh/SzFMV2018-Osz/AutomatedCar/branch/master/graph/badge.svg)](https://codecov.io/gh/SzFMV2018-Osz/AutomatedCar)
+﻿[![Build Status](https://travis-ci.org/SzFMV2018-Osz/AutomatedCar-A.svg?branch=master)](https://travis-ci.org/SzFMV2018-Osz/AutomatedCar-A)
+[![CodeFactor](https://www.codefactor.io/repository/github/szfmv2018-osz/automatedcar-a/badge)](https://www.codefactor.io/repository/github/szfmv2018-osz/automatedcar-a)
+[![codecov](https://codecov.io/gh/SzFMV2018-Osz/AutomatedCar-A/branch/master/graph/badge.svg)](https://codecov.io/gh/SzFMV2018-Osz/AutomatedCar-A)
 [![API Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://szfmv2018-tavasz.github.io/AutomatedCar/javadoc/)
 [![forum](https://img.shields.io/badge/forum-Everyone-94B2E0.svg)](https://github.com/orgs/SzFMV2018-Osz/teams/everyone)
 [![forum](https://img.shields.io/badge/forum-Group%20A-6FCB9F.svg)](https://github.com/orgs/SzFMV2018-Osz/teams/group-a)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-4D394B.svg)](https://szfmv2018-osz.slack.com)
-[![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://github.com/SzFMV2018-Osz/AutomatedCar/wiki)
+[![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://github.com/SzFMV2018-Osz/AutomatedCar-A/wiki)
 
 
 # AutomatedCar A
