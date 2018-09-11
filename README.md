@@ -1,8 +1,8 @@
-# Szoftverfejlesztés multinacionális vállalatoknál
+# Szoftverfejlesztés multinacionális vállalatoknál - A csoport
 
-1. [Jegyzet, tudnivalók](https://github.com/SzFMV2018-Osz/AutomatedCar/wiki)
-2. [Munkarepó](https://github.com/SzFMV2018-Osz/AutomatedCar)
-3. [API dokumentáció](https://szfmv2018-Osz.github.io/AutomatedCar/javadoc/)
+1. [Jegyzet, tudnivalók](https://github.com/SzFMV2018-Osz/handout/blob/master/README.md)
+2. [Munkarepó](https://github.com/SzFMV2018-Osz/AutomatedCar-A)
+3. [API dokumentáció](https://szfmv2018-Osz.github.io/AutomatedCar-A/javadoc/)
 
 ## Tárgyleírás
 
