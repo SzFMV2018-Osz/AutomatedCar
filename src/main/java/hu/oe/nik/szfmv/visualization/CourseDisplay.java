@@ -5,16 +5,7 @@ import hu.oe.nik.szfmv.environment.WorldObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ImageObserver;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.RenderableImage;
-import java.text.AttributedCharacterIterator;
-import java.util.Map;
 
 
 /**
@@ -57,20 +48,18 @@ public class CourseDisplay extends JPanel {
 
 
     protected BufferedImage renderDoubleBufferedScreen(World world) {
-        BufferedImage DoubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Rectangle BackGroundScreen = new Rectangle(0, 0, width, height);
+        BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Rectangle backGroundScreen = new Rectangle(0, 0, width, height);
 
-        DoubleBufferedScreen.createGraphics().fill(BackGroundScreen);
-        DoubleBufferedScreen.createGraphics().setBackground(new Color(backgroundColor));
+        doubleBufferedScreen.createGraphics().fill(backGroundScreen);
+        doubleBufferedScreen.createGraphics().setBackground(new Color(backgroundColor));
 
-
-        // super.paintComponent(g);
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage();
 
-            DoubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this); // see javadoc for more info on the parameters
+            doubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this); // see javadoc for more info on the parameters
         }
-        return DoubleBufferedScreen;
+        return doubleBufferedScreen;
     }
 
 

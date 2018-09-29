@@ -46,44 +46,44 @@ public class WorldObject implements IRender {
         return this.x;
     }
 
-    public int getY() {
-        return this.y;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public float getRotation() {
-        return this.rotation;
-    }
-
-    public String getImageFileName() {
-        return this.imageFileName;
-    }
-
     public void setX(int x) {
         this.x = x;
+    }
+
+    public int getY() {
+        return this.y;
     }
 
     public void setY(int y) {
         this.y = y;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 
     public void setHeight(int height) {
         this.height = height;
     }
 
+    public float getRotation() {
+        return this.rotation;
+    }
+
     public void setRotation(float rotation) {
         this.rotation = rotation;
+    }
+
+    public String getImageFileName() {
+        return this.imageFileName;
     }
 
     public void setImageFileName(String imageFileName) {
