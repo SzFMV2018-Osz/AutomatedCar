@@ -30,9 +30,9 @@ public class Main {
         AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
 
         // add car to the world
-         w.addObjectToWorld(car);
-         w.addObjectToWorld(new WorldObject(200, 200, "car_3_black.png"));
-         w.getWorldObjects().get(1).setRotation(50);
+        w.addObjectToWorld(car);
+        w.addObjectToWorld(new WorldObject(200, 200, "car_3_black.png"));
+        w.getWorldObjects().get(1).setRotation(50);
 
         // create gui
         Gui gui = new Gui();

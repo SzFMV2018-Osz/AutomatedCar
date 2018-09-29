@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.visualization;
 
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -51,13 +52,13 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      */
     protected void paintComponent(Graphics g, World world) {
-        g.drawImage(renderDoubleBufferedScreen(world),0,0,this);
+        g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
 
-    protected BufferedImage renderDoubleBufferedScreen(World world){
-        BufferedImage DoubleBufferedScreen = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
-        Rectangle BackGroundScreen = new Rectangle(0,0,width,height);
+    protected BufferedImage renderDoubleBufferedScreen(World world) {
+        BufferedImage DoubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Rectangle BackGroundScreen = new Rectangle(0, 0, width, height);
 
         DoubleBufferedScreen.createGraphics().fill(BackGroundScreen);
         DoubleBufferedScreen.createGraphics().setBackground(new Color(backgroundColor));
@@ -67,7 +68,7 @@ public class CourseDisplay extends JPanel {
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage();
 
-            DoubleBufferedScreen.createGraphics().drawImage(object.getImage(),object.getTransformation(),this); // see javadoc for more info on the parameters
+            DoubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this); // see javadoc for more info on the parameters
         }
         return DoubleBufferedScreen;
     }

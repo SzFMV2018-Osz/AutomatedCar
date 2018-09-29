@@ -4,6 +4,7 @@ package hu.oe.nik.szfmv.environment;
 import hu.oe.nik.szfmv.visualization.IRender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -22,7 +23,7 @@ public class WorldObject implements IRender {
     protected int rotationPointX; // néhány world elemet előre definiált pont körül kell forgatni.
     protected int rotationPointY;
     protected BufferedImage image;
-    protected  AffineTransform transformTheImageToCorrectPos;
+    protected AffineTransform transformTheImageToCorrectPos;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -31,7 +32,7 @@ public class WorldObject implements IRender {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public WorldObject(int x, int y, String imageFileName){
+    public WorldObject(int x, int y, String imageFileName) {
         this.x = x;
         this.y = y;
         this.rotationPointX = x;
@@ -89,18 +90,18 @@ public class WorldObject implements IRender {
         this.imageFileName = imageFileName;
     }
 
-    public BufferedImage getImage(){
-        return  this.image;
+    public BufferedImage getImage() {
+        return this.image;
     }
 
-    public  AffineTransform getTransformation(){
+    public AffineTransform getTransformation() {
         return transformTheImageToCorrectPos;
     }
 
     @Override
     public void InitImage() {
         try {
-            image = ImageIO.  read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
+            image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
@@ -109,7 +110,7 @@ public class WorldObject implements IRender {
     @Override
     public void RotateImage() {
         transformTheImageToCorrectPos = new AffineTransform();
-        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation),rotationPointX,rotationPointY);
+        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), rotationPointX, rotationPointY);
         transformTheImageToCorrectPos.translate(x, y);
     }
 }
