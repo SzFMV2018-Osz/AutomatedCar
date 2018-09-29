@@ -27,11 +27,11 @@ public class Measurer extends JPanel {
 		g.setColor(Color.BLACK);
 		g.setFont(g.getFont().deriveFont(Font.BOLD, 10));
 
-		for (int i = 110; i <= 120 + 110; i++) {
-			int x = 58 + (int) (48 * Math.sin(i * Math.PI / 90));
-			int y = 65 - (int) (48 * Math.cos(i * Math.PI / 90));
-			if ((i-1) % 10 == 0) {
-				g.drawString(Integer.toString(i - 111), x, y);
+		for (int i = 110; i <= 120 + 10001; i++) {
+			int x = 52 + (int) (43 * Math.sin(i * Math.PI / 90));
+			int y = 68 - (int) (45 * Math.cos(i * Math.PI / 90));
+			if ((i-110) % 2000 == 0) {
+				g.drawString(Integer.toString(i - 110), x, y);
 			}
 		}
 
