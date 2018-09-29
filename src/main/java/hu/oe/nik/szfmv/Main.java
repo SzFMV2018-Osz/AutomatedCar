@@ -3,9 +3,12 @@ package hu.oe.nik.szfmv;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.World;
+import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -25,13 +28,17 @@ public class Main {
         World w = new World(800, 600);
         // create an automated car
         AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+
         // add car to the world
-        w.addObjectToWorld(car);
+         w.addObjectToWorld(car);
+         w.addObjectToWorld(new WorldObject(200, 200, "car_3_black.png"));
+         w.getWorldObjects().get(1).setRotation(50);
 
         // create gui
         Gui gui = new Gui();
 
         // draw world to course display
+
         gui.getCourseDisplay().drawWorld(w);
 
         while (true) {

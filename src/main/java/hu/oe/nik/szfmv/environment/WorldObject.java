@@ -1,12 +1,28 @@
 package hu.oe.nik.szfmv.environment;
 
-public class WorldObject {
+
+import hu.oe.nik.szfmv.visualization.IRender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class WorldObject implements IRender {
+    private static final Logger LOGGER = LogManager.getLogger();
     protected int x;
     protected int y;
     protected int width;
     protected int height;
     protected float rotation = 0f;
     protected String imageFileName;
+
+    protected int rotationPointX; // néhány world elemet előre definiált pont körül kell forgatni.
+    protected int rotationPointY;
+    protected BufferedImage image;
+    protected  AffineTransform transformTheImageToCorrectPos;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -15,10 +31,14 @@ public class WorldObject {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public WorldObject(int x, int y, String imageFileName) {
+    public WorldObject(int x, int y, String imageFileName){
         this.x = x;
         this.y = y;
+        this.rotationPointX = x;
+        this.rotationPointY = y;
         this.imageFileName = imageFileName;
+        InitImage();
+
     }
 
     public int getX() {
@@ -67,5 +87,29 @@ public class WorldObject {
 
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
+    }
+
+    public BufferedImage getImage(){
+        return  this.image;
+    }
+
+    public  AffineTransform getTransformation(){
+        return transformTheImageToCorrectPos;
+    }
+
+    @Override
+    public void InitImage() {
+        try {
+            image = ImageIO.  read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void RotateImage() {
+        transformTheImageToCorrectPos = new AffineTransform();
+        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation),rotationPointX,rotationPointY);
+        transformTheImageToCorrectPos.translate(x, y);
     }
 }
