@@ -25,13 +25,16 @@ public class Main {
         World w = new World(800, 600);
         // create an automated car
         AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+
         // add car to the world
         w.addObjectToWorld(car);
+
 
         // create gui
         Gui gui = new Gui();
 
         // draw world to course display
+
         gui.getCourseDisplay().drawWorld(w);
 
         while (true) {
