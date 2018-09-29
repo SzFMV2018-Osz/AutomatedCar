@@ -46,7 +46,12 @@ public class CourseDisplay extends JPanel {
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
-
+    /**
+     * Rendering method to avoid flickering
+     * 
+     * @param world {@link World} object that describes the virtual world
+     * @return the ready to render doubleBufferedScreen
+     */
     protected BufferedImage renderDoubleBufferedScreen(World world) {
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Rectangle backGroundScreen = new Rectangle(0, 0, width, height);
@@ -57,7 +62,7 @@ public class CourseDisplay extends JPanel {
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage();
 
-            doubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this); // see javadoc for more info on the parameters
+            doubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this);
         }
         return doubleBufferedScreen;
     }
