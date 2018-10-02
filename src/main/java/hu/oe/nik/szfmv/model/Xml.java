@@ -33,7 +33,7 @@ public class Xml {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
-                Document doc = builder.parse("C:\\Users\\Bendzsi\\IdeaProjects\\xml\\src\\com\\company\\lane_keeping_test_world.xml");
+                Document doc = builder.parse("lane_keeping_test_world.xml");
                 //Objektenként szétválaszt
                 NodeList objectList = doc.getElementsByTagName("Object");
                 for (int i = 0; i < objectList.getLength(); i++) {
