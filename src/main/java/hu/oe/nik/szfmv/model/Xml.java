@@ -28,7 +28,7 @@ public class Xml {
     private static String roadpainting_3;
     static List<osCsoport> csoport = new ArrayList<osCsoport>();
 
-    public static void main(String[] args) throws Exception {
+    public static void xmlParse() throws Exception {
         {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
