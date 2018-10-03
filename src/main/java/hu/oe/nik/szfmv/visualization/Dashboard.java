@@ -15,7 +15,6 @@ public class Dashboard extends JPanel {
 	Gui parent;
 	public int power;
 
-
 	/**
 	 * Initialize the dashboard
 	 */
@@ -30,13 +29,15 @@ public class Dashboard extends JPanel {
 		add(tachometer);
 		power = 0;
 		Timer.start();
-		
+
 	}
-	
+
 	private void CreateTachometer() {
 		tachometer.setDiameter(125);
 		tachometer.setMaxValue(10001);
 		tachometer.setViewValue(2000);
+		tachometer.setPosition(new Point(-30, -30));
+		tachometer.setSize(new Point(200, 200));
 	}
 
 	Thread Timer = new Thread() {
@@ -54,7 +55,7 @@ public class Dashboard extends JPanel {
 					Thread.sleep(100);
 				} catch (InterruptedException ex) {
 				}
-				
+
 				tachometer.repaint();
 			}
 		}

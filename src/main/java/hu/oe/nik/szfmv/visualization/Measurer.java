@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.visualization;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 
 import javax.swing.JPanel;
 
@@ -13,6 +14,16 @@ public class Measurer extends JPanel {
 	int maxValue;
 	int viewValue;
 	int diameter;
+	Point position;
+	Point size;
+	
+	public void setSize(Point size) {
+		this.size = size;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
 	
 	public void setMaxValue(int maxValue) {
 		this.maxValue = maxValue;
@@ -36,7 +47,7 @@ public class Measurer extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.setColor(new Color(0x888888));
-		g.fillOval(-30, -30, 200, 200);
+		g.fillOval(position.x, position.y, size.x, size.y);
 		g.setColor(Color.BLACK);
 		g.fillOval(3, 3, diameter, diameter); // 125,125
 		g.setColor(Color.WHITE);
