@@ -25,11 +25,18 @@ public class Dashboard extends JPanel {
 		setBackground(new Color(backgroundColor));
 		setBounds(770, 0, width, height);
 		tachometer = new Measurer(this);
+		CreateTachometer();
 		parent = pt;
 		add(tachometer);
 		power = 0;
 		Timer.start();
 		
+	}
+	
+	private void CreateTachometer() {
+		tachometer.setDiameter(125);
+		tachometer.setMaxValue(10001);
+		tachometer.setViewValue(2000);
 	}
 
 	Thread Timer = new Thread() {
