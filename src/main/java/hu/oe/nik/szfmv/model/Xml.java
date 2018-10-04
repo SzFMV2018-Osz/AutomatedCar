@@ -16,16 +16,15 @@ import org.xml.sax.SAXException;
 public class Xml {
 
     private static String type;
-    private static String x;
-    private static String y;
-    private static String m11;
-    private static String m12;
-    private static String m21;
-    private static String m22;
-    private static String rpName;
-    private static String roadpainting_1;
-    private static String roadpainting_2;
-    private static String roadpainting_3;
+    private static float x;
+    private static float y;
+    private static float m11;
+    private static float m12;
+    private static float m21;
+    private static float m22;
+    private static int roadpainting_1;
+    private static int roadpainting_2;
+    private static int roadpainting_3;
     static List<osCsoport> csoport = new ArrayList<osCsoport>();
 
     public static void xmlParse() throws Exception {
@@ -33,7 +32,7 @@ public class Xml {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
-                Document doc = builder.parse("lane_keeping_test_world.xml");
+                Document doc = builder.parse("C:\\Users\\User\\IdeaProjects\\AutomatedCar-A\\src\\main\\resources\\lane_keeping_test_world.xml");
                 //Objektenként szétválaszt
                 NodeList objectList = doc.getElementsByTagName("Object");
                 for (int i = 0; i < objectList.getLength(); i++) {
@@ -48,8 +47,8 @@ public class Xml {
                             Node n = posNodes.item(j);
                             if (n.getNodeType() == Node.ELEMENT_NODE) {
                                 Element name = (Element) n;
-                                x = name.getAttribute("x");
-                                y = name.getAttribute("y");
+                                x = Float.parseFloat(name.getAttribute("x"));
+                                y = Float.parseFloat(name.getAttribute("y"));
                             }
                         }
                         NodeList transNodes = object.getElementsByTagName("Transform");
@@ -57,26 +56,25 @@ public class Xml {
                             Node n = transNodes.item(j);
                             if (n.getNodeType() == Node.ELEMENT_NODE) {
                                 Element name = (Element) n;
-                                m11 = name.getAttribute("m11");
-                                m12 = name.getAttribute("m12");
-                                m21 = name.getAttribute("m21");
-                                m22 = name.getAttribute("m22");
+                                m11 = Float.parseFloat(name.getAttribute("m11"));
+                                m12 = Float.parseFloat(name.getAttribute("m12"));
+                                m21 = Float.parseFloat(name.getAttribute("m21"));
+                                m22 = Float.parseFloat(name.getAttribute("m22"));
                             }
                         }
-                        //Ennél a résznél baszik
                         NodeList paraNodes = object.getElementsByTagName("Parameter");
                         for (int j = 0; j < paraNodes.getLength(); j++) {
                             Node n = paraNodes.item(j);
                             if (n.getNodeType() == Node.ELEMENT_NODE) {
                                 Element name = (Element) n;
                                 if (name.getAttribute("name").contains("1")){
-                                    roadpainting_1 = name.getAttribute("value");
+                                    roadpainting_1 = Integer.parseInt(name.getAttribute("value"));
                                 }
                                 if (name.getAttribute("name").contains("2")){
-                                    roadpainting_2 = name.getAttribute("value");
+                                    roadpainting_2 = Integer.parseInt(name.getAttribute("value"));
                                 }
                                 if (name.getAttribute("name").contains("3")){
-                                    roadpainting_3 = name.getAttribute("value");
+                                    roadpainting_3 = Integer.parseInt(name.getAttribute("value"));
                                 }
                             }
                         }

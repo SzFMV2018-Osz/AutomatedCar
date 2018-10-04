@@ -2,17 +2,17 @@ package hu.oe.nik.szfmv.model;
 
 public class osCsoport {
     String type;
-    String x;
-    String y;
-    String m11;
-    String m12;
-    String m21;
-    String m22;
-    String roadpainting_1;
-    String roadpainting_2;
-    String roadpainting_3;
+    float x;
+    float y;
+    float m11;
+    float m12;
+    float m21;
+    float m22;
+    int roadpainting_1;
+    int roadpainting_2;
+    int roadpainting_3;
 
-    osCsoport(String name,String x, String y, String m11, String m12, String m21, String m22, String p1, String p2, String p3){
+    osCsoport(String name,float x, float y, float m11, float m12, float m21, float m22, int p1, int p2, int p3){
         this.type=name;
         this.x=x;
         this.y=y;
