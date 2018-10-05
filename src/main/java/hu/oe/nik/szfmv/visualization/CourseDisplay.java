@@ -49,7 +49,7 @@ public class CourseDisplay extends JPanel {
 
     /**
      * Rendering method to avoid flickering
-     * 
+     *
      * @param world {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
@@ -63,7 +63,7 @@ public class CourseDisplay extends JPanel {
         camera.Update();
 
         for (WorldObject object : world.getWorldObjects()) {
-            object.RotateImage(camera.getX(),camera.getY());
+            object.RotateImage(camera.getX(), camera.getY());
 
             doubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this);
         }
