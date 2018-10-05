@@ -3,6 +3,8 @@ package hu.oe.nik.szfmv;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.World;
+import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.Gui;
 import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
@@ -32,10 +34,12 @@ public class Main {
 
         // add car to the world
         w.addObjectToWorld(car);
-
+        w.addObjectToWorld(new WorldObject(700,400,"bollard.png"));
+        w.addObjectToWorld(new WorldObject(200,150,"bollard.png"));
 
         // create gui
         Gui gui = new Gui();
+        gui.getCourseDisplay().camera=new Camera(800,600,w,car);
 
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);

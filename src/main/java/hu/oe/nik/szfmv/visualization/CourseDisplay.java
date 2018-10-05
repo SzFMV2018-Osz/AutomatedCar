@@ -15,6 +15,7 @@ public class CourseDisplay extends JPanel {
     private final int width = 770;
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
+    public Camera camera;
 
     /**
      * Initialize the course display
@@ -59,8 +60,10 @@ public class CourseDisplay extends JPanel {
         doubleBufferedScreen.createGraphics().fill(backGroundScreen);
         doubleBufferedScreen.createGraphics().setBackground(new Color(backgroundColor));
 
+        camera.Update();
+
         for (WorldObject object : world.getWorldObjects()) {
-            object.RotateImage();
+            object.RotateImage(camera.getX(),camera.getY());
 
             doubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this);
         }

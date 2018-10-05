@@ -102,15 +102,17 @@ public class WorldObject implements IRender {
     public void InitImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
+            this.width=image.getWidth();
+            this.height=image.getHeight();
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
     }
 
     @Override
-    public void RotateImage() {
+    public void RotateImage(int cameraX, int cameraY) {
         transformTheImageToCorrectPos = new AffineTransform();
-        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), rotationPointX, rotationPointY);
-        transformTheImageToCorrectPos.translate(x, y);
+        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), x+rotationPointX, y+rotationPointY);
+        transformTheImageToCorrectPos.translate(cameraX+x, cameraY+y);
     }
 }
