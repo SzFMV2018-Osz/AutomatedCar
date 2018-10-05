@@ -39,7 +39,7 @@ public class Main {
 
         // create gui
         Gui gui = new Gui();
-        gui.getCourseDisplay().camera = new Camera(800, 600, w, car);
+        gui.getCourseDisplay().camera = new Camera(gui.getCourseDisplay().getWidth(), gui.getCourseDisplay().getHeight(), w, car);
 
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
