@@ -15,6 +15,7 @@ public class Dashboard extends JPanel {
 	Gui parent;
 	public int power;
     Pedal gasPedal;
+    Pedal breakPedal;
 
 	/**
 	 * Initialize the dashboard
@@ -31,6 +32,7 @@ public class Dashboard extends JPanel {
 		power = 0;
 		Timer.start();
         gasPedal=new Pedal();
+        breakPedal=new Pedal();
 
 	}
 
@@ -56,6 +58,9 @@ public class Dashboard extends JPanel {
 
                 if (gasPedal.level>0)
                     gasPedal.Decrease();
+                if(breakPedal.level>0)
+                    breakPedal.Decrease();
+
 
                 try {
 					Thread.sleep(100);

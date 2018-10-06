@@ -62,7 +62,7 @@ public class Gui extends JFrame {
                 if (e.getKeyCode() == e.VK_UP)
                     dashboard.gasPedal.Pressed();
                 else if (e.getKeyCode() == e.VK_DOWN)
-                {}
+                    dashboard.breakPedal.Pressed();
 
 			}
 		};
