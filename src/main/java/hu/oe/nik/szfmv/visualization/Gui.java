@@ -11,7 +11,6 @@ public class Gui extends JFrame {
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
 
-    int newValue = 0;
 
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
@@ -62,7 +61,7 @@ public class Gui extends JFrame {
                 if (e.getKeyCode() == e.VK_UP)
                     dashboard.gasPedal.Pressed();
                 else if (e.getKeyCode() == e.VK_DOWN)
-                {}
+                    dashboard.breakPedal.Pressed();
 
 			}
 		};
