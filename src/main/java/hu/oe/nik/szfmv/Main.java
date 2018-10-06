@@ -125,7 +125,7 @@ public class Main {
  * A key checker for camera debug porpuse
  */
 class Keychecker extends KeyAdapter {
-    private final int movespeed = 0;
+    private final int movespeed = 10;
     private Camera camera;
 
     /**
