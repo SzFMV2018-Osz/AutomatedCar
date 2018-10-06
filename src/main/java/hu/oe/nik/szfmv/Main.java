@@ -22,6 +22,8 @@ import java.io.File;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int[] ys = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
+    private static int[] xs = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
     /**
      * Main entrypoint of the software
@@ -55,11 +57,12 @@ public class Main {
             int pcount = poss.getLength();
             NodeList trans = doc.getDocumentElement().getElementsByTagName("Transform");
             int tcount = trans.getLength();
-            String[] names = {"road_2lane_rotary.png", "2_crossroad_1.png", "2_crossroad_2.png", "road_2lane_tjunctionleft.png",
-                    "road_2lane_90left.png", "road_2lane_90right.png", "road_2lane_45left.png", "road_2lane_45right.png", "road_2lane_6left.png",
+            String[] names = {"road_2lane_rotary.png", "2_crossroad_1.png",
+                    "2_crossroad_2.png", "road_2lane_tjunctionleft.png",
+                    "road_2lane_90left.png", "road_2lane_90right.png", "road_2lane_45left.png",
+                    "road_2lane_45right.png", "road_2lane_6left.png",
                     "road_2lane_6right.png", "car_2_white.png", "car_2_red.png"};
-            int[] xs = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
-            int[] ys = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
+
             for (int i = 0; i < objects.getLength(); i++) {
                 String filename = objects.item(i).getAttributes().getNamedItem("type").getNodeValue() + ".png";
                 int x = Integer.parseInt(poss.item(i).getAttributes().getNamedItem("x").getNodeValue());
