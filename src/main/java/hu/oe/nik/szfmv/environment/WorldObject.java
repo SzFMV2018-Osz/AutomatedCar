@@ -19,12 +19,10 @@ public class WorldObject implements IRender {
     protected int height;
     protected float rotation = 0f;
     protected String imageFileName;
-
     protected int rotationPointX; // néhány world elemet előre definiált pont körül kell forgatni.
     protected int rotationPointY;
     protected BufferedImage image;
     protected AffineTransform transformTheImageToCorrectPos;
-
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
@@ -40,6 +38,14 @@ public class WorldObject implements IRender {
         this.imageFileName = imageFileName;
         InitImage();
 
+    }
+
+    public void setRotationPointX(int rotationPointX) {
+        this.rotationPointX = rotationPointX;
+    }
+
+    public void setRotationPointY(int rotationPointY) {
+        this.rotationPointY = rotationPointY;
     }
 
     public int getX() {
