@@ -16,7 +16,6 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -123,8 +122,9 @@ public class Main {
  * A key checker for camera debug porpuse
  */
 class Keychecker extends KeyAdapter {
+    private final int movespeed = 0;
     private Camera camera;
-    private int movespeed = 0;
+
     /**
      * Init the key checker
      *
@@ -132,7 +132,7 @@ class Keychecker extends KeyAdapter {
      */
     public Keychecker(Camera c) {
         this.camera = c;
-        this.movespeed = 10;
+
 
     }
 
