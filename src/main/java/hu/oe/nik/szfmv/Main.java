@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -132,7 +133,7 @@ class Keychecker extends KeyAdapter {
     public Keychecker(Camera c) {
         this.camera = c;
     }
-
+    private final int movespeed = 10;
     /**
      * Moving the camera
      *
@@ -140,7 +141,7 @@ class Keychecker extends KeyAdapter {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-        int movespeed = 10;
+
         if (event.getKeyChar() == 'a') {
             camera.MoveCamera(movespeed, 0);
         }
