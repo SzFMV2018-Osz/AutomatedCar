@@ -14,6 +14,7 @@ public class Dashboard extends JPanel {
 	Measurer tachometer;
 	Gui parent;
 	public int power;
+    int newValue;
     Pedal gasPedal;
     Pedal breakPedal;
 
@@ -31,6 +32,7 @@ public class Dashboard extends JPanel {
 		add(tachometer);
 		power = 0;
 		Timer.start();
+        newValue=0;
         gasPedal=new Pedal();
         breakPedal=new Pedal();
 
@@ -45,16 +47,19 @@ public class Dashboard extends JPanel {
 	}
 
 	Thread Timer = new Thread() {
-		int newPower;
+        int difference;
 
 		public void run() {
 			while (true) {
-				newPower = parent.newValue - 69;
-				power = newPower;
-				if (parent.newValue > 0) {
-					parent.newValue--;
+                difference=gasPedal.level/10-breakPedal.level/10;
+                if(newValue+difference<100&&newValue+difference>0)
+                    newValue+=difference;
 
-				}
+                power=newValue-69;
+
+                if (newValue>0)
+                    newValue-=4;
+
 
                 if (gasPedal.level>0)
                     gasPedal.Decrease();
