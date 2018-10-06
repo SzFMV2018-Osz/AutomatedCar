@@ -71,7 +71,7 @@ public class Main {
                 double matrix = Utils.convertMatrixToRadians(m11, m12, m21, m22);
                 float routate = (float) Utils.radianToDegree(matrix);
                 WorldObject obj = new WorldObject(x, y, filename);
-                //obj.setRotation(routate);
+                obj.setRotation(routate);
                 for (int l = 0; l < names.length; l++) {
                     if (names[l].equals(filename)) {
                         obj.setRotationPointX(xs[l]);

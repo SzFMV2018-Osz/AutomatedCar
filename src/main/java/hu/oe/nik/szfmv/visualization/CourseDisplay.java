@@ -25,7 +25,7 @@ public class CourseDisplay extends JPanel {
         setDoubleBuffered(true);
         setLayout(null);
         setBounds(0, 0, width, height);
-        setBackground(new Color(backgroundColor));
+
     }
 
     /**
@@ -44,6 +44,8 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      */
     protected void paintComponent(Graphics g, World world) {
+
+
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
@@ -55,17 +57,17 @@ public class CourseDisplay extends JPanel {
      */
     protected BufferedImage renderDoubleBufferedScreen(World world) {
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Rectangle backGroundScreen = new Rectangle(0, 0, width, height);
-
-        doubleBufferedScreen.createGraphics().fill(backGroundScreen);
-        doubleBufferedScreen.createGraphics().setBackground(new Color(backgroundColor));
+        Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
+        Rectangle r = new Rectangle(0, 0, width, height);
+        g2d.setPaint(new Color(backgroundColor));
+        g2d.fill(r);
 
         camera.Update();
 
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage(camera.getX(), camera.getY());
 
-            doubleBufferedScreen.createGraphics().drawImage(object.getImage(), object.getTransformation(), this);
+            g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }
         return doubleBufferedScreen;
     }
