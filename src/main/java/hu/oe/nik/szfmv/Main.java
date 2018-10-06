@@ -124,7 +124,7 @@ public class Main {
  */
 class Keychecker extends KeyAdapter {
     private Camera camera;
-
+    private int movespeed = 0;
     /**
      * Init the key checker
      *
@@ -132,8 +132,10 @@ class Keychecker extends KeyAdapter {
      */
     public Keychecker(Camera c) {
         this.camera = c;
+        this.movespeed = 10;
+
     }
-    private final int movespeed = 10;
+
     /**
      * Moving the camera
      *
