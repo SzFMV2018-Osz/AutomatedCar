@@ -140,18 +140,18 @@ class Keychecker extends KeyAdapter {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-
+        int movespeed = 10;
         if (event.getKeyChar() == 'a') {
-            camera.MoveCamera(10, 0);
+            camera.MoveCamera(movespeed, 0);
         }
         if (event.getKeyChar() == 'd') {
-            camera.MoveCamera(-10, 0);
+            camera.MoveCamera(-movespeed, 0);
         }
         if (event.getKeyChar() == 'w') {
-            camera.MoveCamera(0, 10);
+            camera.MoveCamera(0, movespeed);
         }
         if (event.getKeyChar() == 's') {
-            camera.MoveCamera(0, -10);
+            camera.MoveCamera(0, -movespeed);
         }
 
     }
