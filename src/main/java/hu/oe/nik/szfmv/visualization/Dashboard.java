@@ -14,6 +14,7 @@ public class Dashboard extends JPanel {
 	Measurer tachometer;
 	Gui parent;
 	public int power;
+    Pedal gasPedal;
 
 	/**
 	 * Initialize the dashboard
@@ -29,6 +30,7 @@ public class Dashboard extends JPanel {
 		add(tachometer);
 		power = 0;
 		Timer.start();
+        gasPedal=new Pedal();
 
 	}
 
@@ -51,7 +53,11 @@ public class Dashboard extends JPanel {
 					parent.newValue--;
 
 				}
-				try {
+
+                if (gasPedal.level>0)
+                    gasPedal.Decrease();
+
+                try {
 					Thread.sleep(100);
 				} catch (InterruptedException ex) {
 				}

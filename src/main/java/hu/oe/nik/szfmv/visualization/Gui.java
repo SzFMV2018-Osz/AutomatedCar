@@ -59,10 +59,11 @@ public class Gui extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == e.VK_UP && newValue < 100)
-					newValue += 3;
-				else if (e.getKeyCode() == e.VK_DOWN && newValue > 0)
-					newValue -= 2;
+                if (e.getKeyCode() == e.VK_UP)
+                    dashboard.gasPedal.Pressed();
+                else if (e.getKeyCode() == e.VK_DOWN)
+                {}
+
 			}
 		};
 
