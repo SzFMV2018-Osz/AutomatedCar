@@ -13,8 +13,8 @@ public class Dashboard extends JPanel {
     private final int backgroundColor = 0x888888;
 
     public int power;
-    int newValue;
     int steeringWheelValue;
+    int newValue;
 
     Gui parent;
     Measurer tachometer;
@@ -24,6 +24,8 @@ public class Dashboard extends JPanel {
 
     Pedal gasPedal;
     Pedal breakPedal;
+    
+    WheelTurn wheelTurning;
 
     /**
      * Initialize the dashboard
@@ -37,8 +39,10 @@ public class Dashboard extends JPanel {
         parent = pt;
         power = 0;
         newValue = 0;
+        steeringWheelValue = 0;
         gasPedal = new Pedal();
         breakPedal = new Pedal();
+        wheelTurning = new WheelTurn();
 
         tachometer = new Measurer(this);
         speedometer = new Measurer(this);
@@ -103,12 +107,16 @@ public class Dashboard extends JPanel {
                 if (breakPedal.level > 0) {
                     breakPedal.Decrease();
                 }
+                
+                //steeringWheelValue = wheelTurning.level;
+                steeringWheel.setText("streering wheel: " + wheelTurning.level);
 
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
                 }
-                // steeringWheel.repaint();
+                //steeringWheel.repaint();
+                //speedometer.repaint();
                 tachometer.repaint();
             }
         }
