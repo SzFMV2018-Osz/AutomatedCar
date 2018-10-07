@@ -11,10 +11,14 @@ public class Dashboard extends JPanel {
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
-    Measurer tachometer;
-    Gui parent;
+
     public int power;
     int newValue;
+    
+    Gui parent;
+    Measurer tachometer;
+    Measurer speedometer;
+
     Pedal gasPedal;
     Pedal breakPedal;
 
@@ -28,17 +32,30 @@ public class Dashboard extends JPanel {
         setBounds(770, 0, width, height);
 
         parent = pt;
-
-        tachometer = new Measurer(this);
-        CreateTachometer();
-        add(tachometer);
-
         power = 0;
         newValue = 0;
         gasPedal = new Pedal();
         breakPedal = new Pedal();
 
+        tachometer = new Measurer(this);
+        speedometer = new Measurer(this);
+        
+        tachometer.setBounds(2, 0, 130, 130);
+        CreateTachometer();
+        
+        speedometer.setBounds(130,15,115,115);
+        CreateSpeedometer();
+        
+        add(tachometer);
+        add(speedometer);
+
         Timer.start();
+    }
+
+    private void CreateSpeedometer() {
+        speedometer.setDiameter(110);
+        speedometer.setMaxValue(91);
+        speedometer.setViewValue(10);
     }
 
     private void CreateTachometer() {
@@ -76,9 +93,9 @@ public class Dashboard extends JPanel {
 
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    tachometer.repaint();
-                }
+                } catch (InterruptedException ex) {}
+                
+                tachometer.repaint();
             }
         }
     };

@@ -38,14 +38,12 @@ public class Measurer extends JPanel {
     }
 
     public Measurer(Dashboard pt) {
-        setSize(130, 130);
         parent = pt;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(new Color(0x888888));
-        g.fillOval(position.x, position.y, size.x, size.y);
+        
         g.setColor(Color.BLACK);
         g.fillOval(3, 3, diameter, diameter); // 125,125
         g.setColor(Color.WHITE);
@@ -67,6 +65,6 @@ public class Measurer extends JPanel {
         tx = 58 + (int) (48 * Math.sin(parent.power * Math.PI / 90));
         ty = 65 - (int) (48 * Math.cos(parent.power * Math.PI / 90));
         g.setColor(Color.RED);
-        g.drawLine(67, 67, tx, ty);
+        g.drawLine(diameter / 2 + 5, diameter / 2 + 5, tx, ty);
     }
 }
