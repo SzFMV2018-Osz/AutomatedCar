@@ -14,10 +14,13 @@ public class Dashboard extends JPanel {
 
     public int power;
     int newValue;
-    
+    int steeringWheelValue;
+
     Gui parent;
     Measurer tachometer;
     Measurer speedometer;
+    JLabel steeringWheel;
+    JLabel debugLabel;
 
     Pedal gasPedal;
     Pedal breakPedal;
@@ -39,15 +42,25 @@ public class Dashboard extends JPanel {
 
         tachometer = new Measurer(this);
         speedometer = new Measurer(this);
-        
+        steeringWheel = new JLabel();
+        debugLabel = new JLabel();
+
         tachometer.setBounds(2, 0, 130, 130);
         CreateTachometer();
-        
-        speedometer.setBounds(130,15,115,115);
+
+        speedometer.setBounds(130, 15, 115, 115);
         CreateSpeedometer();
-        
+
+        steeringWheel.setText("streering wheel: " + steeringWheelValue);
+        steeringWheel.setBounds(5, 500, 250, 20);
+
+        debugLabel.setText("debug:");
+        debugLabel.setBounds(5, 480, 100, 20);
+
         add(tachometer);
         add(speedometer);
+        add(steeringWheel);
+        add(debugLabel);
 
         Timer.start();
     }
@@ -72,7 +85,7 @@ public class Dashboard extends JPanel {
         public void run() {
             while (true) {
                 difference = gasPedal.level / 10 - breakPedal.level / 10;
-                
+
                 if (newValue + difference < 100 && newValue + difference > 0) {
                     newValue += difference;
                 }
@@ -93,8 +106,9 @@ public class Dashboard extends JPanel {
 
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {}
-                
+                } catch (InterruptedException ex) {
+                }
+                // steeringWheel.repaint();
                 tachometer.repaint();
             }
         }
