@@ -2,6 +2,8 @@ package hu.oe.nik.szfmv.visualization;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 public class Gui extends JFrame {
@@ -35,10 +37,36 @@ public class Gui extends JFrame {
         courseDisplay = new CourseDisplay();
         add(courseDisplay);
 
-        dashboard = new Dashboard();
+        dashboard = new Dashboard(this);
         add(dashboard);
 
         setVisible(true);
+        
+        KeyListener listen = new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == e.VK_UP)
+                    dashboard.gasPedal.Pressed();
+                else if (e.getKeyCode() == e.VK_DOWN)
+                    dashboard.breakPedal.Pressed();
+
+			}
+		};
+
+		this.addKeyListener(listen);
     }
 
     public CourseDisplay getCourseDisplay() {
