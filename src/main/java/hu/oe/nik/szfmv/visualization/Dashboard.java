@@ -20,7 +20,8 @@ public class Dashboard extends JPanel {
     Pedal gasPedal;
     Pedal breakPedal;
   
-  private JProgressBar breakProgressBar;
+    private JProgressBar breakProgressBar;
+    private JProgressBar gasProgressBar;
 
 	/**
 	 * Initialize the dashboard
@@ -31,7 +32,8 @@ public class Dashboard extends JPanel {
 		setBackground(new Color(backgroundColor));
 		setBounds(770, 0, width, height);
     
-    breakProgressBar = addProgressBar(10, 10, "Break pedal");
+        breakProgressBar = addProgressBar(10, 500, "Break pedal");
+        gasProgressBar = addProgressBar(10, 530, "Gas pedal");
     
 		tachometer = new Measurer(this);
 		CreateTachometer();
