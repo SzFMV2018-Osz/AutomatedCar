@@ -9,8 +9,8 @@ import java.awt.*;
 public class Dashboard extends JPanel {
 
 	public static final int MIN_BREAK_VALUE = 0;
-  public static final int MAX_BREAK_VALUE = 100;
-  private final int width = 250;
+    public static final int MAX_BREAK_VALUE = 100;
+    private final int width = 250;
 	private final int height = 700;
 	private final int backgroundColor = 0x888888;
 	Measurer tachometer;
@@ -19,6 +19,7 @@ public class Dashboard extends JPanel {
     int newValue;
     Pedal gasPedal;
     Pedal breakPedal;
+    private JLabel gearLabel;
   
   private JProgressBar breakProgressBar;
 
@@ -31,7 +32,7 @@ public class Dashboard extends JPanel {
 		setBackground(new Color(backgroundColor));
 		setBounds(770, 0, width, height);
     
-    breakProgressBar = addProgressBar(10, 10, "Break pedal");
+        breakProgressBar = addProgressBar(10, 500, "Break pedal");
     
 		tachometer = new Measurer(this);
 		CreateTachometer();
@@ -44,11 +45,18 @@ public class Dashboard extends JPanel {
         gasPedal=new Pedal();
         breakPedal=new Pedal();
 
+        gearLabel = addLabel((width  / 2) - 20, 200, "Gear: N");
+
 	}
   public void setBreakProgress(int value) {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             breakProgressBar.setValue(value);
         }
+    }
+
+    public void setGear (String gear) {
+        String gearLabelValue = "Gear: " + gear;
+        gearLabel.setText(gearLabelValue);
     }
 
 	private void CreateTachometer() {
@@ -80,6 +88,18 @@ public class Dashboard extends JPanel {
         add(progressBar);
 
         return progressBar;
+    }
+
+    private JLabel addLabel (int offsetX, int offsetY, String defaultText) {
+        JLabel label = new JLabel(defaultText);
+        Insets insets = getInsets();
+
+        Dimension labelSize = label.getPreferredSize();
+        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+
+        add(label);
+
+        return label;
     }
 
 	Thread Timer = new Thread() {
