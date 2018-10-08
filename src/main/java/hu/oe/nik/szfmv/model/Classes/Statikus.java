@@ -1,6 +1,9 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public class Statikus extends  Targy {
+import hu.oe.nik.szfmv.environment.WorldObject;
+
+public class Statikus extends WorldObject {
+
     boolean neki_lehet_menni;
 
     public boolean isNeki_lehet_menni() {
@@ -12,12 +15,19 @@ public class Statikus extends  Targy {
     }
 
 
-    public Statikus(String type, float m11, float m12, float m21, float m22, float x, float y) {
-        super(type, m11, m12, m21, m22, x, y);
-        neki_lehet_menni = false;
+
+    /**
+     * Creates an object of the virtual world on the given coordinates with the given image.
+     *
+     * @param x             the initial x coordinate of the object
+     * @param y             the initial y coordinate of the object
+     * @param imageFileName the filename of the image representing the object in the virtual world
+     */
+    public Statikus(int x, int y, String imageFileName) {
+        super(x, y, imageFileName);
     }
-    public Statikus(String type, float m11, float m12, float m21, float m22, float x, float y , boolean neki_lehet_menni) {
-        super(type, m11, m12, m21, m22, x, y);
-        this.neki_lehet_menni = neki_lehet_menni;
-    }
+
+
+
+
 }

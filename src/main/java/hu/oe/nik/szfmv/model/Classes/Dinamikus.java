@@ -1,8 +1,18 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public abstract class Dinamikus extends Targy {
+import hu.oe.nik.szfmv.environment.WorldObject;
 
-    public Dinamikus(String type, float m11, float m12, float m21, float m22, float x, float y) {
-        super(type, m11, m12, m21, m22, x, y);
+public abstract class Dinamikus extends WorldObject {
+
+
+    /**
+     * Creates an object of the virtual world on the given coordinates with the given image.
+     *
+     * @param x             the initial x coordinate of the object
+     * @param y             the initial y coordinate of the object
+     * @param imageFileName the filename of the image representing the object in the virtual world
+     */
+    public Dinamikus(int x, int y, String imageFileName) {
+        super(x, y, imageFileName);
     }
 }
