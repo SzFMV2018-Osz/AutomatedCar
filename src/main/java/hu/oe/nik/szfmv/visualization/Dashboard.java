@@ -8,10 +8,13 @@ import java.awt.*;
  */
 public class Dashboard extends JPanel {
 
+    public static final int MIN_BREAK_VALUE = 0;
+    public static final int MAX_BREAK_VALUE = 100;
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
-
+    Measurer tachometer;
+    Gui parent;
     public int power;
     int newValue;
 
@@ -21,6 +24,10 @@ public class Dashboard extends JPanel {
 
     Pedal gasPedal;
     Pedal breakPedal;
+    
+    private JLabel gearLabel;
+    private JProgressBar breakProgressBar;
+    private JProgressBar gasProgressBar;
 
     /**
      * Initialize the dashboard
@@ -34,13 +41,36 @@ public class Dashboard extends JPanel {
         parent = pt;
         power = 0;
         newValue = 0;
+  
         gasPedal = new Pedal();
         breakPedal = new Pedal();
 
+        breakProgressBar = addProgressBar(10, 400, "Break pedal");
+        gasProgressBar = addProgressBar(10, 430, "Gas pedal");
+
         tachometer = CreateTachometer();
         speedometer = CreateSpeedometer();
+  
+        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
 
         Timer.start();
+    }
+  
+    public void setBreakProgress(int value) {
+        if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
+            breakProgressBar.setValue(value);
+        }
+    }
+    
+    public void setGasProgress(int value) {
+        if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
+            gasProgressBar.setValue(value);
+        }
+    }
+
+    public void setGear(String gear) {
+        String gearLabelValue = "Gear: " + gear;
+        gearLabel.setText(gearLabelValue);
     }
 
     private Measurer CreateSpeedometer() {
@@ -74,6 +104,41 @@ public class Dashboard extends JPanel {
 
         return panel;
     }
+  
+    private JProgressBar addProgressBar(int offsetX, int offsetY, String label) {
+        JLabel breakLabel = new JLabel(label);
+        Insets insets = getInsets();
+
+        Dimension labelSize = breakLabel.getPreferredSize();
+        breakLabel.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+
+        add(breakLabel);
+
+        JProgressBar progressBar = new JProgressBar(MIN_BREAK_VALUE, MAX_BREAK_VALUE);
+
+        Dimension size = progressBar.getPreferredSize();
+        progressBar.setBounds(insets.left + offsetX, insets.top + offsetY + labelSize.height, size.width, size.height);
+
+        progressBar.setStringPainted(true);
+        progressBar.setVisible(true);
+        progressBar.setValue(0);
+
+        add(progressBar);
+
+        return progressBar;
+    }
+  
+    private JLabel addLabel(int offsetX, int offsetY, String defaultText) {
+        JLabel label = new JLabel(defaultText);
+        Insets insets = getInsets();
+
+        Dimension labelSize = label.getPreferredSize();
+        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+
+        add(label);
+
+        return label;
+    }
 
     private void setSpeed() {
         speedometer.repaint();
@@ -93,6 +158,9 @@ public class Dashboard extends JPanel {
                 if (newValue + difference < 100 && newValue + difference > 0) {
                     newValue += difference;
                 }
+              
+                setBreakProgress(breakPedal.level);
+                setGasProgress(gasPedal.level);
 
                 power = newValue - 69;
 
