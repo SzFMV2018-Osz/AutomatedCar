@@ -44,6 +44,8 @@ public class Measurer extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         
+        g.setColor(new Color(0x888888));
+        g.fillOval(position.x, position.y, size.x, size.y);
         g.setColor(Color.BLACK);
         g.fillOval(3, 3, diameter, diameter); // 125,125
         g.setColor(Color.WHITE);
