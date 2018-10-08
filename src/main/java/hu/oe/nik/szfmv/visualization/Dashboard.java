@@ -19,9 +19,11 @@ public class Dashboard extends JPanel {
     int newValue;
     Pedal gasPedal;
     Pedal breakPedal;
-
+    
+    private JLabel gearLabel;
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
+
 
     /**
      * Initialize the dashboard
@@ -44,8 +46,13 @@ public class Dashboard extends JPanel {
         parent = pt;
         add(tachometer);
         power = 0;
-
         newValue = 0;
+        
+        gasPedal = new Pedal();
+        breakPedal = new Pedal();
+
+        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
+
         Timer.start();
     }
 
@@ -59,6 +66,11 @@ public class Dashboard extends JPanel {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             gasProgressBar.setValue(value);
         }
+    }
+
+    public void setGear(String gear) {
+        String gearLabelValue = "Gear: " + gear;
+        gearLabel.setText(gearLabelValue);
     }
 
     private void CreateTachometer() {
@@ -90,6 +102,19 @@ public class Dashboard extends JPanel {
         add(progressBar);
 
         return progressBar;
+    }
+
+
+    private JLabel addLabel(int offsetX, int offsetY, String defaultText) {
+        JLabel label = new JLabel(defaultText);
+        Insets insets = getInsets();
+
+        Dimension labelSize = label.getPreferredSize();
+        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+
+        add(label);
+
+        return label;
     }
 
     Thread Timer = new Thread() {
