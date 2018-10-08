@@ -19,9 +19,11 @@ public class Dashboard extends JPanel {
     int newValue;
     Pedal gasPedal;
     Pedal breakPedal;
+    
     private JLabel gearLabel;
-
     private JProgressBar breakProgressBar;
+    private JProgressBar gasProgressBar;
+
 
     /**
      * Initialize the dashboard
@@ -32,7 +34,11 @@ public class Dashboard extends JPanel {
         setBackground(new Color(backgroundColor));
         setBounds(770, 0, width, height);
 
-        breakProgressBar = addProgressBar(10, 500, "Break pedal");
+        gasPedal = new Pedal();
+        breakPedal = new Pedal();
+
+        breakProgressBar = addProgressBar(10, 400, "Break pedal");
+        gasProgressBar = addProgressBar(10, 430, "Gas pedal");
 
         tachometer = new Measurer(this);
         CreateTachometer();
@@ -40,18 +46,25 @@ public class Dashboard extends JPanel {
         parent = pt;
         add(tachometer);
         power = 0;
-        Timer.start();
         newValue = 0;
+        
         gasPedal = new Pedal();
         breakPedal = new Pedal();
 
         gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
 
+        Timer.start();
     }
 
     public void setBreakProgress(int value) {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             breakProgressBar.setValue(value);
+        }
+    }
+    
+    public void setGasProgress(int value) {
+        if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
+            gasProgressBar.setValue(value);
         }
     }
 
@@ -91,6 +104,7 @@ public class Dashboard extends JPanel {
         return progressBar;
     }
 
+
     private JLabel addLabel(int offsetX, int offsetY, String defaultText) {
         JLabel label = new JLabel(defaultText);
         Insets insets = getInsets();
@@ -109,23 +123,30 @@ public class Dashboard extends JPanel {
         public void run() {
             while (true) {
                 difference = gasPedal.level / 10 - breakPedal.level / 10;
-                if (newValue + difference < 100 && newValue + difference > 0)
+                
+                setBreakProgress(breakPedal.level);
+                setGasProgress(gasPedal.level);
+                
+                if (newValue + difference < 100 && newValue + difference > 0) {
                     newValue += difference;
+                }
 
                 power = newValue - 69;
 
-                if (newValue > 0)
+                if (newValue > 0) {
                     newValue -= 4;
+                }
 
-                if (gasPedal.level > 0)
+                if (gasPedal.level > 0) {
                     gasPedal.Decrease();
-                if (breakPedal.level > 0)
+                }
+                if (breakPedal.level > 0) {
                     breakPedal.Decrease();
+                }
 
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
+                } catch (InterruptedException ex) {}
 
                 tachometer.repaint();
             }
