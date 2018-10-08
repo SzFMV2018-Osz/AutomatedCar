@@ -20,6 +20,7 @@ public class Dashboard extends JPanel {
     Pedal gasPedal;
     Pedal breakPedal;
     Index index;
+    AutoTransmission autoTr;
 
     private JLabel gearLabel;
     private JLabel indexLabel;
@@ -54,6 +55,7 @@ public class Dashboard extends JPanel {
         breakPedal = new Pedal();
 
         gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
+        autoTr = new AutoTransmission();
 
         index = new Index();
         indexLabel = addLabel((width / 2) - 20, 220, "O");
@@ -141,6 +143,7 @@ public class Dashboard extends JPanel {
         public void run() {
             while (true) {
                 setIndex(index.actIndex);
+                setGear(autoTr.actGear.toString());
                 difference = gasPedal.level / 10 - breakPedal.level / 10;
 
                 setBreakProgress(breakPedal.level);

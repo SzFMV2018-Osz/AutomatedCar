@@ -62,8 +62,7 @@ public class Gui extends JFrame {
                     dashboard.gasPedal.Pressed();
                 else if (e.getKeyCode() == e.VK_DOWN)
                     dashboard.breakPedal.Pressed();
-
-                if (e.getKeyCode()== e.VK_Q )
+                else if (e.getKeyCode()== e.VK_Q )
                     dashboard.index.TurnLeft();
                 else if (e.getKeyCode()== e.VK_E)
                     dashboard.index.TurnRight();
@@ -71,6 +70,10 @@ public class Gui extends JFrame {
                     dashboard.index.Warning();
                 else if (e.getKeyCode()==e.VK_W)
                     dashboard.index.SwitchBack();
+                else if (e.getKeyCode()==e.VK_PAGE_UP)
+                    dashboard.autoTr.ShiftUp();
+                else if (e.getKeyCode()==e.VK_PAGE_DOWN)
+                    dashboard.autoTr.ShiftDown();
 
 			}
 		};
