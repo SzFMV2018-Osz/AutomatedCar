@@ -13,8 +13,7 @@ public class Dashboard extends JPanel {
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
-    Measurer tachometer;
-    Gui parent;
+
     public int power;
     int newValue;
 
