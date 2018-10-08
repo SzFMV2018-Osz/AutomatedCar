@@ -19,8 +19,10 @@ public class Dashboard extends JPanel {
     int newValue;
     Pedal gasPedal;
     Pedal breakPedal;
-    
+    Index index;
+
     private JLabel gearLabel;
+    private JLabel indexLabel;
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
 
@@ -47,11 +49,14 @@ public class Dashboard extends JPanel {
         add(tachometer);
         power = 0;
         newValue = 0;
-        
+
         gasPedal = new Pedal();
         breakPedal = new Pedal();
 
         gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
+
+        index = new Index();
+        indexLabel = addLabel((width / 2) - 20, 220, "O");
 
         Timer.start();
     }
@@ -61,7 +66,7 @@ public class Dashboard extends JPanel {
             breakProgressBar.setValue(value);
         }
     }
-    
+
     public void setGasProgress(int value) {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             gasProgressBar.setValue(value);
@@ -71,6 +76,19 @@ public class Dashboard extends JPanel {
     public void setGear(String gear) {
         String gearLabelValue = "Gear: " + gear;
         gearLabel.setText(gearLabelValue);
+    }
+
+    public void setIndex(Index.Direction d) {
+        String indexLabelValue = "O";
+        if (d == Index.Direction.left)
+            indexLabelValue = "<";
+        else if (d == Index.Direction.right)
+            indexLabelValue = ">";
+        else if (d == Index.Direction.none)
+            indexLabelValue = "O";
+        else if (d == Index.Direction.warningsign)
+            indexLabelValue = "X";
+        indexLabel.setText(indexLabelValue);
     }
 
     private void CreateTachometer() {
@@ -122,11 +140,12 @@ public class Dashboard extends JPanel {
 
         public void run() {
             while (true) {
+                setIndex(index.actIndex);
                 difference = gasPedal.level / 10 - breakPedal.level / 10;
-                
+
                 setBreakProgress(breakPedal.level);
                 setGasProgress(gasPedal.level);
-                
+
                 if (newValue + difference < 100 && newValue + difference > 0) {
                     newValue += difference;
                 }
@@ -144,9 +163,11 @@ public class Dashboard extends JPanel {
                     breakPedal.Decrease();
                 }
 
+
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {}
+                } catch (InterruptedException ex) {
+                }
 
                 tachometer.repaint();
             }

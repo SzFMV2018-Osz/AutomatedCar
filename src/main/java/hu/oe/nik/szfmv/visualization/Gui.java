@@ -63,6 +63,15 @@ public class Gui extends JFrame {
                 else if (e.getKeyCode() == e.VK_DOWN)
                     dashboard.breakPedal.Pressed();
 
+                if (e.getKeyCode()== e.VK_Q )
+                    dashboard.index.TurnLeft();
+                else if (e.getKeyCode()== e.VK_E)
+                    dashboard.index.TurnRight();
+                else if (e.getKeyCode()==e.VK_X)
+                    dashboard.index.Warning();
+                else if (e.getKeyCode()==e.VK_W)
+                    dashboard.index.SwitchBack();
+
 			}
 		};
 
