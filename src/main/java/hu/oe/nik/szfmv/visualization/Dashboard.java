@@ -14,7 +14,7 @@ public class Dashboard extends JPanel {
 
     public int power;
     int newValue;
-    
+
     Gui parent;
     Measurer tachometer;
     Measurer speedometer;
@@ -37,33 +37,50 @@ public class Dashboard extends JPanel {
         gasPedal = new Pedal();
         breakPedal = new Pedal();
 
-        tachometer = new Measurer(this);
-        speedometer = new Measurer(this);
-        
-        tachometer.setBounds(2, 0, 130, 130);
-        CreateTachometer();
-        
-        speedometer.setBounds(130,15,115,115);
-        CreateSpeedometer();
-        
-        add(tachometer);
-        add(speedometer);
+        tachometer = CreateTachometer();
+        speedometer = CreateSpeedometer();
 
         Timer.start();
     }
 
-    private void CreateSpeedometer() {
-        speedometer.setDiameter(110);
-        speedometer.setMaxValue(91);
-        speedometer.setViewValue(10);
+    private Measurer CreateSpeedometer() {
+        Measurer panel = new Measurer(this);
+        panel.setDiameter(110);
+        panel.setMaxValue(91);
+        panel.setViewValue(10);
+        panel.setPosition(new Point(-30, -30));
+        panel.setSize(new Point(200, 200));
+
+        panel.setBounds(130, 15, 115, 115);
+        panel.setVisible(true);
+
+        add(panel);
+
+        return panel;
     }
 
-    private void CreateTachometer() {
-        tachometer.setDiameter(125);
-        tachometer.setMaxValue(10001);
-        tachometer.setViewValue(2000);
-        tachometer.setPosition(new Point(-30, -30));
-        tachometer.setSize(new Point(200, 200));
+    private Measurer CreateTachometer() {
+        Measurer panel = new Measurer(this);
+        panel.setDiameter(125);
+        panel.setMaxValue(10001);
+        panel.setViewValue(2000);
+        panel.setPosition(new Point(-30, -30));
+        panel.setSize(new Point(200, 200));
+
+        panel.setBounds(2, 0, 130, 130);
+        panel.setVisible(true);
+
+        add(panel);
+
+        return panel;
+    }
+
+    private void setSpeed() {
+        speedometer.repaint();
+    }
+
+    private void setPower() {
+        tachometer.repaint();
     }
 
     Thread Timer = new Thread() {
@@ -72,7 +89,7 @@ public class Dashboard extends JPanel {
         public void run() {
             while (true) {
                 difference = gasPedal.level / 10 - breakPedal.level / 10;
-                
+
                 if (newValue + difference < 100 && newValue + difference > 0) {
                     newValue += difference;
                 }
@@ -93,9 +110,11 @@ public class Dashboard extends JPanel {
 
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {}
-                
-                tachometer.repaint();
+                } catch (InterruptedException ex) {
+                }
+
+                setSpeed();
+                setPower();
             }
         }
     };
