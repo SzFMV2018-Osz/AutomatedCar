@@ -13,8 +13,13 @@ public class Dashboard extends JPanel {
     private final int backgroundColor = 0x888888;
 
     public int power;
-    int steeringWheelValue;
-    int newValue;
+    private int newValue;
+    
+    private int steeringWheelValue;
+    
+    public int getSteeringWheelValue() {
+        return steeringWheelValue;
+    }
 
     Gui parent;
     Measurer tachometer;
@@ -24,7 +29,7 @@ public class Dashboard extends JPanel {
 
     Pedal gasPedal;
     Pedal breakPedal;
-    
+
     WheelTurn wheelTurning;
 
     /**
@@ -107,16 +112,15 @@ public class Dashboard extends JPanel {
                 if (breakPedal.level > 0) {
                     breakPedal.Decrease();
                 }
-                
-                //steeringWheelValue = wheelTurning.level;
-                steeringWheel.setText("streering wheel: " + wheelTurning.level);
+
+                steeringWheelValue = wheelTurning.level;
+                //steeringWheel.setText("streering wheel: " + steeringWheelValue);
 
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
                 }
-                //steeringWheel.repaint();
-                //speedometer.repaint();
+                // speedometer.repaint();
                 tachometer.repaint();
             }
         }
