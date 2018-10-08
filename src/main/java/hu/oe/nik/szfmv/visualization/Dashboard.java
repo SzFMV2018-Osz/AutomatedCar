@@ -25,6 +25,7 @@ public class Dashboard extends JPanel {
     Pedal breakPedal;
     
     private JLabel gearLabel;
+    private JLabel carPositionLabel;
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
 
@@ -51,6 +52,7 @@ public class Dashboard extends JPanel {
         speedometer = CreateSpeedometer();
   
         gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
+        carPositionLabel = addLabel(10, 500, "X: 0, Y: 0");
 
         Timer.start();
     }
@@ -137,6 +139,11 @@ public class Dashboard extends JPanel {
         add(label);
 
         return label;
+    }
+
+    public void setCarPosition(int x, int y) {
+        String position = "X: " + x + ", Y: " + y;
+        carPositionLabel.setText(position);
     }
 
     private void setSpeed() {
