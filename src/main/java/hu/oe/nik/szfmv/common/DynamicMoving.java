@@ -7,6 +7,15 @@ public class DynamicMoving {
     private int angle;
     private int speed;
     private Point vector;
+    private int SecundsInHour = 3600;
+    private int MetersinKilometer = 1000;
+
+    public DynamicMoving() {
+        acceleration = 0;
+        angle = 0;
+        speed = 0;
+        vector = new Point(0, 0);
+    }
 
     public int getAcceleration() {
         return acceleration;
@@ -24,18 +33,11 @@ public class DynamicMoving {
         return vector;
     }
 
-    public DynamicMoving() {
-        acceleration = 0;
-        angle = 0;
-        speed = 0;
-        vector = new Point(0,0);
-    }
-
-    public void CalculateNewVector(int acceleration){
+    public void CalculateNewVector(int acceleration) {
         speed += acceleration;
-        double road = ((double)speed/3600)*1000;
-        int newy = (int)(Math.sin((double)angle)*road);
-        int newx = (int)(Math.cos((double)angle)*road);
-        vector = new Point(newx,newy);
+        double road = ((double) speed / SecundsInHour) * MetersinKilometer;
+        int newy = (int) (Math.sin((double) angle) * road);
+        int newx = (int) (Math.cos((double) angle) * road);
+        vector = new Point(newx, newy);
     }
 }

@@ -11,7 +11,7 @@ public class DynamicMovingTest {
     DynamicMoving moving;
 
     @Test
-    public void MovingNotNull(){
+    public void MovingNotNull() {
         moving = new DynamicMoving();
 
         assertNotNull(moving);
@@ -22,22 +22,22 @@ public class DynamicMovingTest {
     }
 
     @Test
-    public void testNewVectorAccelerationChange(){
+    public void testNewVectorAccelerationChange() {
         moving = new DynamicMoving();
 
         int oldSpeed = moving.getSpeed();
         moving.CalculateNewVector(2);
 
-        assertEquals(moving.getSpeed(), oldSpeed + 2 );
+        assertEquals(moving.getSpeed(), oldSpeed + 2);
     }
 
     @Test
-    public void testNewVectorCoordinates(){
+    public void testNewVectorCoordinates() {
         moving = new DynamicMoving();
 
         Point oldPoint = moving.getVector();
         moving.CalculateNewVector(100);
 
-        assertNotEquals( oldPoint , moving.getVector());
+        assertNotEquals(oldPoint, moving.getVector());
     }
 }
