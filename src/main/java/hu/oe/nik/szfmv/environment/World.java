@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.environment;
 
+import hu.oe.nik.szfmv.model.XMLRead;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class World {
     public World(int width, int height) {
         this.width = width;
         this.height = height;
+        worldObjects = XMLRead.Read();
     }
 
     public int getWidth() {

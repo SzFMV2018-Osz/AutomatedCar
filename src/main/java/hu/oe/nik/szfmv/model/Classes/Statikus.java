@@ -23,8 +23,10 @@ public class Statikus extends WorldObject {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public Statikus(int x, int y, String imageFileName) {
+    public Statikus(int x, int y, String imageFileName, String m11s, String m12s, String m21s, String m22s)
+    {
         super(x, y, imageFileName);
+        super.Tranz_Matrix_Letrehoz(m11s,m12s,m21s,m22s);
     }
 
 
