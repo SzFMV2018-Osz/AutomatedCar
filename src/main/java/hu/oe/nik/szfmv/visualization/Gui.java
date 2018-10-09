@@ -5,12 +5,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 public class Gui extends JFrame {
 
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
-
 
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
@@ -26,8 +24,10 @@ public class Gui extends JFrame {
         setResizable(false);
         pack();
 
-        // Icon downloaded from: http://www.iconarchive.com/show/toolbar-2-icons-by-shlyapnikova/car-icon.html
-        // and available under the licence of: https://creativecommons.org/licenses/by/4.0/
+        // Icon downloaded from:
+        // http://www.iconarchive.com/show/toolbar-2-icons-by-shlyapnikova/car-icon.html
+        // and available under the licence of:
+        // https://creativecommons.org/licenses/by/4.0/
         ImageIcon carIcon = new ImageIcon(ClassLoader.getSystemResource("car-icon.png"));
         setIconImage(carIcon.getImage());
 
@@ -41,26 +41,26 @@ public class Gui extends JFrame {
         add(dashboard);
 
         setVisible(true);
-        
+
         KeyListener listen = new KeyListener() {
 
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // TODO Auto-generated method stub
 
-			}
+            }
 
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // TODO Auto-generated method stub
 
-			}
+            }
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == e.VK_UP)
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
                     dashboard.gasPedal.Pressed();
-                else if (e.getKeyCode() == e.VK_DOWN)
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     dashboard.breakPedal.Pressed();
                 else if (e.getKeyCode()== e.VK_Q )
                     dashboard.index.TurnLeft();
@@ -74,7 +74,11 @@ public class Gui extends JFrame {
                     dashboard.autoTr.ShiftUp();
                 else if (e.getKeyCode()==e.VK_PAGE_DOWN)
                     dashboard.autoTr.ShiftDown();
-
+                else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    dashboard.wheelTurning.TurnRight();
+                } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    dashboard.wheelTurning.TurnLeft();
+                }
 			}
 		};
 

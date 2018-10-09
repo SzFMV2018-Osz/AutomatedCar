@@ -10,22 +10,44 @@ public class Dashboard extends JPanel {
 
     public static final int MIN_BREAK_VALUE = 0;
     public static final int MAX_BREAK_VALUE = 100;
+    public static final int MIN_GAS_VALUE = 0;
+    public static final int MAX_GAS_VALUE = 100;
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
-    Measurer tachometer;
-    Gui parent;
+
     public int power;
-    int newValue;
+    private int newValue;
+
+    private int steeringWheelValue;
+
+    public int getSteeringWheelValue() {
+        return steeringWheelValue;
+    }
+
+
+    Gui parent;
+    Measurer tachometer;
+    Measurer speedometer;
+    
+
     Pedal gasPedal;
     Pedal breakPedal;
     Index index;
     AutoTransmission autoTr;
 
+    JLabel steeringWheel;
+    JLabel debugLabel;  
     private JLabel gearLabel;
     private JLabel indexLabel;
+    private JLabel carPositionLabel;
+
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
+
+    WheelTurn wheelTurning;
+    private TurnSignal leftTurnSignal;
+    private TurnSignal rightTurnSignal;
 
 
     /**
@@ -37,32 +59,36 @@ public class Dashboard extends JPanel {
         setBackground(new Color(backgroundColor));
         setBounds(770, 0, width, height);
 
-        gasPedal = new Pedal();
-        breakPedal = new Pedal();
-
-        breakProgressBar = addProgressBar(10, 400, "Break pedal");
-        gasProgressBar = addProgressBar(10, 430, "Gas pedal");
-
-        tachometer = new Measurer(this);
-        CreateTachometer();
-
         parent = pt;
-        add(tachometer);
         power = 0;
         newValue = 0;
+        steeringWheelValue = 0;
 
         gasPedal = new Pedal();
         breakPedal = new Pedal();
+        wheelTurning = new WheelTurn();
 
-        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
+        breakProgressBar = addProgressBar(10, 400, "Break pedal", MIN_BREAK_VALUE, MAX_BREAK_VALUE);
+        gasProgressBar = addProgressBar(10, 430, "Gas pedal", MIN_GAS_VALUE, MAX_GAS_VALUE);
+      
+        leftTurnSignal = addTurnSignal(new Point(10,200),false);
+        rightTurnSignal = addTurnSignal(new Point(200,200),true);
+
+        tachometer = CreateTachometer();
+        speedometer = CreateSpeedometer();
+      
         autoTr = new AutoTransmission();
-
         index = new Index();
-        indexLabel = addLabel((width / 2) - 20, 220, "O");
-
+  
+        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N", 0);
+        debugLabel = addLabel(5, 480, "debug:", 0);
+        steeringWheel = addLabel(5, 500, "streering wheel: " + steeringWheelValue, 20);
+        carPositionLabel = addLabel(10, 500, "X: 0, Y: 0", 0);
+        indexLabel = addLabel((width / 2) - 20, 220, "O", 0);
+      
         Timer.start();
     }
-
+  
     public void setBreakProgress(int value) {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             breakProgressBar.setValue(value);
@@ -80,6 +106,57 @@ public class Dashboard extends JPanel {
         gearLabel.setText(gearLabelValue);
     }
 
+    private Measurer CreateTachometer() {
+        Measurer panel = new Measurer(this);
+        panel.setDiameter(125);
+        panel.setMaxValue(10001);
+        panel.setViewValue(2000);
+        panel.setPosition(new Point(-30, -30));
+        panel.setSize(new Point(200, 200));
+
+        panel.setBounds(2, 0, 130, 130);
+        panel.setVisible(true);
+
+        add(panel);
+
+        return panel;
+    }
+  
+    private JProgressBar addProgressBar(int offsetX, int offsetY, String label, int minValue, int maxValue) {
+        JLabel breakLabel = new JLabel(label);
+        Insets insets = getInsets();
+
+        Dimension labelSize = breakLabel.getPreferredSize();
+        breakLabel.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+
+        add(breakLabel);
+
+        JProgressBar progressBar = new JProgressBar(minValue, maxValue);
+
+        Dimension size = progressBar.getPreferredSize();
+        progressBar.setBounds(insets.left + offsetX, insets.top + offsetY + labelSize.height, size.width, size.height);
+
+        progressBar.setStringPainted(true);
+        progressBar.setVisible(true);
+        progressBar.setValue(0);
+
+        add(progressBar);
+
+        return progressBar;
+    }
+  
+    private JLabel addLabel(int offsetX, int offsetY, String defaultText) {
+        JLabel label = new JLabel(defaultText);
+        Insets insets = getInsets();
+
+        Dimension labelSize = label.getPreferredSize();
+        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+
+        add(label);
+
+        return label;
+    }
+  
     public void setIndex(Index.Direction d) {
         String indexLabelValue = "O";
         if (d == Index.Direction.left)
@@ -93,44 +170,56 @@ public class Dashboard extends JPanel {
         indexLabel.setText(indexLabelValue);
     }
 
-    private void CreateTachometer() {
-        tachometer.setDiameter(125);
-        tachometer.setMaxValue(10001);
-        tachometer.setViewValue(2000);
-        tachometer.setPosition(new Point(-30, -30));
-        tachometer.setSize(new Point(200, 200));
+    public void setTurnSignal(boolean left, boolean right) {
+        if (left) {
+            leftTurnSignal.setColor(Color.GREEN);
+        } else {
+            leftTurnSignal.setColor(Color.black);
+        }
+
+        if (right) {
+            rightTurnSignal.setColor(Color.GREEN);
+        } else {
+            rightTurnSignal.setColor(Color.black);
+        }
     }
 
-    private JProgressBar addProgressBar(int offsetX, int offsetY, String label) {
-        JLabel breakLabel = new JLabel(label);
+    private TurnSignal addTurnSignal(Point position, boolean isRightArrow) {
+        TurnSignal turnSignal = new TurnSignal();
+        turnSignal.setPosition(position);
+        turnSignal.setColor(Color.black);
+        turnSignal.setOrientation(isRightArrow);
+        Dimension arrow = turnSignal.getPreferedSize();
         Insets insets = getInsets();
+        turnSignal.setBounds(insets.left,insets.top,arrow.width,arrow.height);
 
-        Dimension labelSize = breakLabel.getPreferredSize();
-        breakLabel.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
-
-        add(breakLabel);
-
-        JProgressBar progressBar = new JProgressBar(MIN_BREAK_VALUE, MAX_BREAK_VALUE);
-
-        Dimension size = progressBar.getPreferredSize();
-        progressBar.setBounds(insets.left + offsetX, insets.top + offsetY + labelSize.height, size.width, size.height);
-
-        progressBar.setStringPainted(true);
-        progressBar.setVisible(true);
-        progressBar.setValue(0);
-
-        add(progressBar);
-
-        return progressBar;
+        add(turnSignal);
+        return turnSignal;
+    }
+  
+    public void setCarPosition(int x, int y) {
+        String position = "X: " + x + ", Y: " + y;
+        carPositionLabel.setText(position);
     }
 
+    private void setSpeed() {
+        speedometer.repaint();
+    }
 
-    private JLabel addLabel(int offsetX, int offsetY, String defaultText) {
+    private void setPower() {
+        tachometer.repaint();
+    }
+
+    private void setWheel(int value) {
+        steeringWheel.setText("streering wheel: " + value);
+    }
+
+    private JLabel addLabel(int offsetX, int offsetY, String defaultText, int plusSize) {
         JLabel label = new JLabel(defaultText);
         Insets insets = getInsets();
 
         Dimension labelSize = label.getPreferredSize();
-        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width, labelSize.height);
+        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width + plusSize, labelSize.height);
 
         add(label);
 
@@ -146,12 +235,12 @@ public class Dashboard extends JPanel {
                 setGear(autoTr.actGear.toString());
                 difference = gasPedal.level / 10 - breakPedal.level / 10;
 
-                setBreakProgress(breakPedal.level);
-                setGasProgress(gasPedal.level);
-
                 if (newValue + difference < 100 && newValue + difference > 0) {
                     newValue += difference;
                 }
+              
+                setBreakProgress(breakPedal.level);
+                setGasProgress(gasPedal.level);
 
                 power = newValue - 69;
 
@@ -162,17 +251,20 @@ public class Dashboard extends JPanel {
                 if (gasPedal.level > 0) {
                     gasPedal.Decrease();
                 }
+
                 if (breakPedal.level > 0) {
                     breakPedal.Decrease();
                 }
 
+                setWheel(wheelTurning.level);
 
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
                 }
 
-                tachometer.repaint();
+                setSpeed();
+                setPower();
             }
         }
     };
