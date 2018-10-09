@@ -10,6 +10,8 @@ public class Dashboard extends JPanel {
 
     public static final int MIN_BREAK_VALUE = 0;
     public static final int MAX_BREAK_VALUE = 100;
+    public static final int MIN_GAS_VALUE = 0;
+    public static final int MAX_GAS_VALUE = 100;
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
@@ -39,6 +41,9 @@ public class Dashboard extends JPanel {
     private JProgressBar gasProgressBar;
 
     WheelTurn wheelTurning;
+    private TurnSignal leftTurnSignal;
+    private TurnSignal rightTurnSignal;
+
 
     /**
      * Initialize the dashboard
@@ -58,8 +63,8 @@ public class Dashboard extends JPanel {
         breakPedal = new Pedal();
         wheelTurning = new WheelTurn();
 
-        breakProgressBar = addProgressBar(10, 400, "Break pedal");
-        gasProgressBar = addProgressBar(10, 430, "Gas pedal");
+        breakProgressBar = addProgressBar(10, 400, "Break pedal", MIN_BREAK_VALUE, MAX_BREAK_VALUE);
+        gasProgressBar = addProgressBar(10, 430, "Gas pedal", MIN_GAS_VALUE, MAX_GAS_VALUE);
 
         tachometer = CreateTachometer();
         speedometer = CreateSpeedometer();
@@ -68,6 +73,9 @@ public class Dashboard extends JPanel {
         debugLabel = addLabel(5, 480, "debug:", 0);
         steeringWheel = addLabel(5, 500, "streering wheel: " + steeringWheelValue, 20);
         carPositionLabel = addLabel(10, 500, "X: 0, Y: 0", 0);
+
+        leftTurnSignal = addTurnSignal(new Point(10,200),false);
+        rightTurnSignal = addTurnSignal(new Point(200,200),true);
 
         Timer.start();
     }
@@ -121,7 +129,7 @@ public class Dashboard extends JPanel {
         return panel;
     }
   
-    private JProgressBar addProgressBar(int offsetX, int offsetY, String label) {
+    private JProgressBar addProgressBar(int offsetX, int offsetY, String label, int minValue, int maxValue) {
         JLabel breakLabel = new JLabel(label);
         Insets insets = getInsets();
 
@@ -130,7 +138,7 @@ public class Dashboard extends JPanel {
 
         add(breakLabel);
 
-        JProgressBar progressBar = new JProgressBar(MIN_BREAK_VALUE, MAX_BREAK_VALUE);
+        JProgressBar progressBar = new JProgressBar(minValue, maxValue);
 
         Dimension size = progressBar.getPreferredSize();
         progressBar.setBounds(insets.left + offsetX, insets.top + offsetY + labelSize.height, size.width, size.height);
@@ -156,6 +164,33 @@ public class Dashboard extends JPanel {
         return label;
     }
 
+    public void setTurnSignal(boolean left, boolean right) {
+        if (left) {
+            leftTurnSignal.setColor(Color.GREEN);
+        } else {
+            leftTurnSignal.setColor(Color.black);
+        }
+
+        if (right) {
+            rightTurnSignal.setColor(Color.GREEN);
+        } else {
+            rightTurnSignal.setColor(Color.black);
+        }
+    }
+
+    private TurnSignal addTurnSignal(Point position, boolean isRightArrow) {
+        TurnSignal turnSignal = new TurnSignal();
+        turnSignal.setPosition(position);
+        turnSignal.setColor(Color.black);
+        turnSignal.setOrientation(isRightArrow);
+        Dimension arrow = turnSignal.getPreferedSize();
+        Insets insets = getInsets();
+        turnSignal.setBounds(insets.left,insets.top,arrow.width,arrow.height);
+
+        add(turnSignal);
+        return turnSignal;
+    }
+  
     public void setCarPosition(int x, int y) {
         String position = "X: " + x + ", Y: " + y;
         carPositionLabel.setText(position);
