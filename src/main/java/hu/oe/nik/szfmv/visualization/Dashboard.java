@@ -15,11 +15,20 @@ public class Dashboard extends JPanel {
     private final int backgroundColor = 0x888888;
 
     public int power;
-    int newValue;
+    private int newValue;
+
+    private int steeringWheelValue;
+
+    public int getSteeringWheelValue() {
+        return steeringWheelValue;
+    }
+
 
     Gui parent;
     Measurer tachometer;
     Measurer speedometer;
+    JLabel steeringWheel;
+    JLabel debugLabel;
 
     Pedal gasPedal;
     Pedal breakPedal;
@@ -27,6 +36,8 @@ public class Dashboard extends JPanel {
     private JLabel gearLabel;
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
+
+    WheelTurn wheelTurning;
 
     /**
      * Initialize the dashboard
@@ -40,9 +51,11 @@ public class Dashboard extends JPanel {
         parent = pt;
         power = 0;
         newValue = 0;
-  
+        steeringWheelValue = 0;
+
         gasPedal = new Pedal();
         breakPedal = new Pedal();
+        wheelTurning = new WheelTurn();
 
         breakProgressBar = addProgressBar(10, 400, "Break pedal");
         gasProgressBar = addProgressBar(10, 430, "Gas pedal");
@@ -50,7 +63,9 @@ public class Dashboard extends JPanel {
         tachometer = CreateTachometer();
         speedometer = CreateSpeedometer();
   
-        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N");
+        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N", 0);
+        debugLabel = addLabel(5, 480, "debug:", 0);
+        steeringWheel = addLabel(5, 500, "streering wheel: " + steeringWheelValue, 20);
 
         Timer.start();
     }
@@ -147,6 +162,22 @@ public class Dashboard extends JPanel {
         tachometer.repaint();
     }
 
+    private void setWheel(int value) {
+        steeringWheel.setText("streering wheel: " + value);
+    }
+
+    private JLabel addLabel(int offsetX, int offsetY, String defaultText, int plusSize) {
+        JLabel label = new JLabel(defaultText);
+        Insets insets = getInsets();
+
+        Dimension labelSize = label.getPreferredSize();
+        label.setBounds(insets.left + offsetX, insets.top + offsetY, labelSize.width + plusSize, labelSize.height);
+
+        add(label);
+
+        return label;
+    }
+
     Thread Timer = new Thread() {
         int difference;
 
@@ -174,6 +205,10 @@ public class Dashboard extends JPanel {
                 if (breakPedal.level > 0) {
                     breakPedal.Decrease();
                 }
+
+                setWheel(wheelTurning.level);
+                // steeringWheelValue = wheelTurning.level;
+                // steeringWheel.setText("streering wheel: " + steeringWheelValue);
 
                 try {
                     Thread.sleep(100);
