@@ -62,27 +62,28 @@ public class Gui extends JFrame {
                     dashboard.gasPedal.Pressed();
                 } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     dashboard.breakPedal.Pressed();
-                else if (e.getKeyCode()== e.VK_Q )
-                    dashboard.index.TurnLeft();
-                else if (e.getKeyCode()== e.VK_E)
-                    dashboard.index.TurnRight();
-                else if (e.getKeyCode()==e.VK_X)
-                    dashboard.index.Warning();
-                else if (e.getKeyCode()==e.VK_W)
-                    dashboard.index.SwitchBack();
-                else if (e.getKeyCode()==e.VK_PAGE_UP)
-                    dashboard.autoTr.ShiftUp();
-                else if (e.getKeyCode()==e.VK_PAGE_DOWN)
-                    dashboard.autoTr.ShiftDown();
-                else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     dashboard.wheelTurning.TurnRight();
                 } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                     dashboard.wheelTurning.TurnLeft();
+                } else if (e.getKeyCode() == KeyEvent.VK_Q) {
+                    dashboard.index.TurnLeft();
+                } else if (e.getKeyCode() == KeyEvent.VK_E) {
+                    dashboard.index.TurnRight();
+                } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                    dashboard.index.Warning();
+                } else if (e.getKeyCode() == KeyEvent.VK_W) {
+                    dashboard.index.SwitchBack();
+                } else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+                    dashboard.autoTr.ShiftUp();
+                } else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+                    dashboard.autoTr.ShiftDown();
                 }
-			}
-		};
+            }
+        };
 
-		this.addKeyListener(listen);
+        this.addKeyListener(listen);
+
     }
 
     public CourseDisplay getCourseDisplay() {

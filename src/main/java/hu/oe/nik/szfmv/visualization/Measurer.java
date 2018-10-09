@@ -43,11 +43,11 @@ public class Measurer extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        
+
         g.setColor(new Color(0x888888));
         g.fillOval(position.x, position.y, size.x, size.y);
         g.setColor(Color.BLACK);
-        g.fillOval(3, 3, diameter, diameter); // 125,125
+        g.fillOval(3, 3, diameter, diameter);
         g.setColor(Color.WHITE);
         g.fillOval(6, 6, diameter - 6, diameter - 6);
         g.setColor(Color.RED);
@@ -55,10 +55,10 @@ public class Measurer extends JPanel {
         g.setColor(Color.BLACK);
         g.setFont(g.getFont().deriveFont(Font.BOLD, 10));
 
-        for (int i = 110; i <= 120 + maxValue; i++) { // 10001
+        for (int i = 110; i <= 120 + maxValue; i++) {
             int x = 52 + (int) (43 * Math.sin(i * Math.PI / 90));
             int y = 68 - (int) (45 * Math.cos(i * Math.PI / 90));
-            if ((i - 110) % viewValue == 0) { // 2000
+            if ((i - 110) % viewValue == 0) {
                 g.drawString(Integer.toString(i - 110), x, y);
             }
         }
