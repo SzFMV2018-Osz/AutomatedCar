@@ -36,6 +36,7 @@ public class Dashboard extends JPanel {
     Pedal breakPedal;
     
     private JLabel gearLabel;
+    private JLabel carPositionLabel;
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
 
@@ -71,6 +72,8 @@ public class Dashboard extends JPanel {
         gearLabel = addLabel((width / 2) - 20, 200, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
         steeringWheel = addLabel(5, 500, "streering wheel: " + steeringWheelValue, 20);
+        carPositionLabel = addLabel(10, 500, "X: 0, Y: 0", 0);
+
         leftTurnSignal = addTurnSignal(new Point(10,200),false);
         rightTurnSignal = addTurnSignal(new Point(200,200),true);
 
@@ -186,6 +189,11 @@ public class Dashboard extends JPanel {
 
         add(turnSignal);
         return turnSignal;
+    }
+  
+    public void setCarPosition(int x, int y) {
+        String position = "X: " + x + ", Y: " + y;
+        carPositionLabel.setText(position);
     }
 
     private void setSpeed() {
