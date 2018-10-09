@@ -19,7 +19,6 @@ public class WorldObject implements IRender {
     protected int height;
     protected float rotation = 0f;
     protected String imageFileName;
-
     protected int rotationPointX; // néhány world elemet előre definiált pont körül kell forgatni.
     protected int rotationPointY;
     protected BufferedImage image;
@@ -35,11 +34,19 @@ public class WorldObject implements IRender {
     public WorldObject(int x, int y, String imageFileName) {
         this.x = x;
         this.y = y;
-        this.rotationPointX = x;
-        this.rotationPointY = y;
+        this.rotationPointX = 0;
+        this.rotationPointY = 0;
         this.imageFileName = imageFileName;
         InitImage();
 
+    }
+
+    public void setRotationPointX(int rotationPointX) {
+        this.rotationPointX = rotationPointX;
+    }
+
+    public void setRotationPointY(int rotationPointY) {
+        this.rotationPointY = rotationPointY;
     }
 
     public int getX() {
@@ -98,6 +105,9 @@ public class WorldObject implements IRender {
         return transformTheImageToCorrectPos;
     }
 
+    /**
+     * Create the image file for render
+     */
     @Override
     public void InitImage() {
         try {
@@ -109,10 +119,16 @@ public class WorldObject implements IRender {
         }
     }
 
+    /**
+     * Rotate the image to the correct pos
+     * @param cameraX the camera x for offset
+     * @param cameraY the camera y for offset
+     */
     @Override
     public void RotateImage(int cameraX, int cameraY) {
         transformTheImageToCorrectPos = new AffineTransform();
-        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), x + rotationPointX, y + rotationPointY);
-        transformTheImageToCorrectPos.translate(cameraX + x, cameraY + y);
+        transformTheImageToCorrectPos.rotate(Math.toRadians(-rotation), cameraX + x, cameraY + y);
+        transformTheImageToCorrectPos.translate(cameraX + x - rotationPointX, cameraY + y - rotationPointY);
+
     }
 }
