@@ -6,7 +6,7 @@ import java.util.Map;
 public class AutoTransmission {
 
     public enum Gear {
-        B(1), D(4), N(3), P(2);
+        R(1), D(4), N(3), P(2);
         private int gearNum;
 
         Gear(int gearNum) {

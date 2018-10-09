@@ -68,8 +68,8 @@ public class Dashboard extends JPanel {
         breakProgressBar = addProgressBar(10, 400, "Break pedal", MIN_BREAK_VALUE, MAX_BREAK_VALUE);
         gasProgressBar = addProgressBar(10, 430, "Gas pedal", MIN_GAS_VALUE, MAX_GAS_VALUE);
 
-        leftTurnSignal = addTurnSignal(new Point(10, 200), false);
-        rightTurnSignal = addTurnSignal(new Point(200, 200), true);
+        leftTurnSignal = addTurnSignal(new Point(10, 300), false);
+        rightTurnSignal = addTurnSignal(new Point(200, 300), true);
 
         tachometer = CreateTachometer();
         speedometer = CreateSpeedometer();
@@ -77,9 +77,9 @@ public class Dashboard extends JPanel {
         autoTr = new AutoTransmission();
         index = new Index();
 
-        gearLabel = addLabel((width / 2) - 20, 200, "Gear: N", 0);
+        gearLabel = addLabel((width / 2) - 30, 300, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
-        steeringWheel = addLabel(5, 500, "streering wheel: " + steeringWheelValue, 20);
+        steeringWheel = addLabel(5, 500, "steering wheel: " + steeringWheelValue, 20);
         carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 0);
         indexLabel = addLabel((width / 2) - 20, 220, "O", 0);
 
@@ -146,13 +146,9 @@ public class Dashboard extends JPanel {
         turnSignal.setPosition(position);
         turnSignal.setColor(Color.BLACK);
         turnSignal.setOrientation(isRightArrow);
-
-        // Dimension arrow = turnSignal.getPreferedSize();
-        Insets insets = getInsets();
-        // turnSignal.setBounds(insets.left, insets.top, 250, 200);
-
+        Dimension arrow = turnSignal.getPreferedSize();
+        turnSignal.setBounds(position.x, position.y, arrow.width, arrow.height);
         add(turnSignal);
-
         return turnSignal;
     }
 
@@ -202,16 +198,16 @@ public class Dashboard extends JPanel {
     }
 
     private void setTurnSignal(boolean left, boolean right) {
-        if (left) {
+        if (left && leftTurnSignal.color != Color.GREEN) {
             leftTurnSignal.setColor(Color.GREEN);
         } else {
             leftTurnSignal.setColor(Color.BLACK);
         }
 
-        if (right) {
+        if (right && rightTurnSignal.color != Color.GREEN) {
             rightTurnSignal.setColor(Color.GREEN);
         } else {
-            rightTurnSignal.setColor(Color.BLACK);
+            rightTurnSignal.setColor(Color.black);
         }
         leftTurnSignal.repaint();
         rightTurnSignal.repaint();
@@ -231,7 +227,7 @@ public class Dashboard extends JPanel {
     }
 
     private void setWheel(int value) {
-        steeringWheel.setText("streering wheel: " + value);
+        steeringWheel.setText("steering wheel: " + value);
     }
 
     Thread Timer = new Thread() {
