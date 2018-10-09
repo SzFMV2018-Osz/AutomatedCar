@@ -60,43 +60,28 @@ public class XMLRead
                     }
                 }
             }
+            return  wordElements;
         }
         catch (Exception e)
         {
             System.out.println(e.getMessage());
+            return null;
         }
-
-        return  wordElements;
     }
 
     private static hu.oe.nik.szfmv.model.Classes.Statikus staticObjBuilder(Element element) throws Exception
     {
-        aktualElements = element.getElementsByTagName("Postion");
-        for (int i = 0; i < aktualElements.getLength(); i++) {
-            Node n = aktualElements.item(i);
-            if (n.getNodeType() == Node.ELEMENT_NODE) {
-                Element name = (Element) n;
-                x = Integer.parseInt(name.getAttribute("x"));
-                y = Integer.parseInt(name.getAttribute("y"));
-            }
-        }
-        aktualElements = element.getElementsByTagName("Transform");
-        for (int j = 0; j < aktualElements.getLength(); j++) {
-            Node n = aktualElements.item(j);
-            if (n.getNodeType() == Node.ELEMENT_NODE) {
-                Element name = (Element) n;
-                m11 = name.getAttribute("m11");
-                m12 = name.getAttribute("m12");
-                m21 = name.getAttribute("m21");
-                m22 = name.getAttribute("m22");
-            }
-        }
-
+        builderComponents(element);
         return new Statikus(x,y,imageFileName,m11,m12,m21,m22);
-
     }
 
     private static hu.oe.nik.szfmv.model.Classes.NPC npcBuilder(Element element) throws Exception
+    {
+        builderComponents(element);
+        return new NPC(x,y,imageFileName,m11,m12,m21,m22);
+    }
+
+    private static void builderComponents(Element element)
     {
         aktualElements = element.getElementsByTagName("Postion");
         for (int i = 0; i < aktualElements.getLength(); i++) {
@@ -118,7 +103,5 @@ public class XMLRead
                 m22 = name.getAttribute("m22");
             }
         }
-
-        return new NPC(x,y,imageFileName,m11,m12,m21,m22);
     }
 }
