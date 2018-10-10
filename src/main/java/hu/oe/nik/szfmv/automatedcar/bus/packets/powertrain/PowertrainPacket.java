@@ -5,6 +5,9 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     private int rmp;
     private double speed;
 
+    /**
+     * PowertrainPacket consturctor
+     */
     public PowertrainPacket() {
         this.rmp = 0;
         this.speed = 0d;
