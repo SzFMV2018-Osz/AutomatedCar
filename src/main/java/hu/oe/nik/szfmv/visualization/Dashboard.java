@@ -37,7 +37,6 @@ public class Dashboard extends JPanel {
     private JLabel steeringWheel;
     private JLabel debugLabel;
     private JLabel gearLabel;
-    private JLabel indexLabel;
     private JLabel carPositionLabel;
 
     private JProgressBar breakProgressBar;
@@ -68,8 +67,8 @@ public class Dashboard extends JPanel {
         breakProgressBar = addProgressBar(10, 400, "Break pedal", MIN_BREAK_VALUE, MAX_BREAK_VALUE);
         gasProgressBar = addProgressBar(10, 430, "Gas pedal", MIN_GAS_VALUE, MAX_GAS_VALUE);
 
-        leftTurnSignal = addTurnSignal(new Point(10, 300), false);
-        rightTurnSignal = addTurnSignal(new Point(200, 300), true);
+        leftTurnSignal = addTurnSignal(new Point(10, 150), false);
+        rightTurnSignal = addTurnSignal(new Point(200, 150), true);
 
         tachometer = CreateTachometer();
         speedometer = CreateSpeedometer();
@@ -77,11 +76,10 @@ public class Dashboard extends JPanel {
         autoTr = new AutoTransmission();
         index = new Index();
 
-        gearLabel = addLabel((width / 2) - 30, 300, "Gear: N", 0);
+        gearLabel = addLabel((width / 2) - 30, 155, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
         steeringWheel = addLabel(5, 500, "steering wheel: " + steeringWheelValue, 20);
         carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 0);
-        indexLabel = addLabel((width / 2) - 20, 220, "O", 0);
 
         Timer.start();
     }
@@ -182,7 +180,6 @@ public class Dashboard extends JPanel {
     }
 
     private void setIndex(Index.Direction d) {
-        String indexLabelValue = "O";
 
         if (d == Index.Direction.left) {
             setTurnSignal(true, false);
@@ -194,7 +191,6 @@ public class Dashboard extends JPanel {
             setTurnSignal(true, true);
         }
 
-        indexLabel.setText(indexLabelValue);
     }
 
     private void setTurnSignal(boolean left, boolean right) {
@@ -230,7 +226,7 @@ public class Dashboard extends JPanel {
         steeringWheel.setText("steering wheel: " + value);
     }
 
-    Thread Timer = new Thread() {
+    private Thread Timer = new Thread() {
         int difference;
 
         public void run() {
