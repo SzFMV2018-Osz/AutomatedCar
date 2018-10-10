@@ -1,29 +1,23 @@
 package hu.oe.nik.szfmv.model;
 
-import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
-
-import javax.swing.*;
-import javax.xml.parsers.*;
-import java.io.*;
-import java.util.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-
-import hu.oe.nik.szfmv.model.Classes.Dinamikus;
 import hu.oe.nik.szfmv.model.Classes.NPC;
 import hu.oe.nik.szfmv.model.Classes.Statikus;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XMLRead
 {
     private static String imageFileName;
-    private static int x;
-    private static int y;
+    private static float x;
+    private static float y;
     private static String m11;
     private static String m12;
     private static String m21;
@@ -40,7 +34,7 @@ public class XMLRead
         {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse("C:\\Users\\User\\IdeaProjects\\AutomatedCar-A\\src\\main\\resources\\test_world.xml");
+            Document doc = builder.parse("src/main/resources/test_world.xml");
             NodeList objectList = doc.getElementsByTagName("Object");
             for (int i = 0; i < objectList.getLength(); i++)
             {
@@ -72,24 +66,24 @@ public class XMLRead
     private static hu.oe.nik.szfmv.model.Classes.Statikus staticObjBuilder(Element element) throws Exception
     {
         builderComponents(element);
-        return new Statikus(x,y,imageFileName,m11,m12,m21,m22);
+        return new Statikus((int)x,(int)y,imageFileName,m11,m12,m21,m22);
     }
 
     private static hu.oe.nik.szfmv.model.Classes.NPC npcBuilder(Element element) throws Exception
     {
         builderComponents(element);
-        return new NPC(x,y,imageFileName,m11,m12,m21,m22);
+        return new NPC((int)x,(int)y,imageFileName,m11,m12,m21,m22);
     }
 
     private static void builderComponents(Element element)
     {
-        aktualElements = element.getElementsByTagName("Postion");
+        aktualElements = element.getElementsByTagName("Position");
         for (int i = 0; i < aktualElements.getLength(); i++) {
             Node n = aktualElements.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
                 Element name = (Element) n;
-                x = Integer.parseInt(name.getAttribute("x"));
-                y = Integer.parseInt(name.getAttribute("y"));
+                x = Float.parseFloat(name.getAttribute("x"));
+                y = Float.parseFloat(name.getAttribute("y"));
             }
         }
         aktualElements = element.getElementsByTagName("Transform");

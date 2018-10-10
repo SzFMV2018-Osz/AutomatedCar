@@ -15,10 +15,20 @@ public class Tranzformacios_matrix {
     }
 
     public Tranzformacios_matrix(String m11s, String m12s, String m21s, String m22s) {
-        m11 = java.lang.Integer.parseInt(m11s);
-        m12 = java.lang.Integer.parseInt(m12s);
-        m21 = java.lang.Integer.parseInt(m21s);
-        m22 = java.lang.Integer.parseInt(m22s);
+        try
+        {
+            m11 = java.lang.Integer.parseInt(m11s);
+            m12 = java.lang.Integer.parseInt(m12s);
+            m21 = java.lang.Integer.parseInt(m21s);
+            m22 = java.lang.Integer.parseInt(m22s);
+        }
+        catch (NumberFormatException e)
+        {
+            m11 = Math.round(java.lang.Float.parseFloat(m11s));
+            m12 = Math.round(java.lang.Float.parseFloat(m12s));
+            m21 = Math.round(java.lang.Float.parseFloat(m21s));
+            m22 = Math.round(java.lang.Float.parseFloat(m22s));
+        }
     }
 
     public float getM11() {
