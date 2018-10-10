@@ -7,10 +7,10 @@ import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
  * Powertrain system is responsible for the movement of the car.
  */
 public class PowertrainSystem extends SystemComponent {
-    private static final int PERCENTAGE_DIVISOR = 100;
-
     public static final int MAX_RPM = 6000;
     public static final int EXPECTED_RPM = 750;
+
+    private static final int PERCENTAGE_DIVISOR = 100;
 
     private PowertrainPacket powertrainPacket;
 
