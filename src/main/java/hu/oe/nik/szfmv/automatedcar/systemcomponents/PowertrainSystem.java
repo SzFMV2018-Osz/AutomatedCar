@@ -7,6 +7,8 @@ import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
  * Powertrain system is responsible for the movement of the car.
  */
 public class PowertrainSystem extends SystemComponent {
+    private static final int PERCENTAGE_DIVISOR = 100;
+
     public static final int MAX_RPM = 6000;
     public static final int EXPECTED_RPM = 750;
 
@@ -44,7 +46,7 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Calculate the actual rpm of the engine
      *
-     * @param gaspedalPos: position of the gaspedal
+     * @param gaspedalPos position of the gaspedal
      * @return the actual rpm
      */
     public int calculateActualRpm(int gaspedalPos) {
@@ -53,7 +55,7 @@ public class PowertrainSystem extends SystemComponent {
             this.powertrainPacket.setRpm(actual);
             return actual;
         } else {
-            double multiplier = ((double) (MAX_RPM - this.expectedRPM) / 100);
+            double multiplier = ((double) (MAX_RPM - this.expectedRPM) / PERCENTAGE_DIVISOR);
             int actual = (int) ((gaspedalPos * multiplier) + this.expectedRPM);
             this.powertrainPacket.setRpm(actual);
             return actual;
