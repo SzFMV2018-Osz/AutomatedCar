@@ -1,12 +1,19 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
 
 /**
  * Powertrain system is responsible for the movement of the car.
  */
 public class PowertrainSystem extends SystemComponent {
+    private static final int MAX_RPM = 6000;
+
+    private PowertrainPacket powertrainPacket;
+
     private double speed;
+    private int expectedRPM;
+    private int actualRPM;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
@@ -15,6 +22,11 @@ public class PowertrainSystem extends SystemComponent {
      */
     public PowertrainSystem(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+
+        this.powertrainPacket = new PowertrainPacket();
+
+        this.expectedRPM = 0;
+        this.actualRPM = this.expectedRPM;
     }
 
     @Override
@@ -26,6 +38,25 @@ public class PowertrainSystem extends SystemComponent {
 
     public double getSpeed() {
         return this.speed;
+    }
+
+    /**
+     * Calculate the actual rpm of the engine
+     *
+     * @param gaspedalPos: position of the gaspedal
+     * @return the actual rpm
+     */
+    public int calculateActualRpm(int gaspedalPos) {
+        if (gaspedalPos == 0) {
+            int actual = this.expectedRPM;
+            this.powertrainPacket.setRpm(actual);
+            return actual;
+        } else {
+            double multiplier = ((double) (MAX_RPM - this.expectedRPM) / 100);
+            int actual = (int) ((gaspedalPos * multiplier) + this.expectedRPM);
+            this.powertrainPacket.setRpm(actual);
+            return actual;
+        }
     }
 }
 
