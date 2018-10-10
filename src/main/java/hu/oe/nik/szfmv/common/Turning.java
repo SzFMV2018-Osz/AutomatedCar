@@ -19,7 +19,7 @@ public class Turning {
         return turningCircle;
     }
 
-    public void CalculateTurningCircle(int turningDegree){
-        turningCircle = (int)(car.getWheelbase()/Math.tan(turningDegree) + car.getWidth());
+    public void CalculateTurningCircle(int turningDegree) {
+        turningCircle = (int) (car.getWheelbase() / Math.tan(turningDegree) + car.getWidth());
     }
 }
