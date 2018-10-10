@@ -43,8 +43,7 @@
       <Parameter name="roadpainting_2" value="1"/>
       <Parameter name="roadpainting_3" value="1"/>
     </Object>
-    
-     <Object type="road_2lane_45right">
+    <Object type="road_2lane_45right">
       <Position x="526" y="2193"/>
       <Transform m11="0.7071068286895752" m12="-0.7071068286895752" m21="0.7071068286895752" m22="0.7071068286895752"/>
       <Parameter name="roadpainting_1" value="1"/>
@@ -65,8 +64,6 @@
       <Parameter name="roadpainting_2" value="1"/>
       <Parameter name="roadpainting_3" value="1"/>
     </Object>
-    
-    
     <Object type="road_2lane_straight">
       <Position x="1000" y="144"/>
       <Transform m11="0" m12="1" m21="-1" m22="0"/>
@@ -109,10 +106,6 @@
       <Parameter name="roadpainting_2" value="1"/>
       <Parameter name="roadpainting_3" value="1"/>
     </Object>
-    
-    
-    
-    
     <Object type="road_2lane_straight">
       <Position x="3718" y="545"/>
       <Transform m11="-0.70710688829422" m12="0.70710688829422" m21="-0.70710688829422" m22="-0.70710688829422"/>
@@ -120,8 +113,7 @@
       <Parameter name="roadpainting_2" value="1"/>
       <Parameter name="roadpainting_3" value="1"/>
     </Object>
-   
-   <Object type="road_2lane_straight">
+    <Object type="road_2lane_straight">
       <Position x="897" y="2841"/>
       <Transform m11="0" m12="-1" m21="1" m22="0"/>
       <Parameter name="roadpainting_1" value="1"/>
@@ -170,9 +162,6 @@
       <Parameter name="roadpainting_2" value="1"/>
       <Parameter name="roadpainting_3" value="1"/>
     </Object>
-    
-    
-    
     <Object type="road_2lane_90right">
       <Position x="3522" y="2316"/>
       <Transform m11="-1" m12="0" m21="0" m22="-1"/>

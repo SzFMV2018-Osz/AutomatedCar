@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.environment;
 
+import hu.oe.nik.szfmv.model.Classes.Tranzformacios_matrix;
+
 public class WorldObject {
     protected int x;
     protected int y;
@@ -7,6 +9,7 @@ public class WorldObject {
     protected int height;
     protected float rotation = 0f;
     protected String imageFileName;
+    protected Tranzformacios_matrix tranz_matrix;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -19,6 +22,11 @@ public class WorldObject {
         this.x = x;
         this.y = y;
         this.imageFileName = imageFileName;
+    }
+
+    public  void Tranz_Matrix_Letrehoz (String m11s, String m12s, String m21s, String m22s)
+    {
+        tranz_matrix = new Tranzformacios_matrix(m11s ,m12s ,m21s ,m22s);
     }
 
     public int getX() {
