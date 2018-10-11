@@ -25,7 +25,7 @@ public class Xml {
     private static int roadpainting_1;
     private static int roadpainting_2;
     private static int roadpainting_3;
-    static List<osCsoport> csoport = new ArrayList<osCsoport>();
+    static List<MainObject> csoport = new ArrayList<MainObject>();
 
     public static void xmlParse() throws Exception {
         {
@@ -79,7 +79,7 @@ public class Xml {
                             }
                         }
                     }
-                    csoport.add(new osCsoport(type, x, y, m11, m12, m21, m22, roadpainting_1, roadpainting_2, roadpainting_3));
+                    csoport.add(new MainObject(type, x, y, m11, m12, m21, m22, roadpainting_1, roadpainting_2, roadpainting_3));
                 }
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
@@ -89,7 +89,7 @@ public class Xml {
                 e.printStackTrace();
             }
         }
-        for (osCsoport item: csoport
+        for (MainObject item: csoport
         ) {
             System.out.println(item.type  + ", " + item.x + ", " + item.y + ", " + item.m11 + ", " + item.m12 + ", " + item.m21 + ", " + item.m22 + ", " + item.roadpainting_1 + ", " + item.roadpainting_2 + ", " + item.roadpainting_3);
         }
