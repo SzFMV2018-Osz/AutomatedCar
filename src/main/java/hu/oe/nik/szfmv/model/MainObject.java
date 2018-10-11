@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.model;
 
-public class osCsoport {
+public class MainObject {
     String type;
     float x;
     float y;
@@ -12,7 +12,7 @@ public class osCsoport {
     int roadpainting_2;
     int roadpainting_3;
 
-    osCsoport(String name,float x, float y, float m11, float m12, float m21, float m22, int p1, int p2, int p3){
+    MainObject(String name,float x, float y, float m11, float m12, float m21, float m22, int p1, int p2, int p3){
         this.type=name;
         this.x=x;
         this.y=y;
