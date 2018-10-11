@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
+import hu.oe.nik.szfmv.common.exceptions.NegativeNumberException;
 
 /**
  * Powertrain system is responsible for the movement of the car.
@@ -49,7 +50,10 @@ public class PowertrainSystem extends SystemComponent {
      * @param gaspedalPos position of the gaspedal
      * @return the actual rpm
      */
-    public int calculateActualRpm(int gaspedalPos) {
+    public int calculateActualRpm(int gaspedalPos) throws NegativeNumberException {
+        if (gaspedalPos < 0) {
+            throw new NegativeNumberException("The position of the gas pedal must be a non-negative number");
+        }
         if (gaspedalPos == 0) {
             int actual = this.expectedRPM;
             this.powertrainPacket.setRpm(actual);
