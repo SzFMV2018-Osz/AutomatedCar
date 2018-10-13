@@ -98,12 +98,12 @@ public class Xml {
         }
         System.out.println("ok");
     }
-    public static ArrayList<hu.oe.nik.szfmv.environment.WorldObject> Obj_List(){
+  /*  public static ArrayList<hu.oe.nik.szfmv.environment.WorldObject> Obj_List(){
         ArrayList<hu.oe.nik.szfmv.environment.WorldObject> returnarray = new ArrayList<hu.oe.nik.szfmv.environment.WorldObject>();
         for (int i = 0; i < csoport.size(); i++ ){
 
             //Itt kell megcsinalni
         }
         return  returnarray;
-    }
+    }*/
 }
