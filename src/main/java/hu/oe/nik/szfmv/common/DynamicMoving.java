@@ -3,12 +3,13 @@ package hu.oe.nik.szfmv.common;
 import java.awt.*;
 
 public class DynamicMoving {
+    private static final int SECONDS_IN_HOUR = 3600;
+    private static final int METERS_IN_KILOMETER = 1000;
+
     private int acceleration;
     private int angle;
     private int speed;
     private Point vector;
-    private int SecundsInHour = 3600;
-    private int MetersinKilometer = 1000;
 
     public DynamicMoving() {
         acceleration = 0;
@@ -35,7 +36,7 @@ public class DynamicMoving {
 
     public void CalculateNewVector(int acceleration) {
         speed += acceleration;
-        double road = ((double) speed / SecundsInHour) * MetersinKilometer;
+        double road = ((double) speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
         int newy = (int) (Math.sin((double) angle) * road);
         int newx = (int) (Math.cos((double) angle) * road);
         vector = new Point(newx, newy);
