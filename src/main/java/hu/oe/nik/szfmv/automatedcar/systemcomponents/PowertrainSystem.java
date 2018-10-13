@@ -43,7 +43,6 @@ public class PowertrainSystem extends SystemComponent {
         this.expectedRPM = EXPECTED_RPM;
         this.actualRPM = this.expectedRPM;
 
-
         this.sampleBreakPedalPosition = 0;
     }
 
