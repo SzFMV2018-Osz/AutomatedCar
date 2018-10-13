@@ -80,7 +80,7 @@ public class PowertrainSystem extends SystemComponent {
     }
 
     /**
-     *  Calculate the magnitude of the given vector
+     * Calculate the magnitude of the given vector
      * @param vector given vector
      * @return the magnitude
      */
