@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.common;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
+import hu.oe.nik.szfmv.common.exceptions.NegativeNumberException;
 import org.junit.*;
 import org.junit.experimental.theories.suppliers.TestedOn;
 
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class PowertrainSystemTest {
 
     @Test
-    public void calculateActualRpmWithZeroPedalPositionTest(){
+    public void calculateActualRpmWithZeroPedalPositionTest() throws NegativeNumberException {
         PowertrainSystem ps = new PowertrainSystem(new VirtualFunctionBus());
 
         int gaspedalPosition = 0;
@@ -24,8 +25,8 @@ public class PowertrainSystemTest {
         assertEquals(result, valueOfTestedMethod);
     }
 
-    @Test()
-    public void calculateActualRpmWithPositivePedalPositionTest(){
+    @Test
+    public void calculateActualRpmWithPositivePedalPositionTest() throws NegativeNumberException {
         PowertrainSystem ps = new PowertrainSystem(new VirtualFunctionBus());
         Random r = new Random();
 
@@ -37,5 +38,14 @@ public class PowertrainSystemTest {
         int valueOfTestedMethod = ps.calculateActualRpm(gaspedalPosition);
 
         assertEquals(result, valueOfTestedMethod);
+    }
+
+    @Test(expected = NegativeNumberException.class)
+    public void calculateActualRpmWithExceptionTest() throws NegativeNumberException {
+        PowertrainSystem ps = new PowertrainSystem(new VirtualFunctionBus());
+
+        int wrongInput = -1;
+
+        int valueOfTestedMethod = ps.calculateActualRpm(wrongInput);
     }
 }
