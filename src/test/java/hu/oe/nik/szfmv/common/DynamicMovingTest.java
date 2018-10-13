@@ -26,7 +26,7 @@ public class DynamicMovingTest {
         moving = new DynamicMoving();
 
         int oldSpeed = moving.getSpeed();
-        moving.CalculateNewVector(2);
+        moving.calculateNewVector(2);
 
         assertEquals(moving.getSpeed(), oldSpeed + 2);
     }
@@ -36,7 +36,7 @@ public class DynamicMovingTest {
         moving = new DynamicMoving();
 
         Point oldPoint = moving.getVector();
-        moving.CalculateNewVector(100);
+        moving.calculateNewVector(100);
 
         assertNotEquals(oldPoint, moving.getVector());
     }

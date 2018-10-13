@@ -138,11 +138,12 @@ public class PowertrainSystem extends SystemComponent {
     }
 
     /**
-     * Under construction
-     * @return 0
+     * Change the current speed by the speed delta
+     * @param speedDelta The difference between the old and the new speed
      */
-    private double calculateNewVelocityVector() {
-        return 0d;
+    private void changeSpeed(double speedDelta) {
+        this.speed += speedDelta;
+        this.dynamicMoving.calculateNewVector(speedDelta);
     }
 }
 
