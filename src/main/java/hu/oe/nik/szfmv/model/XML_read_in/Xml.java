@@ -102,7 +102,7 @@ public class Xml {
         ArrayList<hu.oe.nik.szfmv.environment.WorldObject> returnarray = new ArrayList<hu.oe.nik.szfmv.environment.WorldObject>();
         for (int i = 0; i < csoport.size(); i++ ){
 
-            //Itt kell
+            //Itt kell megcsinalni
         }
         return  returnarray;
     }
