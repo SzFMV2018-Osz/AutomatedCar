@@ -24,6 +24,7 @@ public class PowertrainSystem extends SystemComponent {
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -5.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
+    
     private DynamicMoving dynamicMoving;
     private double speed;
     private int currentRPM;
