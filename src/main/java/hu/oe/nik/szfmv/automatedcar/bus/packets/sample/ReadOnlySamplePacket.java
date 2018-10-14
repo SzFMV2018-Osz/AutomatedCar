@@ -2,37 +2,10 @@ package hu.oe.nik.szfmv.automatedcar.bus.packets.sample;
 
 public interface ReadOnlySamplePacket {
 
-
     /**
      * @return Gaspedal Position
      * Get the Gaspedal Position
      */
     int getGaspedalPosition();
 
-    /**
-     * @param gaspedalPosition Set the Gaspedal Position
-     */
-    void setGaspedalPosition(int gaspedalPosition);
-
-    /**
-     * @return Breakpedal Position
-     * Get the Breakpedal Position
-     */
-    int getBreakpedalPosition();
-
-    /**
-     * @param breakpedalPosition Set the Breakpedal Position
-     */
-    void setBreakpedalPosition(int breakpedalPosition);
-
-    /**
-     * @return Steering Wheel Position
-     * Get the Steering Wheel Position
-     */
-    int getSteeringWheelPosition();
-
-    /**
-     * @param steeringWheelPosition Set the Steering Wheel Position
-     */
-    void setSteeringWheelPosition(int steeringWheelPosition);
 }
