@@ -18,7 +18,6 @@ public class SteeringSystemTest {
 
         assertNotNull(steeringSystem);
         assertNotNull(steeringSystem.getAngularSpeed());
-        assertNotNull(steeringSystem.getCar());
         assertNotNull(steeringSystem.getTurningCircle());
     }
 
@@ -42,7 +41,7 @@ public class SteeringSystemTest {
     public void testCalculateTurningCircle() {
         steeringSystem = new SteeringSystem(new VirtualFunctionBus());
         int oldTurningCircle = steeringSystem.getTurningCircle();
-        steeringSystem.calculateTurningCircle(30);
+        steeringSystem.calculateTurningCircle(30, new Car(50, 50, "car_1_red.png"));
         int newTurningCircle = steeringSystem.getTurningCircle();
 
         assertNotEquals(oldTurningCircle, newTurningCircle);
