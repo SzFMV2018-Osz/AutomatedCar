@@ -16,9 +16,20 @@ public class DynamicMovingTest {
 
         assertNotNull(moving);
         assertNotNull(moving.getAcceleration());
-        assertNotNull(moving.getAngle());
         assertNotNull(moving.getSpeed());
         assertNotNull(moving.getVector());
+        assertNotNull(moving.getCar());
+        assertNotNull(moving.getTurningCircle());
+    }
+
+    @Test
+    public void testCalculateTurningCircle() {
+        moving = new DynamicMoving();
+        int oldTurningCircle = moving.getTurningCircle();
+        moving.calculateTurningCircle(30);
+        int newTurningCircle = moving.getTurningCircle();
+
+        assertNotEquals(oldTurningCircle, newTurningCircle);
     }
 
     @Test
@@ -26,7 +37,7 @@ public class DynamicMovingTest {
         moving = new DynamicMoving();
 
         int oldSpeed = moving.getSpeed();
-        moving.CalculateNewVector(2);
+        moving.calculateNewVector(2);
 
         assertEquals(moving.getSpeed(), oldSpeed + 2);
     }
@@ -36,7 +47,7 @@ public class DynamicMovingTest {
         moving = new DynamicMoving();
 
         Point oldPoint = moving.getVector();
-        moving.CalculateNewVector(100);
+        moving.calculateNewVector(100);
 
         assertNotEquals(oldPoint, moving.getVector());
     }

@@ -13,7 +13,7 @@ public class CarTest {
 
     @Test
     public void testAutoPropertiesAreNotNull() {
-        Car car = new Car();
+        Car car = new Car("car_1_red.png");
 
         assertNotNull(car.getWheelbase());
         assertNotNull(car.getWidth());
@@ -21,7 +21,7 @@ public class CarTest {
 
     @Test
     public void testAutoPropertiesEqualsIconSize() {
-        Car car = new Car();
+        Car car = new Car("car_1_red.png");
 
         assertEquals(car.getWidth(), icon.getIconWidth());
         assertEquals(car.getWheelbase(), icon.getIconHeight());

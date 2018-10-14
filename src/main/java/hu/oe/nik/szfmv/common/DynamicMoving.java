@@ -4,25 +4,23 @@ import java.awt.*;
 
 public class DynamicMoving {
     private int acceleration;
-    private int angle;
     private int speed;
     private Point vector;
-    private int SecundsInHour = 3600;
-    private int MetersinKilometer = 1000;
+    private Car car;
+    private int turningCircle;
+    protected static final int SECUNDS_IN_HOUR = 3600;
+    protected static final int METERS_IN_KILOMETER = 1000;
 
     public DynamicMoving() {
         acceleration = 0;
-        angle = 0;
         speed = 0;
         vector = new Point(0, 0);
+        car = new Car("car_1_red.png");
+        turningCircle = 0;
     }
 
     public int getAcceleration() {
         return acceleration;
-    }
-
-    public int getAngle() {
-        return angle;
     }
 
     public int getSpeed() {
@@ -33,11 +31,23 @@ public class DynamicMoving {
         return vector;
     }
 
-    public void CalculateNewVector(int acceleration) {
+    public Car getCar() {
+        return car;
+    }
+
+    public int getTurningCircle() {
+        return turningCircle;
+    }
+
+    public void calculateTurningCircle(int turningDegree) {
+        turningCircle = (int) (car.getWheelbase() / Math.tan(turningDegree) + car.getWidth());
+    }
+
+    public void calculateNewVector(int acceleration) {
         speed += acceleration;
-        double road = ((double) speed / SecundsInHour) * MetersinKilometer;
-        int newy = (int) (Math.sin((double) angle) * road);
-        int newx = (int) (Math.cos((double) angle) * road);
+        double road = ((double) speed / SECUNDS_IN_HOUR) * METERS_IN_KILOMETER;
+        int newy = (int) (Math.sin((double) turningCircle) * road);
+        int newx = (int) (Math.cos((double) turningCircle) * road);
         vector = new Point(newx, newy);
     }
 }
