@@ -22,7 +22,6 @@ public class SamplePacket implements ReadOnlySamplePacket {
 
     @Override
     public int getBreakpedalPosition() {
-
         return breakpedalPosition;
     }
 
@@ -33,13 +32,10 @@ public class SamplePacket implements ReadOnlySamplePacket {
     public int getGaspedalPosition() {
         return this.gaspedalPosition;
     }
-
-
+    
     public void setGaspedalPosition(int gaspedalPosition) {
         this.gaspedalPosition = gaspedalPosition;
     }
 
     // TODO implement all of the HMI signals
-
-
 }
