@@ -21,7 +21,6 @@ public class PowertrainSystem extends SystemComponent {
     private static final int ENGINE_BRAKE_TORQUE = 70;
     private static final double MAX_BRAKE_DECELERATION = 25;
 
-    private PowertrainPacket powertrainPacket;
     private DynamicMoving dynamicMoving;
 
     private double speed;
@@ -37,13 +36,23 @@ public class PowertrainSystem extends SystemComponent {
     public PowertrainSystem(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
-        this.powertrainPacket = new PowertrainPacket();
+        this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
         this.dynamicMoving = new DynamicMoving();
 
         this.expectedRPM = EXPECTED_RPM;
         this.actualRPM = this.expectedRPM;
 
         this.sampleBreakPedalPosition = 0;
+    }
+
+    /**
+     * Calculate the magnitude of the given vector
+     *
+     * @param vector given vector
+     * @return the magnitude
+     */
+    private static double calculateVectorMagnitude(Point vector) {
+        return Math.sqrt(Math.pow(vector.getX(), 2) + Math.pow(vector.getY(), 2));
     }
 
     @Override
@@ -59,6 +68,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Calculate the actual rpm of the engine
+     *
      * @param gasPedalPosition position of the gaspedal
      * @return the actual rpm
      * @throws NegativeNumberException the input value must be a non-negative number
@@ -69,27 +79,19 @@ public class PowertrainSystem extends SystemComponent {
         }
         if (gasPedalPosition == 0) {
             int actual = this.expectedRPM;
-            this.powertrainPacket.setRpm(actual);
+            this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         } else {
             double multiplier = ((double) (MAX_RPM - this.expectedRPM) / PERCENTAGE_DIVISOR);
             int actual = (int) ((gasPedalPosition * multiplier) + this.expectedRPM);
-            this.powertrainPacket.setRpm(actual);
+            this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         }
     }
 
     /**
-     * Calculate the magnitude of the given vector
-     * @param vector given vector
-     * @return the magnitude
-     */
-    private static double calculateVectorMagnitude(Point vector) {
-        return Math.sqrt(Math.pow(vector.getX(), 2) + Math.pow(vector.getY(), 2));
-    }
-
-    /**
      * Gets the magnitude of the car's velocity vector
+     *
      * @return the magnitude
      */
     private double getVelocityVectorMagnitude() {
@@ -98,6 +100,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Gets the magnitude of the air resistance
+     *
      * @return the magnitude
      */
     private double getAirResistanceMagnitude() {
@@ -107,6 +110,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Gets the magnitude of the rolling resistance
+     *
      * @return the magnitude
      */
     private double getRollingResistanceMagnitude() {
@@ -116,6 +120,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Calculate the difference between the actual and the increased speed
+     *
      * @return the speed delta
      */
     private double calculateSpeedDifference() {
@@ -138,6 +143,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Change the current speed by the speed delta
+     *
      * @param speedDelta The difference between the old and the new speed
      */
     private void changeSpeed(double speedDelta) {

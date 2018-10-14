@@ -11,6 +11,7 @@ public interface ReadOnlyPowertrainPacket {
 
     /**
      * Sets the value of the rpm of the engine
+     *
      * @param rpm of the engine
      */
     void setRpm(int rpm);
@@ -26,6 +27,7 @@ public interface ReadOnlyPowertrainPacket {
 
     /**
      * Sets the value of the speed of the car
+     *
      * @param speed the speed of the car
      */
     void setSpeed(double speed);
