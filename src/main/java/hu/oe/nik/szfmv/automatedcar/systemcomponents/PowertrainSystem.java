@@ -13,7 +13,7 @@ import java.awt.*;
  */
 public class PowertrainSystem extends SystemComponent {
     public static final int MAX_RPM = 6000;
-    public static final int EXPECTED_RPM = 750;
+    public static final int MIN_RPM = 750;
 
     private static final double GEAR_RATIOS = 1.3;
     private static final int PERCENTAGE_DIVISOR = 100;
@@ -24,9 +24,8 @@ public class PowertrainSystem extends SystemComponent {
     private DynamicMoving dynamicMoving;
 
     private double speed;
-    private int expectedRPM;
+    private int currentRPM;
     private int actualRPM;
-    private int sampleBreakPedalPosition;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
@@ -39,10 +38,8 @@ public class PowertrainSystem extends SystemComponent {
         this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
         this.dynamicMoving = new DynamicMoving();
 
-        this.expectedRPM = EXPECTED_RPM;
-        this.actualRPM = this.expectedRPM;
-
-        this.sampleBreakPedalPosition = 0;
+        this.currentRPM = MIN_RPM;
+        this.actualRPM = this.currentRPM;
     }
 
     /**
@@ -63,7 +60,7 @@ public class PowertrainSystem extends SystemComponent {
     }
 
     public double getSpeed() {
-        return this.speed;
+        return speed;
     }
 
     /**
@@ -78,12 +75,12 @@ public class PowertrainSystem extends SystemComponent {
             throw new NegativeNumberException("The position of the gas pedal must be a non-negative number");
         }
         if (gasPedalPosition == 0) {
-            int actual = this.expectedRPM;
+            int actual = MIN_RPM;
             this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         } else {
-            double multiplier = ((double) (MAX_RPM - this.expectedRPM) / PERCENTAGE_DIVISOR);
-            int actual = (int) ((gasPedalPosition * multiplier) + this.expectedRPM);
+            double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
+            int actual = (int) ((gasPedalPosition * multiplier) + this.currentRPM);
             this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         }
@@ -125,14 +122,15 @@ public class PowertrainSystem extends SystemComponent {
      */
     private double calculateSpeedDifference() {
         double speedDelta;
+        int brakePedalPosition = this.virtualFunctionBus.readOnlyInputPositionPacket.getBreakpedalPosition();
 
-        if (this.actualRPM > this.expectedRPM) {
+        if (this.actualRPM > this.currentRPM) {
             speedDelta = (this.getVelocityVectorMagnitude() * this.actualRPM * GEAR_RATIOS) /
                     (this.getAirResistanceMagnitude() * SAMPLE_WEIGHT *
                             this.getRollingResistanceMagnitude());
-        } else if (this.sampleBreakPedalPosition > 0) {
+        } else if (brakePedalPosition > 0) {
             speedDelta = -1 * this.getVelocityVectorMagnitude() * ((MAX_BRAKE_DECELERATION /
-                    (double) PERCENTAGE_DIVISOR) * this.sampleBreakPedalPosition);
+                    (double) PERCENTAGE_DIVISOR) * brakePedalPosition);
         } else {
             speedDelta = (-1 * this.getVelocityVectorMagnitude() * (double) ENGINE_BRAKE_TORQUE *
                     this.getAirResistanceMagnitude() * this.getRollingResistanceMagnitude()) / PERCENTAGE_DIVISOR;
@@ -146,9 +144,12 @@ public class PowertrainSystem extends SystemComponent {
      *
      * @param speedDelta The difference between the old and the new speed
      */
-    private void changeSpeed(double speedDelta) {
+    private void updateChanges(double speedDelta) {
         this.speed += speedDelta;
+        this.currentRPM = this.actualRPM;
+
         this.dynamicMoving.calculateNewVector(speedDelta);
+        this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
     }
 }
 
