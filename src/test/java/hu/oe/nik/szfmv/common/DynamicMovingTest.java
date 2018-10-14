@@ -16,16 +16,16 @@ public class DynamicMovingTest {
 
         assertNotNull(moving);
         assertNotNull(moving.getAcceleration());
-        assertNotNull(moving.getAngle());
         assertNotNull(moving.getSpeed());
         assertNotNull(moving.getVector());
+        assertNotNull(moving.getSteeringSystem());
     }
 
     @Test
     public void testNewVectorAccelerationChange() {
         moving = new DynamicMoving();
 
-        double oldSpeed = moving.getSpeed();
+        int oldSpeed = moving.getSpeed();
         moving.calculateNewVector(2);
 
         assertEquals(moving.getSpeed(), oldSpeed + 2, 0.001);
