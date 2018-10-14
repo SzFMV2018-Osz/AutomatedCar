@@ -65,7 +65,7 @@ public class CourseDisplay extends JPanel {
         camera.Update();
 
         for (WorldObject object : world.getWorldObjects()) {
-            object.RotateImage(camera.getX(), camera.getY());
+            object.RotateImage(camera);
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }

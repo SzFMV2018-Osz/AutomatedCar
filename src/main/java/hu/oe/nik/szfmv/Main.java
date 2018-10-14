@@ -141,7 +141,7 @@ public class Main {
 
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(0, 80, "car_2_white.png");
 
         // add car to the world
         w.addObjectToWorld(car);
@@ -208,6 +208,13 @@ class Keychecker extends KeyAdapter {
         if (event.getKeyChar() == 's') {
             camera.MoveCamera(0, -movespeed);
         }
+        if (event.getKeyChar() == '+') {
+            camera.setScale(camera.getScale() + 0.1);
+        }
+        if (event.getKeyChar() == '-') {
+            camera.setScale(camera.getScale() - 0.1);
+        }
+
 
     }
 }

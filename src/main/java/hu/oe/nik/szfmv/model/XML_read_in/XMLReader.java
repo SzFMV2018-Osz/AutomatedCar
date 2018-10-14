@@ -102,7 +102,7 @@ public class XMLReader {
 
                 }
 
-                obj.setRotation(routate);
+                obj.setRotation(-routate);
                 for (int l = 0; l < names.length; l++) {
                     if (names[l].equals(filename)) {
                         obj.setRotationPointX(xs[l]);

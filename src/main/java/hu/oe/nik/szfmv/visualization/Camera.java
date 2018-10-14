@@ -8,12 +8,11 @@ public class Camera {
     private int y;
     private int objectLastX;
     private int objectLastY;
+    private double scale;
     private WorldObject followableObject;
     private int displayWidth;
     private int displayHeight;
     private World world;
-
-
     /**
      * initializing the camera
      *
@@ -45,22 +44,32 @@ public class Camera {
         this.displayWidth = displayWidth;
         this.x = 0;
         this.y = 0;
+        this.scale = 0.5;
         this.followableObject = followable;
         this.objectLastX = followableObject.getX();
         this.objectLastY = followableObject.getY();
+    }
+
+    public double getScale() {
+        return scale;
+    }
+
+    public void setScale(double scale) {
+        if(scale > 0.1)
+        this.scale = scale;
     }
 
     /**
      * Updating the position of the camera when the camera have a followable object
      */
     public void Update() {
-        if ((followableObject.getX() > (displayWidth / 2 - followableObject.getWidth() / 2) &&
+        if ((followableObject.getX() > (displayWidth / scale / 2 - followableObject.getWidth() / 2) &&
                 followableObject.getX() < world.getWidth() - (displayWidth / 2 - followableObject.getWidth() / 2))) {
-          //  this.x = displayWidth / 2 - followableObject.getX() - followableObject.getWidth() / 2;
+                this.x = (int) Math.round( displayWidth /scale / 2 - followableObject.getX() - followableObject.getWidth() / 2);
         }
-        if ((followableObject.getY() > (displayHeight / 2 - followableObject.getHeight() / 2) &&
+        if ((followableObject.getY() > (displayHeight/ scale / 2 - followableObject.getHeight() / 2) &&
                 followableObject.getY() < world.getHeight() - (displayHeight / 2 - followableObject.getHeight() / 2))) {
-         //   this.y = displayHeight / 2 - followableObject.getY() - followableObject.getHeight() / 2;
+                this.y =(int) Math.round(displayHeight / scale / 2 - followableObject.getY() - followableObject.getHeight() / 2);
         }
         System.out.println("x,y: " + x + "," + y);
         this.objectLastX = followableObject.getX();
@@ -92,10 +101,18 @@ public class Camera {
         return x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
     /**
      * @return the x cord of the camera
      */
     public int getY() {
         return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
