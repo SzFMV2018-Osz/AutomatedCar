@@ -35,4 +35,15 @@ public interface ReadOnlySamplePacket {
      * @param steeringWheelPosition Set the Steering Wheel Position
      */
     void setSteeringWheelPosition(int steeringWheelPosition);
+
+    /**
+     * @return Gear State
+     * Get the Gear State
+     */
+    int getGearState();
+
+    /**
+     * @param gearState Set the Gear State
+     */
+    void setGearState(int gearState);
 }

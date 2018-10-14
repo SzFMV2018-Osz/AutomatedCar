@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.bus.packets.sample;
 
 public class SamplePacket implements ReadOnlySamplePacket {
+    private int gearState = 0;
     private int gaspedalPosition = 0;
     private int breakpedalPosition = 0;
     private int steeringWheelPosition = 0;
@@ -12,10 +13,31 @@ public class SamplePacket implements ReadOnlySamplePacket {
     }
 
     @Override
+    public int getGaspedalPosition() {
+        return gaspedalPosition;
+    }
+
+    @Override
+    public void setGaspedalPosition(int gaspedalPosition) {
+        this.gaspedalPosition = gaspedalPosition;
+    }
+
+    @Override
+    public int getGearState() {
+        return gearState;
+    }
+
+    @Override
+    public void setGearState(int gearState) {
+        this.gearState = gearState;
+    }
+
+    @Override
     public int getSteeringWheelPosition() {
         return steeringWheelPosition;
     }
 
+    @Override
     public void setSteeringWheelPosition(int steeringWheelPosition) {
         this.steeringWheelPosition = steeringWheelPosition;
     }
@@ -25,16 +47,9 @@ public class SamplePacket implements ReadOnlySamplePacket {
         return breakpedalPosition;
     }
 
+    @Override
     public void setBreakpedalPosition(int breakpedalPosition) {
         this.breakpedalPosition = breakpedalPosition;
-    }
-
-    public int getGaspedalPosition() {
-        return this.gaspedalPosition;
-    }
-    
-    public void setGaspedalPosition(int gaspedalPosition) {
-        this.gaspedalPosition = gaspedalPosition;
     }
 
     // TODO implement all of the HMI signals
