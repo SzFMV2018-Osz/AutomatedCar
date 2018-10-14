@@ -1,15 +1,19 @@
 package hu.oe.nik.szfmv.automatedcar.bus.packets.inputposition;
 
 public class InputPositionPacket implements ReadOnlyInputPositionPacket {
-    private int gearState = 0;
-    private int gaspedalPosition = 0;
-    private int breakpedalPosition = 0;
-    private int steeringWheelPosition = 0;
+    private int gearState;
+    private int gaspedalPosition;
+    private int breakpedalPosition;
+    private int steeringWheelPosition;
 
     /**
      * Create a Sample Packet
      */
     public InputPositionPacket() {
+        this.gearState = 0;
+        this.gaspedalPosition = 0;
+        this.breakpedalPosition = 0;
+        this.steeringWheelPosition = 0;
     }
 
     @Override
