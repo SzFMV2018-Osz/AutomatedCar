@@ -57,7 +57,7 @@ public class PowertrainSystem extends SystemComponent {
 
     @Override
     public void loop() {
-        int gasPedal = virtualFunctionBus.samplePacket.getGaspedalPosition();
+        int gasPedal = virtualFunctionBus.readOnlyInputPositionPacket.getGaspedalPosition();
         speed = 0;
         //TODO write this
     }
