@@ -100,7 +100,7 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Set speed when gearstate is D - drive
      *
-     * @param acceleration
+     * @param acceleration acceleration
      */
     private void drive(double acceleration) {
         if (brakePedal == 0) {
@@ -121,7 +121,7 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Set speed when gearstate is N - no gear
      *
-     * @param acceleration
+     * @param acceleration acceleration
      */
     private void noGear(double acceleration) {
         if (brakePedal > 0) {
@@ -138,7 +138,7 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Set speed when gearstate is R - reverse
      *
-     * @param acceleration
+     * @param acceleration acceleration
      */
     private void reverse(double acceleration) {
         if (brakePedal == 0) {
