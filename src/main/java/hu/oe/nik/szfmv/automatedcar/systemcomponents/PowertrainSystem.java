@@ -20,12 +20,18 @@ public class PowertrainSystem extends SystemComponent {
     private static final int SAMPLE_WEIGHT = 1000;
     private static final int ENGINE_BRAKE_TORQUE = 70;
     private static final double MAX_BRAKE_DECELERATION = 25;
+    private static final double MAX_FORWARD_SPEED = 118.0605;
+    private static final double MIN_FORWARD_SPEED = 4.3888;
+    private static final double MAX_REVERSE_SPEED = -5.278;
+    private static final double MIN_REVERSE_SPEED = -3.3888;
 
     private DynamicMoving dynamicMoving;
-
     private double speed;
     private int currentRPM;
     private int actualRPM;
+    private int gasPedal;
+    private int brakePedal;
+    private int gearState;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
@@ -37,7 +43,6 @@ public class PowertrainSystem extends SystemComponent {
 
         this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
         this.dynamicMoving = new DynamicMoving();
-
         this.currentRPM = MIN_RPM;
         this.actualRPM = this.currentRPM;
     }
@@ -54,9 +59,101 @@ public class PowertrainSystem extends SystemComponent {
 
     @Override
     public void loop() {
-        int gasPedal = virtualFunctionBus.readOnlyInputPositionPacket.getGaspedalPosition();
+        try {
+            actualRPM = calculateActualRpm(virtualFunctionBus.readOnlyInputPositionPacket.getGaspedalPosition());
+        } catch (NegativeNumberException e) {
+            e.printStackTrace();
+        }
+        doPowerTrain();
+    }
+
+    private void doPowerTrain() {
+        double acceleration = calculateSpeedDifference();
+
+        // gearState : R(1), P(2), N(3), D(4)
+        switch (gearState) {
+            case 1:
+                reverse(acceleration);
+                break;
+            case 2:
+                park();
+                break;
+            case 3:
+                noGear(acceleration);
+                break;
+            case 4:
+                drive(acceleration);
+                break;
+                default:
+                    break;
+        }
+    }
+
+    /**
+     * Set speed when gearstate is P - park
+     */
+    private void park() {
         speed = 0;
-        //TODO write this
+        this.dynamicMoving.calculateNewVector(speed);
+    }
+
+    /**
+     * Set speed when gearstate is D - drive
+     *
+     * @param acceleration acceleration
+     */
+    private void drive(double acceleration) {
+        if (brakePedal == 0) {
+            if ((acceleration > 0 && speed < MAX_FORWARD_SPEED) || (acceleration < 0 && speed > MIN_FORWARD_SPEED)) {
+                updateChanges(acceleration);
+            }
+        } else {
+            if (speed > 0) {
+                updateChanges(acceleration);
+            }
+            if (speed < 0) {
+                speed = 0;
+                this.dynamicMoving.calculateNewVector(speed);
+            }
+        }
+    }
+
+    /**
+     * Set speed when gearstate is N - no gear
+     *
+     * @param acceleration acceleration
+     */
+    private void noGear(double acceleration) {
+        if (brakePedal > 0) {
+            if (Math.abs(speed) > 0) {
+                updateChanges(acceleration);
+            }
+            if (speed < 0) {
+                speed = 0;
+                this.dynamicMoving.calculateNewVector(speed);
+            }
+        }
+    }
+
+    /**
+     * Set speed when gearstate is R - reverse
+     *
+     * @param acceleration acceleration
+     */
+    private void reverse(double acceleration) {
+        if (brakePedal == 0) {
+            if ((acceleration < 0 && speed > MAX_REVERSE_SPEED) || (acceleration > 0 && speed < MIN_REVERSE_SPEED)) {
+                updateChanges(acceleration);
+            }
+        } else {
+            if (speed < 0) {
+                updateChanges(acceleration);
+            }
+            if (speed > 0) {
+                speed = 0;
+                this.dynamicMoving.calculateNewVector(speed);
+            }
+        }
     }
 
     public double getSpeed() {
