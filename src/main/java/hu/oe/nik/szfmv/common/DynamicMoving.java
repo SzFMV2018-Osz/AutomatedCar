@@ -1,16 +1,18 @@
 package hu.oe.nik.szfmv.common;
 
+import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
+
 import java.awt.*;
 
 public class DynamicMoving {
     private int acceleration;
     private int speed;
     private Point vector;
-    private Car car;
-    private int turningCircle;
-    protected static final int SECONDS_IN_HOUR = 3600;
-    protected static final int METERS_IN_KILOMETER = 1000;
+    private static final int SECONDS_IN_HOUR = 3600;
+    private static final int METERS_IN_KILOMETER = 1000;
 
+    private SteeringSystem steeringSystem;
     /**
      * Constructor of the DynamicMoving class
      */
@@ -18,8 +20,7 @@ public class DynamicMoving {
         acceleration = 0;
         speed = 0;
         vector = new Point(0, 0);
-        car = new Car("car_1_red.png");
-        turningCircle = 0;
+        this.steeringSystem = new SteeringSystem(new VirtualFunctionBus());
     }
 
     public int getAcceleration() {
@@ -34,16 +35,8 @@ public class DynamicMoving {
         return vector;
     }
 
-    public Car getCar() {
-        return car;
-    }
-
-    public int getTurningCircle() {
-        return turningCircle;
-    }
-
-    public void calculateTurningCircle(int turningDegree) {
-        turningCircle = (int) (car.getWheelbase() / Math.tan(turningDegree) + car.getWidth());
+    public SteeringSystem getSteeringSystem() {
+        return steeringSystem;
     }
 
     /**
@@ -52,9 +45,9 @@ public class DynamicMoving {
      */
     public void calculateNewVector(double speedDelta) {
         speed += speedDelta;
-        double road = (speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
-        int newY = (int) (Math.sin((double) turningCircle) * road);
-        int newX = (int) (Math.cos((double) turningCircle) * road);
+        double road = ((double) speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
+        int newY = (int) (Math.sin((double) steeringSystem.getTurningCircle()) * road);
+        int newX = (int) (Math.cos((double) steeringSystem.getTurningCircle()) * road);
         vector = new Point(newX, newY);
     }
 }
