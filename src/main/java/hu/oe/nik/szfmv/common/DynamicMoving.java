@@ -8,9 +8,12 @@ public class DynamicMoving {
     private Point vector;
     private Car car;
     private int turningCircle;
-    protected static final int SECUNDS_IN_HOUR = 3600;
+    protected static final int SECONDS_IN_HOUR = 3600;
     protected static final int METERS_IN_KILOMETER = 1000;
 
+    /**
+     * Constructor of the DynamicMoving class
+     */
     public DynamicMoving() {
         acceleration = 0;
         speed = 0;
@@ -43,11 +46,15 @@ public class DynamicMoving {
         turningCircle = (int) (car.getWheelbase() / Math.tan(turningDegree) + car.getWidth());
     }
 
-    public void calculateNewVector(int acceleration) {
-        speed += acceleration;
-        double road = ((double) speed / SECUNDS_IN_HOUR) * METERS_IN_KILOMETER;
-        int newy = (int) (Math.sin((double) turningCircle) * road);
-        int newx = (int) (Math.cos((double) turningCircle) * road);
-        vector = new Point(newx, newy);
+    /**
+     * Calculate the new velocity vector
+     * @param speedDelta the difference between the old and the new speed
+     */
+    public void calculateNewVector(double speedDelta) {
+        speed += speedDelta;
+        double road = (speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
+        int newY = (int) (Math.sin((double) turningCircle) * road);
+        int newX = (int) (Math.cos((double) turningCircle) * road);
+        vector = new Point(newX, newY);
     }
 }

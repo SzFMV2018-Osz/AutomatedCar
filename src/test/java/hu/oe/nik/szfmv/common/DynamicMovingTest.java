@@ -39,7 +39,7 @@ public class DynamicMovingTest {
         int oldSpeed = moving.getSpeed();
         moving.calculateNewVector(2);
 
-        assertEquals(moving.getSpeed(), oldSpeed + 2);
+        assertEquals(moving.getSpeed(), oldSpeed + 2, 0.001);
     }
 
     @Test
