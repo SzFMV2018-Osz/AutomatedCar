@@ -84,6 +84,8 @@ public class PowertrainSystem extends SystemComponent {
             case 4:
                 drive(acceleration);
                 break;
+                default:
+                    break;
         }
     }
 
