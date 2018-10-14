@@ -24,7 +24,7 @@ public class PowertrainSystem extends SystemComponent {
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -5.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
-    
+
     private DynamicMoving dynamicMoving;
     private double speed;
     private int currentRPM;
@@ -45,9 +45,6 @@ public class PowertrainSystem extends SystemComponent {
         this.dynamicMoving = new DynamicMoving();
         this.currentRPM = MIN_RPM;
         this.actualRPM = this.currentRPM;
-        this.gasPedal = virtualFunctionBus.readOnlyInputPositionPacket.getGaspedalPosition();
-        this.brakePedal = virtualFunctionBus.readOnlyInputPositionPacket.getBreakpedalPosition();
-        this.gearState = virtualFunctionBus.readOnlyInputPositionPacket.getGearState();
     }
 
     /**
