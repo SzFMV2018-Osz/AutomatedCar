@@ -18,6 +18,9 @@ public class Pedal {
     }
 
     public void Decrease() {
-        level -= 9;
+        level -= 3;
+        if (level < 5) {
+            level = 0;
+        }
     }
 }
