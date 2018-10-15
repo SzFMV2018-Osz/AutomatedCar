@@ -15,7 +15,7 @@ public class Dashboard extends JPanel {
     public static final int MAX_BREAK_VALUE = 100;
     public static final int MIN_GAS_VALUE = 0;
     public static final int MAX_GAS_VALUE = 100;
-    
+
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
@@ -25,7 +25,7 @@ public class Dashboard extends JPanel {
 
     Gui parent;
     SamplePacket sp;
-    
+
     Measurer tachometer;
     Measurer speedometer;
     Pedal gasPedal;
@@ -33,7 +33,7 @@ public class Dashboard extends JPanel {
     Index index;
     AutoTransmission autoTr;
     WheelTurn wheelTurning;
-    
+
     private JLabel steeringWheel;
     private JLabel debugLabel;
     private JLabel gearLabel;
@@ -56,7 +56,7 @@ public class Dashboard extends JPanel {
 
         parent = pt;
         sp = new SamplePacket();
-        
+
         power = 0;
         newValue = 0;
 
@@ -258,8 +258,8 @@ public class Dashboard extends JPanel {
                 if (breakPedal.level > 0) {
                     breakPedal.Decrease();
                 }
-                
-                if (wheelTurning.level!=0) {
+
+                if (wheelTurning.level != 0) {
                     wheelTurning.BackPosition();
                 }
 
