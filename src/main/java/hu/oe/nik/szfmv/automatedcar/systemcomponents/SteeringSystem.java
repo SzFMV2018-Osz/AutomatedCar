@@ -1,14 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.common.Car;
+import hu.oe.nik.szfmv.model.Classes.Car;
 
 /**
  * Steering system is responsible for the turning of the car.
  */
 public class SteeringSystem extends SystemComponent {
     private double angularSpeed = 0;
-    private Car car;
     private int turningCircle;
 
     /**
@@ -19,7 +18,6 @@ public class SteeringSystem extends SystemComponent {
     public SteeringSystem(VirtualFunctionBus virtualFunctionBus) {
 
         super(virtualFunctionBus);
-        car = new Car("car_1_red.png");
         turningCircle = 0;
     }
 
@@ -28,16 +26,12 @@ public class SteeringSystem extends SystemComponent {
         // calculateTurningCircle();
     }
 
-    public void calculateTurningCircle(int turningDegree) {
-        turningCircle = (int) (car.getWheelbase() / Math.tan(turningDegree) + car.getWidth());
+    public void calculateTurningCircle(int turningDegree, Car car) {
+        turningCircle = (int) (car.getHeight() / Math.tan((Math.toRadians((double) turningDegree)) + car.getWidth()));
     }
 
     public double getAngularSpeed() {
         return this.angularSpeed;
-    }
-
-    public Car getCar() {
-        return car;
     }
 
     public int getTurningCircle() {
