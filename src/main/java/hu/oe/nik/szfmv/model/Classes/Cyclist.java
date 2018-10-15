@@ -1,8 +1,6 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-import hu.oe.nik.szfmv.model.Interfaces.Not_Playable;
-
-public class Cyclist extends Dinamic implements Not_Playable {
+public class Cyclist extends Dinamic {
     public Cyclist(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

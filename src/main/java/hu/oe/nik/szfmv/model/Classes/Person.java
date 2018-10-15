@@ -1,9 +1,8 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-import hu.oe.nik.szfmv.model.Interfaces.Collidable;
-import hu.oe.nik.szfmv.model.Interfaces.Not_Playable;
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
-public class Person extends Dinamic implements Not_Playable , Collidable {
+public class Person extends Dinamic implements ICollidable {
     public Person(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

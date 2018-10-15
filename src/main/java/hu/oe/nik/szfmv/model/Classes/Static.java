@@ -1,9 +1,8 @@
 package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Interfaces.Not_Collidable;
 
-public class Static extends WorldObject {
+public abstract class Static extends WorldObject {
     public Static(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

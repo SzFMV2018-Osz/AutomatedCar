@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public class Bush extends Road_Obsticle {
+public class Bush extends RoadObsticle {
     public Bush(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

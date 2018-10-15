@@ -4,11 +4,9 @@ import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
-import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Car;
-import hu.oe.nik.szfmv.model.Interfaces.Playable;
 
-public class AutomatedCar extends Car implements Playable {
+public class AutomatedCar extends Car {
 
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;

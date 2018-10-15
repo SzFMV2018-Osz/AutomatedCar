@@ -5,8 +5,8 @@ import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.common.Utils;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Classes.Not_AutomatedCar;
-import hu.oe.nik.szfmv.model.Classes.Road_Element;
+import hu.oe.nik.szfmv.model.Classes.NonPlayableCar;
+import hu.oe.nik.szfmv.model.Classes.Road;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -57,44 +57,44 @@ public class XMLReader {
                 double m22 = Double.parseDouble(trans.item(i).getAttributes().getNamedItem("m22").getNodeValue());
                 double matrix = Utils.convertMatrixToRadians(m11, m12, m21, m22);
                 float routate = (float) Utils.radianToDegree(matrix);
-                WorldObject obj = new WorldObject(x, y, filename);
+                WorldObject obj;
                 switch (filename)
                 {
                     case "road_2lane_rotary.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "2_crossroad_1.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "2_crossroad_2.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_tjunctionleft.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_90left.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_90right.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_45left.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_45right.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_6left.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "road_2lane_6right.png":
-                        obj = new Road_Element(x,y,filename);
+                        obj = new Road(x,y,filename);
                         break;
                     case "car_2_white.png":
-                        obj = new Not_AutomatedCar(x,y,filename);
+                        obj = new NonPlayableCar(x,y,filename);
                         break;
                     case "car_2_red.png":
-                        obj = new Not_AutomatedCar(x,y,filename);
+                        obj = new NonPlayableCar(x,y,filename);
                         break;
                     default:
                         obj = new WorldObject(x, y, filename);
@@ -112,13 +112,10 @@ public class XMLReader {
                 w.addObjectToWorld(obj);
 
             }
-
-
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
 
         return  w;
     }
-
 }
