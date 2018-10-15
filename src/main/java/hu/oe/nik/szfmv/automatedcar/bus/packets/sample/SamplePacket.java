@@ -2,8 +2,35 @@ package hu.oe.nik.szfmv.automatedcar.bus.packets.sample;
 
 public class SamplePacket implements ReadOnlySamplePacket {
     private int gaspedalPosition = 0;
+    private int breakpedalPosition = 0;
+    private int wheelPosition = 0;
+    private String gear = "";
 
     public SamplePacket() {
+    }
+
+    public int getBreakpedalPosition() {
+        return breakpedalPosition;
+    }
+
+    public void setBreakpedalPosition(int breakpedalPosition) {
+        this.breakpedalPosition = breakpedalPosition;
+    }
+
+    public int getWheelPosition() {
+        return wheelPosition;
+    }
+
+    public void setWheelPosition(int wheelPosition) {
+        this.wheelPosition = wheelPosition;
+    }
+
+    public String getGear() {
+        return gear;
+    }
+
+    public void setGear(String gear) {
+        this.gear = gear;
     }
 
     public int getGaspedalPosition() {
