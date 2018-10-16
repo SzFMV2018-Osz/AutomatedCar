@@ -1,8 +1,7 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
-public abstract class RoadObsticle extends  Static implements ICollidable {
+public abstract class RoadObsticle extends  Static {
     public RoadObsticle(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

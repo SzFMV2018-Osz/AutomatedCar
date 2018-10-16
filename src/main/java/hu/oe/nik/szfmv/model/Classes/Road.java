@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public class Road extends  Static {
+public class Road extends Static {
     public Road(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

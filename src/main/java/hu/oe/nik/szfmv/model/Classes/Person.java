@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
-public class Person extends Dinamic implements ICollidable {
+public class Person extends Dynamic implements ICollidable {
     public Person(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

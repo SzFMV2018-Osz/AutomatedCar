@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.environment;
 
-import hu.oe.nik.szfmv.model.XML_read_in.Xml;
+
+import hu.oe.nik.szfmv.model.Classes.Dynamic;
+import hu.oe.nik.szfmv.model.Classes.Static;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +11,8 @@ public class World {
     private int width = 0;
     private int height = 0;
     private List<WorldObject> worldObjects = new ArrayList<>();
- //   private List<WorldObject> complexWorldObjects = new ArrayList<>();
-  /*  public List<WorldObject> getComplexWorldObjects() {
-        return complexWorldObjects;
-    }*/
-
- /*   public void setComplexWorldObjects(List<WorldObject> complexWorldObjects) {
-        this.complexWorldObjects = complexWorldObjects;
-    }*/
-
-
+    private List<Dynamic> dynamicObjects = new ArrayList<>();
+    private List<Static> staticObjects = new ArrayList<>();
 
     /**
      * Creates the virtual world with the given dimension.
@@ -63,5 +57,13 @@ public class World {
     }
 
 
+    public List<Dynamic> getDynamicObjects() { return dynamicObjects; }
+
+    public void addObjectToDynamicObjects(Dynamic o) { dynamicObjects.add(o); }
+
+
+    public List<Static> getStaticObjects() { return staticObjects; }
+
+    public void addObjectToStaticObjects(Static o) { staticObjects.add(o); }
 
 }

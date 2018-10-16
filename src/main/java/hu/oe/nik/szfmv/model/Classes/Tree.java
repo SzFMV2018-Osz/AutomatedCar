@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public class Tree extends RoadObsticle {
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
+
+public class Tree extends RoadObsticle implements ICollidable {
     public Tree(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

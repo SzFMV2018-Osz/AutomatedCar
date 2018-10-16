@@ -5,8 +5,7 @@ import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.common.Utils;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Classes.NonPlayableCar;
-import hu.oe.nik.szfmv.model.Classes.Road;
+import hu.oe.nik.szfmv.model.Classes.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -45,7 +44,9 @@ public class XMLReader {
                     "2_crossroad_2.png", "road_2lane_tjunctionleft.png",
                     "road_2lane_90left.png", "road_2lane_90right.png", "road_2lane_45left.png",
                     "road_2lane_45right.png", "road_2lane_6left.png",
-                    "road_2lane_6right.png", "car_2_white.png", "car_2_red.png"};
+                    "road_2lane_6right.png", "car_2_white.png", "car_2_red.png", "road_2lane_straight",
+                    "road_2lane_tjunctionright","parking_space_parallel","crosswalk","tree","roadsign_speed_40",
+                    "roadsign_speed_50","roadsign_speed_60","roadsign_priority_stop","roadsign_parking_right"};
 
             for (int i = 0; i < objects.getLength(); i++) {
                 String filename = objects.item(i).getAttributes().getNamedItem("type").getNodeValue() + ".png";
@@ -60,6 +61,36 @@ public class XMLReader {
                 WorldObject obj;
                 switch (filename)
                 {
+                    case "road_2lane_straight":
+                        obj = new Road(x,y,filename);
+                        break;
+                    case "road_2lane_tjunctionright":
+                        obj = new Road(x,y,filename);
+                        break;
+                    case "parking_space_parallel":
+                        obj = new Road(x,y,filename);
+                        break;
+                    case "crosswalk":
+                        obj = new Road(x,y,filename);
+                        break;
+                    case "roadsign_parking_right":
+                        obj = new RoadSign(x,y,filename);
+                        break;
+                    case "roadsign_priority_stop":
+                        obj = new RoadSign(x,y,filename);
+                        break;
+                    case "roadsign_speed_40":
+                        obj = new RoadSign(x,y,filename);
+                        break;
+                    case "roadsign_speed_50":
+                        obj = new RoadSign(x,y,filename);
+                        break;
+                    case "roadsign_speed_60":
+                        obj = new RoadSign(x,y,filename);
+                        break;
+                    case "tree":
+                        obj = new Tree(x,y,filename);
+                        break;
                     case "road_2lane_rotary.png":
                         obj = new Road(x,y,filename);
                         break;
@@ -110,12 +141,33 @@ public class XMLReader {
                     }
                 }
                 w.addObjectToWorld(obj);
-
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
 
+        FillDynamicObjectsList(w);
+        FillStaticObjectsList(w);
         return  w;
+    }
+
+    private static void FillDynamicObjectsList(World w)
+    {
+        for (WorldObject object: w.getWorldObjects()) {
+            if (object instanceof Dynamic)
+            {
+                w.addObjectToDynamicObjects((Dynamic) object);
+            }
+        }
+    }
+
+    private static void FillStaticObjectsList(World w)
+    {
+        for (WorldObject object: w.getWorldObjects()) {
+            if (object instanceof Static)
+            {
+                w.addObjectToStaticObjects((Static) object);
+            }
+        }
     }
 }

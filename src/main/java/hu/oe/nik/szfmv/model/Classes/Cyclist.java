@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public class Cyclist extends Dinamic {
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
+
+public class Cyclist extends Dynamic implements ICollidable {
     public Cyclist(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

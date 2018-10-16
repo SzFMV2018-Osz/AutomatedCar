@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.model.Classes;
 
-public class Car extends Dinamic {
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
+
+public abstract class Car extends Dynamic implements ICollidable {
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
