@@ -23,8 +23,7 @@ public class WorldObject implements IRender {
     protected int rotationPointY;
     protected BufferedImage image;
     protected AffineTransform transformTheImageToCorrectPos;
-    protected double [][] t_Matrix;
-
+    protected double[][] t_Matrix;
 
 
     /**
@@ -44,7 +43,7 @@ public class WorldObject implements IRender {
         t_Matrix = new double[2][2];
     }
 
-    public WorldObject(int x, int y, String imageFileName , double m11  ,double m12 , double m21 , double m22) {
+    public WorldObject(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         this.x = x;
         this.y = y;
         this.rotationPointX = 0;
@@ -56,6 +55,7 @@ public class WorldObject implements IRender {
         t_Matrix[2][1] = m21;
         t_Matrix[2][2] = m22;
     }
+
     public double[][] getT_Matrix() {
         return t_Matrix;
     }
@@ -144,6 +144,7 @@ public class WorldObject implements IRender {
 
     /**
      * Rotate the image to the correct pos
+     *
      * @param cameraX the camera x for offset
      * @param cameraY the camera y for offset
      */

@@ -4,7 +4,7 @@ public class Index {
 
     public enum Direction {
         left, right, none, warningsign
-    };
+    }
 
     public Direction actIndex;
 
