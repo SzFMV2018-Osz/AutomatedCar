@@ -25,7 +25,7 @@ public class Xml {
     private static int roadpainting_1;
     private static int roadpainting_2;
     private static int roadpainting_3;
-    static List<MainObject> csoport = new ArrayList<MainObject>();
+    static List<MainObject> group = new ArrayList<MainObject>();
 
     public static void xmlParse() throws Exception {
         {
@@ -33,15 +33,15 @@ public class Xml {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document doc = builder.parse("C:\\Users\\User\\IdeaProjects\\AutomatedCar-A\\src\\main\\resources\\lane_keeping_test_world.xml");
-                //Objektenként szétválaszt
+                //Separate as Object
                 NodeList objectList = doc.getElementsByTagName("Object");
                 for (int i = 0; i < objectList.getLength(); i++) {
-                    //Objekteken végigfut
+                    //Runs through the objects
                     Node o = objectList.item(i);
                     if (o.getNodeType() == Node.ELEMENT_NODE) {
                         Element object = (Element) o;
                         type = object.getAttribute("type");
-                        //Objekteken belüli leszármazottakon végigfut
+                        //Runs through the descendants in the objects
                         NodeList posNodes = object.getElementsByTagName("Position");
                         for (int j = 0; j < posNodes.getLength(); j++) {
                             Node n = posNodes.item(j);
@@ -79,7 +79,7 @@ public class Xml {
                             }
                         }
                     }
-                    csoport.add(new MainObject(type, x, y, m11, m12, m21, m22, roadpainting_1, roadpainting_2, roadpainting_3));
+                    group.add(new MainObject(type, x, y, m11, m12, m21, m22, roadpainting_1, roadpainting_2, roadpainting_3));
                 }
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
@@ -92,7 +92,7 @@ public class Xml {
 
 
 
-        for (MainObject item: csoport
+        for (MainObject item: group
         ) {
             System.out.println(item.type  + ", " + item.x + ", " + item.y + ", " + item.m11 + ", " + item.m12 + ", " + item.m21 + ", " + item.m22 + ", " + item.roadpainting_1 + ", " + item.roadpainting_2 + ", " + item.roadpainting_3);
         }
