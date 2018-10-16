@@ -25,7 +25,6 @@ public class WorldObject implements IRender {
     protected AffineTransform transformTheImageToCorrectPos;
     protected double[][] t_Matrix;
 
-
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
