@@ -40,6 +40,10 @@ public class SamplePacket implements ReadOnlySamplePacket {
     public int getGaspedalPosition() {
         return gaspedalPosition;
     }
+    
+    public void setGaspedalPosition(int gaspedalPosition) {
+        this.gaspedalPosition = gaspedalPosition;
+    }
 
     // TODO implement all of the HMI signals
 }
