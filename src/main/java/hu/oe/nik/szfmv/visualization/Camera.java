@@ -56,11 +56,11 @@ public class Camera {
     public void update() {
         if ((followableObject.getX() > (displayWidth / 2 - followableObject.getWidth() / 2) &&
                 followableObject.getX() < world.getWidth() - (displayWidth / 2 - followableObject.getWidth() / 2))) {
-            this.x = displayWidth / 2 - followableObject.getX() - followableObject.getWidth() / 2;
+           // this.x = displayWidth / 2 - followableObject.getX() - followableObject.getWidth() / 2;
         }
         if ((followableObject.getY() > (displayHeight / 2 - followableObject.getHeight() / 2) &&
                 followableObject.getY() < world.getHeight() - (displayHeight / 2 - followableObject.getHeight() / 2))) {
-            this.y = displayHeight / 2 - followableObject.getY() - followableObject.getHeight() / 2;
+           // this.y = displayHeight / 2 - followableObject.getY() - followableObject.getHeight() / 2;
         }
         System.out.println("x,y: " + x + "," + y);
         this.objectLastX = followableObject.getX();
