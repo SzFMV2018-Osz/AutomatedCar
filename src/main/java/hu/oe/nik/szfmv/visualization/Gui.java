@@ -2,13 +2,13 @@ package hu.oe.nik.szfmv.visualization;
 
 import javax.swing.*;
 import java.awt.*;
-
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Gui extends JFrame {
 
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
-
 
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
@@ -24,8 +24,10 @@ public class Gui extends JFrame {
         setResizable(false);
         pack();
 
-        // Icon downloaded from: http://www.iconarchive.com/show/toolbar-2-icons-by-shlyapnikova/car-icon.html
-        // and available under the licence of: https://creativecommons.org/licenses/by/4.0/
+        // Icon downloaded from:
+        // http://www.iconarchive.com/show/toolbar-2-icons-by-shlyapnikova/car-icon.html
+        // and available under the licence of:
+        // https://creativecommons.org/licenses/by/4.0/
         ImageIcon carIcon = new ImageIcon(ClassLoader.getSystemResource("car-icon.png"));
         setIconImage(carIcon.getImage());
 
@@ -35,10 +37,53 @@ public class Gui extends JFrame {
         courseDisplay = new CourseDisplay();
         add(courseDisplay);
 
-        dashboard = new Dashboard();
+        dashboard = new Dashboard(this);
         add(dashboard);
 
         setVisible(true);
+
+        KeyListener listen = new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    dashboard.gasPedal.Pressed();
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    dashboard.breakPedal.Pressed();
+                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    dashboard.wheelTurning.TurnRight();
+                } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    dashboard.wheelTurning.TurnLeft();
+                } else if (e.getKeyCode() == KeyEvent.VK_Q) {
+                    dashboard.index.TurnLeft();
+                } else if (e.getKeyCode() == KeyEvent.VK_E) {
+                    dashboard.index.TurnRight();
+                } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                    dashboard.index.Warning();
+                } else if (e.getKeyCode() == KeyEvent.VK_W) {
+                    dashboard.index.SwitchBack();
+                } else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+                    dashboard.autoTr.ShiftUp();
+                } else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+                    dashboard.autoTr.ShiftDown();
+                }
+            }
+        };
+
+        this.addKeyListener(listen);
+
     }
 
     public CourseDisplay getCourseDisplay() {
