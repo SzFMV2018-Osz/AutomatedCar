@@ -8,4 +8,10 @@ public interface ReadOnlySamplePacket {
      */
     int getGaspedalPosition();
 
+    int getBreakpedalPosition();
+
+    int getWheelPosition();
+
+    String getGear();
+
 }
