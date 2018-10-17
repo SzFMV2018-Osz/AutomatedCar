@@ -21,8 +21,8 @@ import java.io.File;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int[] ys = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
-    private static int[] xs = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
+    private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
+    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
     /**
      * Main entrypoint of the software
@@ -40,7 +40,7 @@ public class Main {
 
         // create the world
       //  World w = new World(800, 600);
-        World w = XMLReader.WorldMaker();
+        World w = XMLReader.worldMaker();
 
        /* try {
             File fXmlFile = new File(ClassLoader.getSystemResource("test_world.xml").getFile());

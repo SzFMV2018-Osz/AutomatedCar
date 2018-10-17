@@ -17,10 +17,15 @@ import java.io.File;
 
 public class XMLReader {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int[] ys = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
-    private static int[] xs = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
+    private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
+    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
-    public static World WorldMaker() {
+    /**
+     *
+     * @Creates World object of the elements of rescource xml
+     * @return World obejct
+     */
+    public static World worldMaker() {
         LOGGER.info(ConfigProvider.provide().getBoolean("general.debug"));
         World w = new World(800, 600);
 
@@ -39,13 +44,14 @@ public class XMLReader {
             int pcount = poss.getLength();
             NodeList trans = doc.getDocumentElement().getElementsByTagName("Transform");
             int tcount = trans.getLength();
-            String[] names = {"road_2lane_rotary.png", "2_crossroad_1.png",
-                    "2_crossroad_2.png", "road_2lane_tjunctionleft.png",
-                    "road_2lane_90left.png", "road_2lane_90right.png", "road_2lane_45left.png",
-                    "road_2lane_45right.png", "road_2lane_6left.png",
-                    "road_2lane_6right.png", "car_2_white.png", "car_2_red.png", "road_2lane_straight",
-                    "road_2lane_tjunctionright", "parking_space_parallel", "crosswalk", "tree", "roadsign_speed_40",
-                    "roadsign_speed_50", "roadsign_speed_60", "roadsign_priority_stop", "roadsign_parking_right"};
+            String[] names = {
+                "road_2lane_rotary.png", "2_crossroad_1.png", "2_crossroad_2.png",
+                "road_2lane_tjunctionleft.png", "road_2lane_90left.png", "road_2lane_90right.png",
+                "road_2lane_45left.png", "road_2lane_45right.png", "road_2lane_6left.png",
+                "road_2lane_6right.png", "car_2_white.png", "car_2_red.png",
+                "road_2lane_straight", "road_2lane_tjunctionright", "parking_space_parallel",
+                "crosswalk", "tree", "roadsign_speed_40", "roadsign_speed_50",
+                "roadsign_speed_60", "roadsign_priority_stop", "roadsign_parking_right"};
 
             for (int i = 0; i < objects.getLength(); i++) {
                 String filename = objects.item(i).getAttributes().getNamedItem("type").getNodeValue() + ".png";
@@ -134,8 +140,8 @@ public class XMLReader {
                 obj.setRotation(routate);
                 for (int l = 0; l < names.length; l++) {
                     if (names[l].equals(filename)) {
-                        obj.setRotationPointX(xs[l]);
-                        obj.setRotationPointY(ys[l]);
+                        obj.setRotationPointX(xS[l]);
+                        obj.setRotationPointY(yS[l]);
                     }
                 }
                 w.addObjectToWorld(obj);
