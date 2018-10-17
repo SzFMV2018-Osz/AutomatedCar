@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,11 +47,11 @@ public class Dashboard extends JPanel {
         public void run() {
             while (true) {
 
-                difference = gasPedal.level / 10 - breakPedal.level / 10;
+                //difference = gasPedal.level / 10 - breakPedal.level / 10;
 
-                if (newValue + difference < 100 && newValue + difference > 0) {
-                    newValue += difference;
-                }
+                //if (newValue + difference < 100 && newValue + difference > 0) {
+                //    newValue += difference;
+                // }
 
                 setBreakProgress(breakPedal.level);
                 sp.setBreakpedalPosition(breakPedal.level);
@@ -59,7 +60,11 @@ public class Dashboard extends JPanel {
                 setWheel(wheelTurning.level);
                 sp.setWheelPosition(wheelTurning.level);
 
-                power = newValue - 69;
+                if (parent.getVirtualFunctionBus() != null) {
+                    power = (int) (((double) parent.getVirtualFunctionBus().powertrainPacket.getRpm() / PowertrainSystem.MAX_RPM) * 110) - 80;
+                } else {
+                    power = ((PowertrainSystem.MIN_RPM / PowertrainSystem.MAX_RPM) * 110) - 69;
+                }
 
                 if (newValue > 0) {
                     newValue -= 4;
@@ -86,6 +91,7 @@ public class Dashboard extends JPanel {
                 setPower();
 
                 setIndex(index.actIndex);
+                setCarPosition(parent.getVirtualFunctionBus().carPacket.getxPosition(), parent.getVirtualFunctionBus().carPacket.getyPosition());
                 setGear(autoTr.actGear.toString());
                 sp.setGear(autoTr.actGear.toString());
                 parent.getVirtualFunctionBus().samplePacket = sp;

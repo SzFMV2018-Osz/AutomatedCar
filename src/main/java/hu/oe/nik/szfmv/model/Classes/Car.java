@@ -28,7 +28,6 @@ public class Car extends Dinamic {
         dynamicMoving = new DynamicMoving(steeringSystem);
         powertrainSystem = new PowertrainSystem(virtualFunctionBus, dynamicMoving);
 
-
         new Driver(virtualFunctionBus);
 
         setCarPacket();
@@ -73,7 +72,7 @@ public class Car extends Dinamic {
 
         virtualFunctionBus.carPacket.setxPosition(x);
         virtualFunctionBus.carPacket.setyPosition(y);
-        
+
         rotation += angularSpeed;
     }
 
