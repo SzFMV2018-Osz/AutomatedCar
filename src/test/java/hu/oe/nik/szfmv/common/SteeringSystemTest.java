@@ -18,7 +18,7 @@ public class SteeringSystemTest {
         steeringSystem = new SteeringSystem(new VirtualFunctionBus());
 
         assertNotNull(steeringSystem);
-        assertNotEquals(steeringSystem.getTurningCircle(), 0);
+        assertEquals(steeringSystem.getTurningCircle(), 0);
     }
 
     @Test
