@@ -83,14 +83,14 @@ public class Gui extends JFrame {
                     dashboard.index.TurnLeft();
                 } else  if (keysPressed.contains(KeyEvent.VK_E)) {
                     dashboard.index.TurnRight();
-                } else  if (keysPressed.contains(KeyEvent.VK_X)) {
-                    dashboard.index.Warning();
                 } else  if (keysPressed.contains(KeyEvent.VK_W)) {
+                    dashboard.index.Warning();
+                } else  if (keysPressed.contains(KeyEvent.VK_S)) {
                     dashboard.index.SwitchBack();
                 }
-                if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
+                if (keysPressed.contains(KeyEvent.VK_D)) {
                     dashboard.autoTr.ShiftUp();
-                } else  if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
+                } else  if (keysPressed.contains(KeyEvent.VK_A)) {
                     dashboard.autoTr.ShiftDown();
                 }
             }
