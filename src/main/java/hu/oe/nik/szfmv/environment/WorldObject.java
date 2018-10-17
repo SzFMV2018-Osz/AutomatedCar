@@ -23,8 +23,7 @@ public class WorldObject implements IRender {
     protected int rotationPointY;
     protected BufferedImage image;
     protected AffineTransform transformTheImageToCorrectPos;
-    protected double[][] t_Matrix;
-
+    protected double[][] tMatrix;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -40,9 +39,19 @@ public class WorldObject implements IRender {
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
         InitImage();
-        t_Matrix = new double[2][2];
+        tMatrix = new double[2][2];
     }
 
+    /**
+     *
+     * @param x coordinate
+     * @param y coordinate
+     * @param imageFileName the name of the imagefile used for this type
+     * @param m11 transformation
+     * @param m12 transformation
+     * @param m21 transformation
+     * @param m22 transformation
+     */
     public WorldObject(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         this.x = x;
         this.y = y;
@@ -50,18 +59,18 @@ public class WorldObject implements IRender {
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
         InitImage();
-        t_Matrix[1][1] = m11;
-        t_Matrix[1][2] = m12;
-        t_Matrix[2][1] = m21;
-        t_Matrix[2][2] = m22;
+        tMatrix[1][1] = m11;
+        tMatrix[1][2] = m12;
+        tMatrix[2][1] = m21;
+        tMatrix[2][2] = m22;
     }
 
-    public double[][] getT_Matrix() {
-        return t_Matrix;
+    public double[][] getTMatrix() {
+        return tMatrix;
     }
 
-    public void setT_Matrix(double[][] t_Matrix) {
-        this.t_Matrix = t_Matrix;
+    public void setTMatrix(double[][] tMatrix) {
+        this.tMatrix = tMatrix;
     }
 
     public void setRotationPointX(int rotationPointX) {

@@ -15,8 +15,7 @@
     <module name="TreeWalker">
         <!-- require javadoc allowing missing javadoc for getters and setters-->
         <module name="JavadocMethod">
-            <!-- Asked by @usanyo -->
-            <property name="excludeScope" value="private"/>
+            <property name="scope" value="public"/>
             <property name="allowMissingPropertyJavadoc" value="true"/>
         </module>
 

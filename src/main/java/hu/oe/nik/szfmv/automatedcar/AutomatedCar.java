@@ -4,15 +4,13 @@ import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
-import hu.oe.nik.szfmv.common.DynamicMoving;
-import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Classes.Car;
 
-public class AutomatedCar extends WorldObject {
+public class AutomatedCar extends Car {
 
-    private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
-    private DynamicMoving dynamicMoving;
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
+    private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 
     /**
      * Constructor of the AutomatedCar class
@@ -24,7 +22,7 @@ public class AutomatedCar extends WorldObject {
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
-        powertrainSystem = new PowertrainSystem(virtualFunctionBus, dynamicMoving);
+        powertrainSystem = new PowertrainSystem(virtualFunctionBus);
         steeringSystem = new SteeringSystem(virtualFunctionBus);
 
         new Driver(virtualFunctionBus);
@@ -43,8 +41,9 @@ public class AutomatedCar extends WorldObject {
      * Calculates the new x and y coordinates of the {@link AutomatedCar} using the powertrain and the steering systems.
      */
     private void calculatePositionAndOrientation() {
+        //TODO it is just a fake implementation
         double speed = powertrainSystem.getSpeed();
-        double angularSpeed = steeringSystem.getTurningCircle();
+        double angularSpeed = steeringSystem.getAngularSpeed();
 
         x += speed;
         y = 0;
