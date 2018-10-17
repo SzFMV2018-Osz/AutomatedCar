@@ -53,14 +53,14 @@ public class Camera {
     /**
      * Updating the position of the camera when the camera have a followable object
      */
-    public void Update() {
+    public void update() {
         if ((followableObject.getX() > (displayWidth / 2 - followableObject.getWidth() / 2) &&
                 followableObject.getX() < world.getWidth() - (displayWidth / 2 - followableObject.getWidth() / 2))) {
-          //  this.x = displayWidth / 2 - followableObject.getX() - followableObject.getWidth() / 2;
+            this.x = displayWidth / 2 - followableObject.getX() - followableObject.getWidth() / 2;
         }
         if ((followableObject.getY() > (displayHeight / 2 - followableObject.getHeight() / 2) &&
                 followableObject.getY() < world.getHeight() - (displayHeight / 2 - followableObject.getHeight() / 2))) {
-         //   this.y = displayHeight / 2 - followableObject.getY() - followableObject.getHeight() / 2;
+            this.y = displayHeight / 2 - followableObject.getY() - followableObject.getHeight() / 2;
         }
         System.out.println("x,y: " + x + "," + y);
         this.objectLastX = followableObject.getX();
@@ -73,7 +73,7 @@ public class Camera {
      * @param deltaX the movement value of the x cord
      * @param deltaY the movement value of the y cord
      */
-    public void MoveCamera(int deltaX, int deltaY) {
+    public void moveCamera(int deltaX, int deltaY) {
         if (this.x + deltaX <= 0 &&
                 Math.abs(this.x + deltaX) <= world.getWidth() - (displayWidth / 2)) {
             x += deltaX;
