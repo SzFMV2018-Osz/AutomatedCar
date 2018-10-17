@@ -24,7 +24,7 @@ public class PowertrainSystem extends SystemComponent {
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -5.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
-
+    private static final double MAX_PERCENT = 100d;
     private DynamicMoving dynamicMoving;
     private double speed;
     private int currentRPM;
@@ -36,13 +36,14 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
      *
+     * @param dynamicMoving      {@link DynamicMoving}
      * @param virtualFunctionBus {@link VirtualFunctionBus} used to connect {@link SystemComponent}s
      */
-    public PowertrainSystem(VirtualFunctionBus virtualFunctionBus) {
+    public PowertrainSystem(VirtualFunctionBus virtualFunctionBus, DynamicMoving dynamicMoving) {
         super(virtualFunctionBus);
 
         this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
-        this.dynamicMoving = new DynamicMoving();
+        this.dynamicMoving = dynamicMoving;
         this.currentRPM = MIN_RPM;
         this.actualRPM = this.currentRPM;
     }
@@ -57,16 +58,36 @@ public class PowertrainSystem extends SystemComponent {
         return Math.sqrt(Math.pow(vector.getX(), 2) + Math.pow(vector.getY(), 2));
     }
 
+    public DynamicMoving getDynamicMoving() {
+        return dynamicMoving;
+    }
+
     @Override
     public void loop() {
+        switch (virtualFunctionBus.inputPositionPacket.getGearState()) {
+            case 1:
+                dynamicMoving.calculateNewVector((virtualFunctionBus.inputPositionPacket.getGaspedalPosition()
+                        / MAX_PERCENT) * MAX_REVERSE_SPEED);
+                break;
+            case 4:
+                dynamicMoving.calculateNewVector(
+                        (virtualFunctionBus.inputPositionPacket.getGaspedalPosition()
+                                / MAX_PERCENT) * MAX_FORWARD_SPEED);
+                break;
+            default:
+                break;
+        }
         try {
-            actualRPM = calculateActualRpm(virtualFunctionBus.readOnlyInputPositionPacket.getGaspedalPosition());
+            actualRPM = calculateActualRpm(virtualFunctionBus.inputPositionPacket.getGaspedalPosition());
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
         doPowerTrain();
     }
 
+    /**
+     * Do Power Train
+     */
     private void doPowerTrain() {
         double acceleration = calculateSpeedDifference();
 
@@ -84,8 +105,8 @@ public class PowertrainSystem extends SystemComponent {
             case 4:
                 drive(acceleration);
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
@@ -219,17 +240,17 @@ public class PowertrainSystem extends SystemComponent {
      */
     private double calculateSpeedDifference() {
         double speedDelta;
-        int brakePedalPosition = this.virtualFunctionBus.readOnlyInputPositionPacket.getBreakpedalPosition();
+        int brakePedalPosition = this.virtualFunctionBus.inputPositionPacket.getBreakpedalPosition();
 
         if (this.actualRPM > this.currentRPM) {
-            speedDelta = (this.getVelocityVectorMagnitude() * this.actualRPM * GEAR_RATIOS) /
+            speedDelta = (this.getVelocityVectorMagnitude() + this.actualRPM * GEAR_RATIOS) /
                     (this.getAirResistanceMagnitude() * SAMPLE_WEIGHT *
                             this.getRollingResistanceMagnitude());
         } else if (brakePedalPosition > 0) {
-            speedDelta = -1 * this.getVelocityVectorMagnitude() * ((MAX_BRAKE_DECELERATION /
+            speedDelta = -1 * this.getVelocityVectorMagnitude() + ((MAX_BRAKE_DECELERATION /
                     (double) PERCENTAGE_DIVISOR) * brakePedalPosition);
         } else {
-            speedDelta = (-1 * this.getVelocityVectorMagnitude() * (double) ENGINE_BRAKE_TORQUE *
+            speedDelta = (-1 * this.getVelocityVectorMagnitude() + (double) ENGINE_BRAKE_TORQUE *
                     this.getAirResistanceMagnitude() * this.getRollingResistanceMagnitude()) / PERCENTAGE_DIVISOR;
         }
 

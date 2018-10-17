@@ -48,7 +48,7 @@ public class VirtualFunctionBusTest {
 
         protected SenderComponentMock(VirtualFunctionBus virtualFunctionBus) {
             super(virtualFunctionBus);
-            virtualFunctionBus.readOnlyInputPositionPacket = inputPositionPacket;
+            virtualFunctionBus.inputPositionPacket = inputPositionPacket;
         }
 
         @Override
@@ -68,7 +68,7 @@ public class VirtualFunctionBusTest {
         @Override
         public void loop() {
             receiverLoopCalled = true;
-            gaspedalPosition = virtualFunctionBus.readOnlyInputPositionPacket.getGaspedalPosition();
+            gaspedalPosition = virtualFunctionBus.inputPositionPacket.getGaspedalPosition();
         }
     }
 }

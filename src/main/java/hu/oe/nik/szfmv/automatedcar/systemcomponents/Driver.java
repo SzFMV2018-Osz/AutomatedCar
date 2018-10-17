@@ -13,11 +13,12 @@ public class Driver extends SystemComponent {
     public Driver(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
         inputPositionPacket = new InputPositionPacket();
-        virtualFunctionBus.readOnlyInputPositionPacket = inputPositionPacket;
+        virtualFunctionBus.inputPositionPacket = inputPositionPacket;
     }
 
     @Override
     public void loop() {
-        inputPositionPacket.setGaspedalPosition(5);
+        virtualFunctionBus.inputPositionPacket.setGaspedalPosition(5);
+
     }
 }
