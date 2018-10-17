@@ -2,7 +2,7 @@
 language: java
 jdk:
 #  - oraclejdk10
-- openjdk10
+  - openjdk10
 # Define OS image for TravisCI to use: Ubuntu 14.04 LTS (Trusty Tahr)
 dist: trusty
 # The selected image is headless (without display server), but for GUI related tests it is required, so the X virtual
