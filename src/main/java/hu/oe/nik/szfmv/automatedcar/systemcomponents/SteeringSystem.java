@@ -29,9 +29,9 @@ public class SteeringSystem extends SystemComponent {
      * @param turningDegree Degree of the steering wheel
      */
     public void calculateTurningCircle(int turningDegree) {
-        turningCircle = (int) (virtualFunctionBus.carPacket.getCarWidth()
+        turningCircle = (int) (virtualFunctionBus.carPacket.getCarHeigth()
                 / Math.tan((Math.toRadians((double) turningDegree))
-                + virtualFunctionBus.carPacket.getCarHeigth()));
+                + virtualFunctionBus.carPacket.getCarWidth()));
     }
 
     public int getTurningCircle() {
