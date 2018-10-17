@@ -6,6 +6,9 @@ public class SamplePacket implements ReadOnlySamplePacket {
     private int wheelPosition = 0;
     private String gear = "";
 
+    /**
+     * Create a Sample Packet
+     */
     public SamplePacket() {
     }
 
@@ -33,12 +36,9 @@ public class SamplePacket implements ReadOnlySamplePacket {
         this.gear = gear;
     }
 
+    @Override
     public int getGaspedalPosition() {
-        return this.gaspedalPosition;
-    }
-
-    public void setGaspedalPosition(int gaspedalPosition) {
-        this.gaspedalPosition = gaspedalPosition;
+        return gaspedalPosition;
     }
 
     // TODO implement all of the HMI signals

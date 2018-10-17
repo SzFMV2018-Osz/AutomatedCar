@@ -8,9 +8,9 @@ import hu.oe.nik.szfmv.environment.WorldObject;
 
 public class AutomatedCar extends WorldObject {
 
+    private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
-    private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 
     /**
      * Constructor of the AutomatedCar class
