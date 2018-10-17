@@ -1,9 +1,8 @@
 package hu.oe.nik.szfmv.visualization;
 
-import javax.swing.*;
-
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -21,11 +20,8 @@ public class Dashboard extends JPanel {
     private final int backgroundColor = 0x888888;
 
     public int power;
-    private int newValue;
-
     Gui parent;
     SamplePacket sp;
-
     Measurer tachometer;
     Measurer speedometer;
     Pedal gasPedal;
@@ -33,7 +29,7 @@ public class Dashboard extends JPanel {
     Index index;
     AutoTransmission autoTr;
     WheelTurn wheelTurning;
-
+    private int newValue;
     private JLabel steeringWheel;
     private JLabel debugLabel;
     private JLabel gearLabel;
@@ -44,6 +40,59 @@ public class Dashboard extends JPanel {
 
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
+    private Thread Timer = new Thread() {
+        int difference;
+
+        public void run() {
+            while (true) {
+
+                difference = gasPedal.level / 10 - breakPedal.level / 10;
+
+                if (newValue + difference < 100 && newValue + difference > 0) {
+                    newValue += difference;
+                }
+
+                setBreakProgress(breakPedal.level);
+                sp.setBreakpedalPosition(breakPedal.level);
+                setGasProgress(gasPedal.level);
+                sp.setGaspedalPosition(gasPedal.level);
+                setWheel(wheelTurning.level);
+                sp.setWheelPosition(wheelTurning.level);
+
+                power = newValue - 69;
+
+                if (newValue > 0) {
+                    newValue -= 4;
+                }
+
+                if (gasPedal.level > 0) {
+                    gasPedal.Decrease();
+                }
+
+                if (breakPedal.level > 0) {
+                    breakPedal.Decrease();
+                }
+
+                if (wheelTurning.level != 0) {
+                    wheelTurning.BackPosition();
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                }
+
+                setSpeed();
+                setPower();
+
+                setIndex(index.actIndex);
+                setCarPosition(parent.getVirtualFunctionBus().carPacket.getxPosition(), parent.getVirtualFunctionBus().carPacket.getyPosition());
+                setGear(autoTr.actGear.toString());
+                sp.setGear(autoTr.actGear.toString());
+                parent.getVirtualFunctionBus().samplePacket = sp;
+            }
+        }
+    };
 
     /**
      * Initialize the dashboard
@@ -225,57 +274,5 @@ public class Dashboard extends JPanel {
     private void setWheel(int value) {
         steeringWheel.setText("steering wheel: " + value);
     }
-
-    private Thread Timer = new Thread() {
-        int difference;
-
-        public void run() {
-            while (true) {
-
-                difference = gasPedal.level / 10 - breakPedal.level / 10;
-
-                if (newValue + difference < 100 && newValue + difference > 0) {
-                    newValue += difference;
-                }
-
-                setBreakProgress(breakPedal.level);
-                sp.setBreakpedalPosition(breakPedal.level);
-                setGasProgress(gasPedal.level);
-                sp.setGaspedalPosition(gasPedal.level);
-                setWheel(wheelTurning.level);
-                sp.setWheelPosition(wheelTurning.level);
-
-                power = newValue - 69;
-
-                if (newValue > 0) {
-                    newValue -= 4;
-                }
-
-                if (gasPedal.level > 0) {
-                    gasPedal.Decrease();
-                }
-
-                if (breakPedal.level > 0) {
-                    breakPedal.Decrease();
-                }
-
-                if (wheelTurning.level != 0) {
-                    wheelTurning.BackPosition();
-                }
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
-
-                setSpeed();
-                setPower();
-
-                setIndex(index.actIndex);
-                setGear(autoTr.actGear.toString());
-                sp.setGear(autoTr.actGear.toString());
-            }
-        }
-    };
 
 }
