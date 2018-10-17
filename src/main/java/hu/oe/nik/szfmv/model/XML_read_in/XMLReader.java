@@ -14,6 +14,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XMLReader {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -150,24 +152,26 @@ public class XMLReader {
             LOGGER.error(e.getMessage());
         }
 
-        fillDynamicObjectsList(w);
-        fillStaticObjectsList(w);
         return w;
     }
 
-    private static void fillDynamicObjectsList(World w) {
+    private static List<Dynamic> getDynamicObject(World w) {
+        List<Dynamic> dynamicObjects = new ArrayList<>();
         for (WorldObject object : w.getWorldObjects()) {
             if (object instanceof Dynamic) {
-                w.addObjectToDynamicObjects((Dynamic) object);
+                dynamicObjects.add((Dynamic)object);
             }
         }
+        return dynamicObjects;
     }
 
-    private static void fillStaticObjectsList(World w) {
+    private static List<Static> getStaticObject(World w) {
+        List<Static> staticObjects = new ArrayList<>();
         for (WorldObject object : w.getWorldObjects()) {
             if (object instanceof Static) {
-                w.addObjectToStaticObjects((Static) object);
+                staticObjects.add((Static) object);
             }
         }
+        return staticObjects;
     }
 }

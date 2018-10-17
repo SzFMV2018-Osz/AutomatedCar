@@ -11,8 +11,7 @@ public class World {
     private int width = 0;
     private int height = 0;
     private List<WorldObject> worldObjects = new ArrayList<>();
-    private List<Dynamic> dynamicObjects = new ArrayList<>();
-    private List<Static> staticObjects = new ArrayList<>();
+
 
     /**
      * Creates the virtual world with the given dimension.
@@ -57,13 +56,6 @@ public class World {
     }
 
 
-    public List<Dynamic> getDynamicObjects() { return dynamicObjects; }
 
-    public void addObjectToDynamicObjects(Dynamic o) { dynamicObjects.add(o); }
-
-
-    public List<Static> getStaticObjects() { return staticObjects; }
-
-    public void addObjectToStaticObjects(Static o) { staticObjects.add(o); }
 
 }
