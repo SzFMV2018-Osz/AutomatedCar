@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,6 +14,7 @@ public class Gui extends JFrame {
 
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
+    private VirtualFunctionBus virtualFunctionBus;
 
     /**
      * Initialize the GUI class
@@ -84,6 +87,14 @@ public class Gui extends JFrame {
 
         this.addKeyListener(listen);
 
+    }
+
+    public VirtualFunctionBus getVirtualFunctionBus() {
+        return virtualFunctionBus;
+    }
+
+    public void setVirtualFunctionBus(VirtualFunctionBus virtualFunctionBus) {
+        this.virtualFunctionBus = virtualFunctionBus;
     }
 
     public CourseDisplay getCourseDisplay() {
