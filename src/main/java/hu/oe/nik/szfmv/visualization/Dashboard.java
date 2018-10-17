@@ -256,7 +256,7 @@ public class Dashboard extends JPanel {
     }
 
     private void setPower() {
-        tachometer.setPower((int) parent.getVirtualFunctionBus().powertrainPacket.getRpm()/1000*11);
+        tachometer.setPower((int) parent.getVirtualFunctionBus().powertrainPacket.getRpm() / 1000 * 11);
         tachometer.repaint();
     }
 
