@@ -43,14 +43,13 @@ public class WorldObject implements IRender {
     }
 
     /**
-     *
-     * @param x coordinate
-     * @param y coordinate
+     * @param x             coordinate
+     * @param y             coordinate
      * @param imageFileName the name of the imagefile used for this type
-     * @param m11 transformation
-     * @param m12 transformation
-     * @param m21 transformation
-     * @param m22 transformation
+     * @param m11           transformation
+     * @param m12           transformation
+     * @param m21           transformation
+     * @param m22           transformation
      */
     public WorldObject(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         this.x = x;
