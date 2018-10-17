@@ -40,6 +40,7 @@ public class Main {
         AutomatedCar car = new AutomatedCar(100, 100, "car_2_white.png");
         // add car to the world
         w.addObjectToWorld(car);
+
         // create gui
         Gui gui = new Gui();
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
