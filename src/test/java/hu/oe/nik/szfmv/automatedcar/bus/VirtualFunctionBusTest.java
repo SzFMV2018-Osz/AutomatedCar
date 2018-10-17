@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.bus;
 
-import hu.oe.nik.szfmv.automatedcar.bus.packets.inputposition.InputPositionPacket;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,17 +44,17 @@ public class VirtualFunctionBusTest {
     }
 
     class SenderComponentMock extends SystemComponent {
-        InputPositionPacket inputPositionPacket = new InputPositionPacket();
+        SamplePacket samplePacket = new SamplePacket();
 
         protected SenderComponentMock(VirtualFunctionBus virtualFunctionBus) {
             super(virtualFunctionBus);
-            virtualFunctionBus.inputPositionPacket = inputPositionPacket;
+            virtualFunctionBus.samplePacket = samplePacket;
         }
 
         @Override
         public void loop() {
             senderLoopCalled = true;
-            inputPositionPacket.setGaspedalPosition(42);
+            samplePacket.setGaspedalPosition(42);
         }
     }
 
@@ -68,7 +68,7 @@ public class VirtualFunctionBusTest {
         @Override
         public void loop() {
             receiverLoopCalled = true;
-            gaspedalPosition = virtualFunctionBus.inputPositionPacket.getGaspedalPosition();
+            gaspedalPosition = virtualFunctionBus.samplePacket.getGaspedalPosition();
         }
     }
 }

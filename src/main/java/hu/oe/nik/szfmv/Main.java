@@ -30,6 +30,7 @@ public class Main {
 
         // create gui
         Gui gui = new Gui();
+        gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
 
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);

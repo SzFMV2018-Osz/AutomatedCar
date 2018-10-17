@@ -11,4 +11,12 @@ public interface ReadOnlyCarPacket {
      * @return the width of the car
      */
     int getCarWidth();
+
+    int getxPosition();
+
+    void setxPosition(int xPosition);
+
+    int getyPosition();
+
+    void setyPosition(int yPosition);
 }

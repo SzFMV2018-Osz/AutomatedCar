@@ -21,7 +21,7 @@ public class SteeringSystem extends SystemComponent {
 
     @Override
     public void loop() {
-        calculateTurningCircle(virtualFunctionBus.inputPositionPacket.getSteeringWheelPosition());
+        calculateTurningCircle(virtualFunctionBus.samplePacket.getWheelPosition());
     }
 
 

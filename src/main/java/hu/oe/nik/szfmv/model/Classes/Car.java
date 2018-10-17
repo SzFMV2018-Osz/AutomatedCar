@@ -45,6 +45,10 @@ public class Car extends Dinamic {
         setCarPacket();
     }
 
+    public VirtualFunctionBus getVirtualFunctionBus() {
+        return virtualFunctionBus;
+    }
+
     private void setCarPacket() {
         CarPacket carPacket = new CarPacket();
         carPacket.setCarWidth(width);
@@ -67,6 +71,9 @@ public class Car extends Dinamic {
         x -= movingVector.getY();
         y -= movingVector.getX();
 
+        virtualFunctionBus.carPacket.setxPosition(x);
+        virtualFunctionBus.carPacket.setyPosition(y);
+        
         rotation += angularSpeed;
     }
 
