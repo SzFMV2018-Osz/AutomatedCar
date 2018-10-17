@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.common;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
 import hu.oe.nik.szfmv.model.Classes.Car;
 import org.junit.Test;
@@ -39,7 +40,12 @@ public class SteeringSystemTest {
 
     @Test
     public void testCalculateTurningCircle() {
-        steeringSystem = new SteeringSystem(new VirtualFunctionBus());
+        VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+        virtualFunctionBus.carPacket = new CarPacket();
+        ((CarPacket) virtualFunctionBus.carPacket).setCarHeigth(190);
+        ((CarPacket) virtualFunctionBus.carPacket).setCarWidth(90);
+
+        steeringSystem = new SteeringSystem(virtualFunctionBus);
         int oldTurningCircle = steeringSystem.getTurningCircle();
         steeringSystem.calculateTurningCircle(30);
         int newTurningCircle = steeringSystem.getTurningCircle();
