@@ -40,7 +40,7 @@ public class Main {
 
         // create the world
       //  World w = new World(800, 600);
-        World w = XMLReader.World_Maker();
+        World w = XMLReader.WorldMaker();
 
        /* try {
             File fXmlFile = new File(ClassLoader.getSystemResource("test_world.xml").getFile());

@@ -20,7 +20,7 @@ public class XMLReader {
     private static final int[] ys = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
     private static int[] xs = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
-    public static World World_Maker() {
+    public static World WorldMaker() {
         LOGGER.info(ConfigProvider.provide().getBoolean("general.debug"));
         World w = new World(800, 600);
 
@@ -144,12 +144,12 @@ public class XMLReader {
             LOGGER.error(e.getMessage());
         }
 
-        FillDynamicObjectsList(w);
-        FillStaticObjectsList(w);
+        fillDynamicObjectsList(w);
+        fillStaticObjectsList(w);
         return w;
     }
 
-    private static void FillDynamicObjectsList(World w) {
+    private static void fillDynamicObjectsList(World w) {
         for (WorldObject object : w.getWorldObjects()) {
             if (object instanceof Dynamic) {
                 w.addObjectToDynamicObjects((Dynamic) object);
@@ -157,7 +157,7 @@ public class XMLReader {
         }
     }
 
-    private static void FillStaticObjectsList(World w) {
+    private static void fillStaticObjectsList(World w) {
         for (WorldObject object : w.getWorldObjects()) {
             if (object instanceof Static) {
                 w.addObjectToStaticObjects((Static) object);
