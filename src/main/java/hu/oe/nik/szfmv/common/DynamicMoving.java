@@ -8,7 +8,7 @@ public class DynamicMoving {
     private static final int SECONDS_IN_HOUR = 3600;
     private static final int METERS_IN_KILOMETER = 1000;
     private int acceleration;
-    private int speed;
+    private double speed;
     private Point vector;
     private SteeringSystem steeringSystem;
 
@@ -21,7 +21,7 @@ public class DynamicMoving {
         this.steeringSystem = steeringSystem;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
@@ -40,7 +40,7 @@ public class DynamicMoving {
      */
     public void calculateNewVector(double speedDelta) {
         speed += speedDelta;
-        double road = ((double) speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
+        double road = (speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
         int newY = (int) (Math.sin((double) steeringSystem.getTurningCircle()) * road);
         int newX = (int) (Math.cos((double) steeringSystem.getTurningCircle()) * road);
         vector = new Point(newX, newY);

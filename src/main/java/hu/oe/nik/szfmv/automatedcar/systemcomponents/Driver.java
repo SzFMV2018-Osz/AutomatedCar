@@ -18,7 +18,7 @@ public class Driver extends SystemComponent {
 
     @Override
     public void loop() {
+        virtualFunctionBus.inputPositionPacket.setGearState(1);
         virtualFunctionBus.inputPositionPacket.setGaspedalPosition(5);
-
     }
 }

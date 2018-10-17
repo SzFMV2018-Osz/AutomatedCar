@@ -64,7 +64,8 @@ public class PowertrainSystem extends SystemComponent {
 
     @Override
     public void loop() {
-        switch (virtualFunctionBus.inputPositionPacket.getGearState()) {
+        gearState = virtualFunctionBus.inputPositionPacket.getGearState();
+        switch (gearState) {
             case 1:
                 dynamicMoving.calculateNewVector((virtualFunctionBus.inputPositionPacket.getGaspedalPosition()
                         / MAX_PERCENT) * MAX_REVERSE_SPEED);

@@ -25,7 +25,7 @@ public class DynamicMovingTest {
     public void testNewVectorAccelerationChange() {
         moving = new DynamicMoving(new SteeringSystem(new VirtualFunctionBus()));
 
-        int oldSpeed = moving.getSpeed();
+        double oldSpeed = moving.getSpeed();
         moving.calculateNewVector(2);
 
         assertEquals(moving.getSpeed(), oldSpeed + 2, 0.001);

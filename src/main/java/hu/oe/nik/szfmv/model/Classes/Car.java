@@ -70,7 +70,4 @@ public class Car extends Dinamic {
         rotation += angularSpeed;
     }
 
-    public SteeringSystem getSteeringSystem() {
-        return steeringSystem;
-    }
 }
