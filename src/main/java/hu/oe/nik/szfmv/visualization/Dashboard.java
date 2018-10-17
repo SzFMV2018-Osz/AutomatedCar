@@ -19,7 +19,6 @@ public class Dashboard extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0x888888;
 
-    public int power;
     Gui parent;
     SamplePacket sp;
     Measurer tachometer;
@@ -29,7 +28,7 @@ public class Dashboard extends JPanel {
     Index index;
     AutoTransmission autoTr;
     WheelTurn wheelTurning;
-    private int newValue;
+
     private JLabel steeringWheel;
     private JLabel debugLabel;
     private JLabel gearLabel;
@@ -46,24 +45,12 @@ public class Dashboard extends JPanel {
         public void run() {
             while (true) {
 
-                difference = gasPedal.level / 10 - breakPedal.level / 10;
-
-                if (newValue + difference < 100 && newValue + difference > 0) {
-                    newValue += difference;
-                }
-
                 setBreakProgress(breakPedal.level);
                 sp.setBreakpedalPosition(breakPedal.level);
                 setGasProgress(gasPedal.level);
                 sp.setGaspedalPosition(gasPedal.level);
                 setWheel(wheelTurning.level);
                 sp.setWheelPosition(wheelTurning.level);
-
-                power = newValue - 69;
-
-                if (newValue > 0) {
-                    newValue -= 4;
-                }
 
                 if (gasPedal.level > 0) {
                     gasPedal.Decrease();
@@ -86,7 +73,8 @@ public class Dashboard extends JPanel {
                 setPower();
 
                 setIndex(index.actIndex);
-                setCarPosition(parent.getVirtualFunctionBus().carPacket.getxPosition(), parent.getVirtualFunctionBus().carPacket.getyPosition());
+                setCarPosition(parent.getVirtualFunctionBus().carPacket.getxPosition(),
+                        parent.getVirtualFunctionBus().carPacket.getyPosition());
                 setGear(autoTr.actGear.toString());
                 sp.setGear(autoTr.actGear.toString());
                 parent.getVirtualFunctionBus().samplePacket = sp;
@@ -105,9 +93,6 @@ public class Dashboard extends JPanel {
 
         parent = pt;
         sp = new SamplePacket();
-
-        power = 0;
-        newValue = 0;
 
         gasPedal = new Pedal();
         breakPedal = new Pedal();
@@ -128,18 +113,19 @@ public class Dashboard extends JPanel {
         gearLabel = addLabel((width / 2) - 30, 155, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
         steeringWheel = addLabel(5, 500, "steering wheel: " + 0, 20);
-        carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 0);
+        carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 200);
 
         Timer.start();
     }
 
     private Measurer CreateTachometer() {
-        Measurer panel = new Measurer(this);
+        Measurer panel = new Measurer();
         panel.setDiameter(125);
         panel.setMaxValue(10001);
         panel.setViewValue(2000);
         panel.setPosition(new Point(-30, -30));
         panel.setSize(new Point(200, 200));
+        panel.setPower(0);
 
         panel.setBounds(2, 0, 130, 130);
         panel.setVisible(true);
@@ -150,12 +136,13 @@ public class Dashboard extends JPanel {
     }
 
     private Measurer CreateSpeedometer() {
-        Measurer panel = new Measurer(this);
+        Measurer panel = new Measurer();
         panel.setDiameter(110);
         panel.setMaxValue(91);
         panel.setViewValue(10);
         panel.setPosition(new Point(-30, -30));
         panel.setSize(new Point(200, 200));
+        panel.setPower(0);
 
         panel.setBounds(130, 15, 115, 115);
         panel.setVisible(true);
@@ -264,10 +251,12 @@ public class Dashboard extends JPanel {
     }
 
     private void setSpeed() {
+        speedometer.setPower((int) parent.getVirtualFunctionBus().powertrainPacket.getSpeed());
         speedometer.repaint();
     }
 
     private void setPower() {
+        tachometer.setPower((int) parent.getVirtualFunctionBus().powertrainPacket.getRpm()/1000*11);
         tachometer.repaint();
     }
 
