@@ -52,7 +52,7 @@ public class Main {
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
         display.camera = new Camera(display.getWidth(), display.getHeight(), w, car);
-        gui.addKeyListener(new Keychecker(display.camera));
+       // gui.addKeyListener(new Keychecker(display.camera));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
         t.initialize();
@@ -98,16 +98,16 @@ class Keychecker extends KeyAdapter {
     public void keyPressed(KeyEvent event) {
 
         if (event.getKeyChar() == 'a') {
-            camera.MoveCamera(movespeed, 0);
+            camera.moveCamera(movespeed, 0);
         }
         if (event.getKeyChar() == 'd') {
-            camera.MoveCamera(-movespeed, 0);
+            camera.moveCamera(-movespeed, 0);
         }
         if (event.getKeyChar() == 'w') {
-            camera.MoveCamera(0, movespeed);
+            camera.moveCamera(0, movespeed);
         }
         if (event.getKeyChar() == 's') {
-            camera.MoveCamera(0, -movespeed);
+            camera.moveCamera(0, -movespeed);
         }
 
     }
