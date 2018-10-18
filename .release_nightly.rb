@@ -27,7 +27,7 @@ if ENV["TRAVIS_EVENT_TYPE"] != "cron" then
 end
 
 # run only on one of the environments (oraclejdk10 and openjdk10)
-if ENV["TRAVIS_JDK_VERSION"] != "oraclejdk10" then
+if ENV["TRAVIS_JDK_VERSION"] != "openjdk10" then
     exit true
 end
 
