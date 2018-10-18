@@ -8,7 +8,7 @@ import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
  * automatically on instantiation.
  */
 public abstract class SystemComponent {
-    final protected VirtualFunctionBus virtualFunctionBus;
+    protected final VirtualFunctionBus virtualFunctionBus;
 
     protected SystemComponent(VirtualFunctionBus virtualFunctionBus) {
         this.virtualFunctionBus = virtualFunctionBus;

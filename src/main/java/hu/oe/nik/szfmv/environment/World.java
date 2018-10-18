@@ -1,5 +1,9 @@
 package hu.oe.nik.szfmv.environment;
 
+
+import hu.oe.nik.szfmv.model.Classes.Dynamic;
+import hu.oe.nik.szfmv.model.Classes.Static;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +11,7 @@ public class World {
     private int width = 0;
     private int height = 0;
     private List<WorldObject> worldObjects = new ArrayList<>();
+
 
     /**
      * Creates the virtual world with the given dimension.
@@ -17,6 +22,7 @@ public class World {
     public World(int width, int height) {
         this.width = width;
         this.height = height;
+      //  complexWorldObjects= new Xml().Obj_List();
     }
 
     public int getWidth() {
@@ -39,6 +45,7 @@ public class World {
         return worldObjects;
     }
 
+
     /**
      * Add an object to the virtual world.
      *
@@ -47,4 +54,8 @@ public class World {
     public void addObjectToWorld(WorldObject o) {
         worldObjects.add(o);
     }
+
+
+
+
 }
