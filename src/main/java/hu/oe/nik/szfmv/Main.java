@@ -10,14 +10,9 @@ import hu.oe.nik.szfmv.visualization.Gui;
 import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -42,17 +37,18 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
-
+        AutomatedCar car = new AutomatedCar(100, 100, "car_2_white.png");
         // add car to the world
         w.addObjectToWorld(car);
+
         // create gui
         Gui gui = new Gui();
+        gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
 
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
         display.camera = new Camera(display.getWidth(), display.getHeight(), w, car);
-       // gui.addKeyListener(new Keychecker(display.camera));
+        // gui.addKeyListener(new Keychecker(display.camera));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
         t.initialize();
