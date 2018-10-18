@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class Gui extends JFrame {
 
@@ -15,6 +16,7 @@ public class Gui extends JFrame {
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
+    ArrayList<Integer> keysPressed;
 
     /**
      * Initialize the GUI class
@@ -45,6 +47,8 @@ public class Gui extends JFrame {
 
         setVisible(true);
 
+        keysPressed = new ArrayList<Integer>();
+
         KeyListener listen = new KeyListener() {
 
             @Override
@@ -55,31 +59,47 @@ public class Gui extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
+                if (keysPressed.contains(e.getKeyCode())) {
+                    keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
+                }
                 // TODO Auto-generated method stub
 
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
+
+                if (!keysPressed.contains(e.getKeyCode())) {
+                    keysPressed.add(e.getKeyCode());
+                }
+                
+                if (keysPressed.contains(KeyEvent.VK_UP)) {
                     dashboard.gasPedal.Pressed();
-                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                }
+                
+                if (keysPressed.contains(KeyEvent.VK_DOWN)) {
                     dashboard.breakPedal.Pressed();
-                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                }
+                
+                if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
                     dashboard.wheelTurning.TurnRight();
-                } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
                     dashboard.wheelTurning.TurnLeft();
-                } else if (e.getKeyCode() == KeyEvent.VK_Q) {
+                }
+                
+                if (keysPressed.contains(KeyEvent.VK_Q)) {
                     dashboard.index.TurnLeft();
-                } else if (e.getKeyCode() == KeyEvent.VK_E) {
+                } else if (keysPressed.contains(KeyEvent.VK_E)) {
                     dashboard.index.TurnRight();
-                } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                } else if (keysPressed.contains(KeyEvent.VK_W)) {
                     dashboard.index.Warning();
-                } else if (e.getKeyCode() == KeyEvent.VK_W) {
+                } else if (keysPressed.contains(KeyEvent.VK_S)) {
                     dashboard.index.SwitchBack();
-                } else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+                }
+                
+                if (keysPressed.contains(KeyEvent.VK_D)) {
                     dashboard.autoTr.ShiftUp();
-                } else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+                } else if (keysPressed.contains(KeyEvent.VK_A)) {
                     dashboard.autoTr.ShiftDown();
                 }
             }
