@@ -41,8 +41,8 @@ public class DynamicMoving {
     public void calculateNewVector(double speedDelta) {
         speed += speedDelta;
         double road = (speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
-        int newY = (int) (Math.sin((double) steeringSystem.getTurningCircle()) * road);
-        int newX = (int) (Math.cos((double) steeringSystem.getTurningCircle()) * road);
+        int newY = (int) (Math.sin((double) steeringSystem.getTurningAngle()) * road);
+        int newX = (int) (Math.cos((double) steeringSystem.getTurningAngle()) * road);
         vector = new Point(newX, newY);
     }
 }

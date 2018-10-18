@@ -25,6 +25,7 @@ public class SteeringSystemTest {
     public void testCarPropertiesNotNull() {
         AutomatedCar car = new AutomatedCar(50, 50, "car_1_red.png");
 
+        assertNotNull(car);
         assertNotEquals(car.getHeight(), 0);
         assertNotEquals(car.getWidth(), 0);
     }
@@ -36,6 +37,14 @@ public class SteeringSystemTest {
 
         assertEquals(car.getWidth(), icon.getIconWidth());
         assertEquals(car.getHeight(), icon.getIconHeight());
+    }
+
+    @Test
+    public void testCalculateTurningCircleIfDegreeIsNull(){
+        steeringSystem = new SteeringSystem(new VirtualFunctionBus());
+        steeringSystem.calculateTurningCircle(0);
+
+        assertEquals(steeringSystem.getTurningCircle(), 0);
     }
 
     @Test

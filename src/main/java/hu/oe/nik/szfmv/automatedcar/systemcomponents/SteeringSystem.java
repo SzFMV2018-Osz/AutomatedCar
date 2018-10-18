@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
  */
 public class SteeringSystem extends SystemComponent {
     private int turningCircle;
+    private  int turningAngle;
 
     /**
      * Creates a steering system that connects the Virtual Function Bus
@@ -17,6 +18,7 @@ public class SteeringSystem extends SystemComponent {
 
         super(virtualFunctionBus);
         turningCircle = 0;
+        turningAngle = 0;
     }
 
     @Override
@@ -29,12 +31,23 @@ public class SteeringSystem extends SystemComponent {
      * @param turningDegree Degree of the steering wheel
      */
     public void calculateTurningCircle(int turningDegree) {
-        turningCircle = (int) (virtualFunctionBus.carPacket.getCarHeigth()
-                / Math.tan((Math.toRadians((double) turningDegree))
-                + virtualFunctionBus.carPacket.getCarWidth()));
+        //turningCircle = (int) (virtualFunctionBus.carPacket.getCarHeigth()
+          //      / Math.tan((Math.toRadians((double) turningDegree))
+            //    + virtualFunctionBus.carPacket.getCarWidth()));
+        if(turningDegree == 0)
+            turningCircle = 0;
+       // else turningCircle = (int)(virtualFunctionBus.carPacket.getCarHeigth()/Math.sqrt(2-2*Math.cos(2*(double)turningDegree)/16));
+        else{
+            turningCircle = turningDegree;
+            turningAngle = turningDegree;
+        }
     }
 
     public int getTurningCircle() {
         return turningCircle;
+    }
+
+    public int getTurningAngle() {
+        return turningAngle;
     }
 }
