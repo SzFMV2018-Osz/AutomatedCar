@@ -3,11 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-general:
-  branches:
-    ignore:
-      - gh-pages # list of branches to ignore
-      # - /release\/.*/ # or ignore regexes
-    # only:
-      # - master # list of branches to build
-      # - /feature-.*/ # or regexes
+jobs:
+  build:
+    branches:
+      ignore:
+        - gh-pages # list of branches to ignore
