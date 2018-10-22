@@ -1,9 +1,9 @@
 package hu.oe.nik.szfmv.common;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
-import hu.oe.nik.szfmv.model.Classes.Car;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class SteeringSystemTest {
 
     @Test
     public void testCarPropertiesNotNull() {
-        Car car = new Car(50, 50, "car_1_red.png");
+        AutomatedCar car = new AutomatedCar(50, 50, "car_1_red.png");
 
         assertNotEquals(car.getHeight(), 0);
         assertNotEquals(car.getWidth(), 0);
@@ -32,7 +32,7 @@ public class SteeringSystemTest {
     @Test
     public void testAutoPropertiesEqualsIconSize() {
         ImageIcon icon = new ImageIcon(this.getClass().getClassLoader().getResource("car_1_red.png"));
-        Car car = new Car(50, 50, "car_1_red.png");
+        AutomatedCar car = new AutomatedCar(50, 50, "car_1_red.png");
 
         assertEquals(car.getWidth(), icon.getIconWidth());
         assertEquals(car.getHeight(), icon.getIconHeight());
