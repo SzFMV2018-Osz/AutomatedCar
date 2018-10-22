@@ -6,9 +6,10 @@ import java.awt.*;
 import java.util.List;
 
 
-public interface ISensor
-{
+public interface ISensor {
     Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angelOfView, double sensorRotation);
-    void RefreshSensor(Point newSensorPosition, double newSensorRotation);
+
+    void refreshSensor(Point newSensorPosition, double newSensorRotation);
+
     List<WorldObject> detectedObjects(List<WorldObject> worldObjects);
 }
