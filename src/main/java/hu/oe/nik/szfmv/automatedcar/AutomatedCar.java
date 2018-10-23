@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
@@ -15,6 +16,7 @@ public class AutomatedCar extends Car {
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
     private DynamicMoving dynamicMoving;
+    private UltrasonicSensor ultrasonic;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -29,6 +31,9 @@ public class AutomatedCar extends Car {
         steeringSystem = new SteeringSystem(virtualFunctionBus);
         dynamicMoving = new DynamicMoving(steeringSystem);
         powertrainSystem = new PowertrainSystem(virtualFunctionBus, dynamicMoving);
+
+        ultrasonic = new UltrasonicSensor(virtualFunctionBus);
+        virtualFunctionBus.ultrasonic = ultrasonic;
 
         new Driver(virtualFunctionBus);
 
