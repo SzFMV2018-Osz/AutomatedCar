@@ -24,26 +24,26 @@ jobs:
     steps:
       - checkout
 
-      Download and cache dependencies
-      # - restore_cache:
-          # keys:
-          # - v1-dependencies-{{ checksum "pom.xml" }}
-          # fallback to using the latest cache if no exact match is found
-          # - v1-dependencies-
+      # Download and cache dependencies
+#      - restore_cache:
+#          keys:
+#          - v1-dependencies-{{ checksum "pom.xml" }}
+#          # fallback to using the latest cache if no exact match is found
+#          - v1-dependencies-
 
-      # - run: mvn dependency:go-offline
-
-      # - save_cache:
-          # paths:
-            # - ~/.m2
-          # key: v1-dependencies-{{ checksum "pom.xml" }}
+#      - run: mvn dependency:go-offline
+#
+#      - save_cache:
+#          paths:
+#            - ~/.m2
+#          key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn integration-test
-      # - run: mvn clean test
+       - run: mvn integration-test
+#      - run: mvn clean test
       
       # build javadoc
-      # - run: mvn javadoc:javadoc
+      - run: mvn javadoc:javadoc
       # publish Javadoc
       # - run: chmod +x .publish_javadoc.sh
       # - run: .publish_javadoc.sh
