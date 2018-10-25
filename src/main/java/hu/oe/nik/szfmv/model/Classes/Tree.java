@@ -15,10 +15,10 @@ public class Tree extends RoadObsticle implements ICollidable {
      * @param y coordinate
      * @param imageFileName the name of the imagefile used for this type
      */
-    int oldal = 1;
+    /*int oldal = 1;
     Rectangle rectangle;
     int speed;
-    boolean orajaras;
+    boolean orajaras;*/
     public Tree(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }
@@ -36,7 +36,7 @@ public class Tree extends RoadObsticle implements ICollidable {
     public Tree(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
     }
-
+/*
     public void setRoute(int x, int y, int width, int height, int speed, boolean orajaras)
     {
         this.rectangle = new Rectangle(x,y, width, height);
@@ -122,6 +122,7 @@ public class Tree extends RoadObsticle implements ICollidable {
         if (num == 3)
         {
             y -= speed;
-        }*/
-    }
+        }
+    }*/
+
 }

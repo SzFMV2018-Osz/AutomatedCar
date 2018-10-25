@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.World;
+import hu.oe.nik.szfmv.model.Classes.Person;
 import hu.oe.nik.szfmv.model.Classes.Tree;
 import hu.oe.nik.szfmv.model.XML_read_in.XMLReader;
 import hu.oe.nik.szfmv.visualization.Camera;
@@ -39,13 +40,14 @@ public class Main {
 
         // create an automated car
         AutomatedCar car = new AutomatedCar(100, 100, "car_2_white.png");
+        Person person = new Person(150,150,"man.png");
 
-        Tree tree = new Tree(150, 150, "tree.png");
-        tree.setRoute(150,150,50,50, 13, false);
+
         // add car to the world
         w.addObjectToWorld(car);
-        w.addObjectToWorld(tree);
+        w.addObjectToWorld(person);
 
+        person.setRoute(200,200,50,50,4,true);
         // create gui
         Gui gui = new Gui();
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
@@ -60,7 +62,7 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-                tree.move();
+                person.move();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
