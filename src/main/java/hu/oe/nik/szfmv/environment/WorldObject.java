@@ -24,6 +24,10 @@ public class WorldObject implements IRender {
     protected BufferedImage image;
     protected AffineTransform transformTheImageToCorrectPos;
     protected double[][] tMatrix;
+    protected int lastX;
+    protected int lastY;
+    //temporaly sollution
+    protected boolean collide;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -40,6 +44,7 @@ public class WorldObject implements IRender {
         this.imageFileName = imageFileName;
         InitImage();
         tMatrix = new double[2][2];
+        collide = false;
     }
 
     /**
@@ -54,6 +59,8 @@ public class WorldObject implements IRender {
     public WorldObject(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         this.x = x;
         this.y = y;
+        this.lastX = x;
+        this.lastY = y;
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
@@ -62,6 +69,30 @@ public class WorldObject implements IRender {
         tMatrix[1][2] = m12;
         tMatrix[2][1] = m21;
         tMatrix[2][2] = m22;
+    }
+
+    public boolean isCollide() {
+        return collide;
+    }
+
+    public void setCollide(boolean collide) {
+        this.collide = collide;
+    }
+
+    public int getLastX() {
+        return lastX;
+    }
+
+    public void setLastX(int lastX) {
+        this.lastX = lastX;
+    }
+
+    public int getLastY() {
+        return lastY;
+    }
+
+    public void setLastY(int lastY) {
+        this.lastY = lastY;
     }
 
     public double[][] getTMatrix() {

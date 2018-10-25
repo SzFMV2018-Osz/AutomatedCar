@@ -1,9 +1,9 @@
 package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Interfaces.Collidable;
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
-public abstract class Dinamic extends WorldObject implements Collidable {
+public abstract class Dinamic extends WorldObject implements ICollidable {
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
