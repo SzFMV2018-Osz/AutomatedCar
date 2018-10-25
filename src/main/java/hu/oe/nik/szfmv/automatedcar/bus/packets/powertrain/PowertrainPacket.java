@@ -1,9 +1,12 @@
 package hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain;
 
+import hu.oe.nik.szfmv.common.Vector;
+
 public class PowertrainPacket implements ReadOnlyPowertrainPacket {
 
     private int rmp;
     private double speed;
+    Vector vector;
 
     /**
      * PowertrainPacket consturctor
@@ -11,6 +14,7 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     public PowertrainPacket() {
         this.rmp = 0;
         this.speed = 0d;
+        vector = new Vector(0,0);
     }
 
     @Override
@@ -31,5 +35,15 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     @Override
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public Vector getVector() {
+        return this.vector;
+    }
+
+    @Override
+    public void setVector(Vector vector) {
+        this.vector = vector;
     }
 }

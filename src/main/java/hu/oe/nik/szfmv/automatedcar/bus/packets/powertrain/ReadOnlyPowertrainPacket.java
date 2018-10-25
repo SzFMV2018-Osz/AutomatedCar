@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain;
 
+import hu.oe.nik.szfmv.common.Vector;
+
 public interface ReadOnlyPowertrainPacket {
 
     /**
@@ -31,4 +33,16 @@ public interface ReadOnlyPowertrainPacket {
      * @param speed the speed of the car
      */
     void setSpeed(double speed);
+    /**
+     * Gets the value of the turning.
+     *
+     * @return int (rpm)
+     */
+    Vector getVector();
+    /**
+     * Sets the value of the turningAngle
+     *
+     * @param vector of the engine
+     */
+    void setVector(Vector vector);
 }

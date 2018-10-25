@@ -14,7 +14,8 @@ public class PowertrainSystemTest {
 
     @Test
     public void calculateActualRpmWithZeroPedalPositionTest() throws NegativeNumberException {
-        PowertrainSystem ps = new PowertrainSystem(new VirtualFunctionBus(), new DynamicMoving(new SteeringSystem(new VirtualFunctionBus())));
+        VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+        PowertrainSystem ps = new PowertrainSystem(virtualFunctionBus);
 
         int gaspedalPosition = 0;
         int result = PowertrainSystem.MIN_RPM;
@@ -26,7 +27,8 @@ public class PowertrainSystemTest {
 
     @Test
     public void calculateActualRpmWithPositivePedalPositionTest() throws NegativeNumberException {
-        PowertrainSystem ps = new PowertrainSystem(new VirtualFunctionBus(), new DynamicMoving(new SteeringSystem(new VirtualFunctionBus())));
+        VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+        PowertrainSystem ps = new PowertrainSystem(virtualFunctionBus);
         Random r = new Random();
 
 
@@ -41,7 +43,8 @@ public class PowertrainSystemTest {
 
     @Test(expected = NegativeNumberException.class)
     public void calculateActualRpmWithExceptionTest() throws NegativeNumberException {
-        PowertrainSystem ps = new PowertrainSystem(new VirtualFunctionBus(), new DynamicMoving(new SteeringSystem(new VirtualFunctionBus())));
+        VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+        PowertrainSystem ps = new PowertrainSystem(virtualFunctionBus);
 
         int wrongInput = -1;
 
