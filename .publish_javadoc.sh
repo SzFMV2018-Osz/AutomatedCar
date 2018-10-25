@@ -17,7 +17,7 @@ if [ "$CIRCLE_PULL_REQUEST" == "" ] && [ "$CIRCLE_BRANCH" == "master" ]; then
   git rm -rf ./javadoc
   cp -Rf $HOME/javadoc-latest ./javadoc
   git add -f .
-  git commit -m "Latest javadoc on successful travis build $CIRCLE_BUILD_NUM auto-pushed to gh-pages"
+  git commit -m "Latest javadoc on successful CI build $CIRCLE_BUILD_NUM auto-pushed to gh-pages"
   git push -fq origin gh-pages > /dev/null
 
   echo -e "Published Javadoc to gh-pages.\n"
