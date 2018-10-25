@@ -35,59 +35,62 @@ public abstract class Dynamic extends WorldObject {
         super(x, y, imageFileName, m11, m12, m21, m22);
     }
 
-    public void setRoute(int x, int y, int width, int height, int speed, boolean orajaras)
+    public void setRoute(int width, int height, int speed, boolean orajaras)
     {
-        this.rectangle = new Rectangle(x,y, width, height);
+        this.rectangle = new Rectangle(this.x,this.y, width, height);
         this.speed = speed;
         this.orajaras = orajaras;
     }
 
     public void move() {
-        float f = 0;
         if (orajaras) {
             if (oldal == 1) {
-                if (rectangle.getMaxY() >= y) {
-                    y += speed;
-                    this.setRotation(f);
+                if ((rectangle.y  - rectangle.height) <= y) {
+                    y -= speed;
+                    //this.setRotation();
                 } else oldal = 2;
             }
             if (oldal == 2) {
-                if (rectangle.getMinX() <= x) {
-                    x -= speed;
-                    this.setRotation(f-270);
+                if ((rectangle.x + rectangle.width) >= x) {
+                    x += speed;
+                    //this.setRotation(f-270);
                 } else oldal = 3;
             }
             if (oldal == 3) {
-                if (rectangle.getMinY() <= y) {
-                    y -= speed;
-                    this.setRotation(f+180);
+                if (rectangle.y >= y) {
+                    y += speed;
+                    //this.setRotation(f+180);
                 } else oldal = 4;
             }
             if (oldal == 4) {
-                if (rectangle.getMaxX() >= x) {
-                    x += speed;
-                    this.setRotation(f-90);
+                if (rectangle.x <= x) {
+                    x -= speed;
+                    //this.setRotation(f-90);
                 } else oldal = 1;
             }
         } else {
             if (oldal == 1) {
-                if (rectangle.getMaxY() >= y) {
-                    y += speed;
+                if ((rectangle.x + rectangle.width) >= x) {
+                    x += speed;
+                    //this.setRotation(f-270);
                 } else oldal = 2;
             }
             if (oldal == 2) {
-                if (rectangle.getMaxX() >= x) {
-                    x += speed;
+                if ((rectangle.y  - rectangle.height) <= y) {
+                    y -= speed;
+                    //this.setRotation();
                 } else oldal = 3;
             }
             if (oldal == 3) {
-                if (rectangle.getMinY() <= y) {
-                    y -= speed;
+                if (rectangle.x <= x) {
+                    x -= speed;
+                    //this.setRotation(f-90);
                 } else oldal = 4;
             }
             if (oldal == 4) {
-                if (rectangle.getMinX() <= x) {
-                    x -= speed;
+                if (rectangle.y >= y) {
+                    y += speed;
+                    //this.setRotation(f+180);
                 } else oldal = 1;
             }
         }

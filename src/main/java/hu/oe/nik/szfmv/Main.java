@@ -47,7 +47,7 @@ public class Main {
         w.addObjectToWorld(car);
         w.addObjectToWorld(person);
 
-        person.setRoute(200,200,50,50,4,true);
+        person.setRoute(50,50,4,false);
         // create gui
         Gui gui = new Gui();
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
