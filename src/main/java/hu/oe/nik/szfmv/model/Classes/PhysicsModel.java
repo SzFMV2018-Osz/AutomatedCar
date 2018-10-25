@@ -74,4 +74,13 @@ public class PhysicsModel {
         }
     }
 
+    public PhysicsModel(int width,int height,int weight, int damage, int damagelimit, boolean isdead){
+        this.width=width;
+        this.height=height;
+        this.weight=weight;
+        this.damage=damage;
+        this.damagelimit =damagelimit;
+        this.isdead=isdead;
+    }
+
 }
