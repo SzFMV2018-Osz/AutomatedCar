@@ -7,7 +7,11 @@ public class PhysicsModel {
    public int damage;
    public int damagelimit;
    public boolean isdead;
+   public boolean fatal;
 
+    public boolean isFatal() {
+        return fatal;
+    }
 
     public int getHeight() {
         return height;
@@ -57,6 +61,10 @@ public class PhysicsModel {
         this.damagelimit = damagelimit;
     }
 
+    public void setFatal(boolean fatal) {
+        this.fatal = fatal;
+    }
+
     public int getArea() {
         return height * width;
     }
@@ -66,21 +74,31 @@ public class PhysicsModel {
     }
 
     public void CalculateDead() {
-        if(damage == damagelimit){
-         isdead=true;
+        if(!fatal){
+            if(damage == damagelimit){
+             isdead=true;
+            }
+            else{
+                isdead=false;
+            }
         }
         else{
-            isdead=false;
+            isdead=true;
         }
+
     }
 
-    public PhysicsModel(int width,int height,int weight, int damage, int damagelimit, boolean isdead){
+    public PhysicsModel() {
+    }
+
+
+   /* public PhysicsModel(int width,int height,int weight, int damage, int damagelimit, boolean isdead){
         this.width=width;
         this.height=height;
         this.weight=weight;
         this.damage=damage;
         this.damagelimit =damagelimit;
         this.isdead=isdead;
-    }
+    }*/
 
 }
