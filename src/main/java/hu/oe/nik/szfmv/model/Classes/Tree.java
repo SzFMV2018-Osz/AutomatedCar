@@ -26,5 +26,14 @@ public class Tree extends RoadObsticle implements ICollidable {
      */
     public Tree(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
+
+        PhysicsModel physicsModel = new PhysicsModel();
+        physicsModel.setDamage(0);
+        physicsModel.setDamagelimit(100);
+        physicsModel.setIsdead(false);
+        physicsModel.setFatal(false);
+        physicsModel.setWeight(999999);
+        physicsModel.setWidth(25);
+        physicsModel.setWeight(25);
     }
 }
