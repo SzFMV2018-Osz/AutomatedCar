@@ -40,6 +40,12 @@ jobs:
 
       # run tests!
       - run: mvn integration-test
+      
+      # build javadoc
+      - run: mvn javadoc:javadoc
+      # publish Javadoc
+      - run: chmod +x .publish_javadoc.sh
+      - run: .publish_javadoc.sh
 general:
   branches:
     ignore:
