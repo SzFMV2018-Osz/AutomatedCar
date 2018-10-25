@@ -16,7 +16,7 @@ public abstract class Dynamic extends WorldObject {
     int oldal = 1;
     Rectangle rectangle;
     int speed;
-    boolean orajaras;
+    boolean clockwise;
     public Dynamic(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }
@@ -35,62 +35,62 @@ public abstract class Dynamic extends WorldObject {
         super(x, y, imageFileName, m11, m12, m21, m22);
     }
 
-    public void setRoute(int width, int height, int speed, boolean orajaras)
+    public void setRoute(int width, int height, int speed, boolean clockwise)
     {
         this.rectangle = new Rectangle(this.x,this.y, width, height);
         this.speed = speed;
-        this.orajaras = orajaras;
+        this.clockwise = clockwise;
     }
 
     public void move() {
-        if (orajaras) {
+        if (clockwise) {
             if (oldal == 1) {
                 if ((rectangle.y  - rectangle.height) <= y) {
                     y -= speed;
-                    //this.setRotation();
+                    this.setRotation(0);
                 } else oldal = 2;
             }
             if (oldal == 2) {
                 if ((rectangle.x + rectangle.width) >= x) {
                     x += speed;
-                    //this.setRotation(f-270);
+                    this.setRotation(270);
                 } else oldal = 3;
             }
             if (oldal == 3) {
                 if (rectangle.y >= y) {
                     y += speed;
-                    //this.setRotation(f+180);
+                    this.setRotation(180);
                 } else oldal = 4;
             }
             if (oldal == 4) {
                 if (rectangle.x <= x) {
                     x -= speed;
-                    //this.setRotation(f-90);
+                    this.setRotation(90);
                 } else oldal = 1;
             }
         } else {
             if (oldal == 1) {
                 if ((rectangle.x + rectangle.width) >= x) {
                     x += speed;
-                    //this.setRotation(f-270);
+                    this.setRotation(270);
                 } else oldal = 2;
             }
             if (oldal == 2) {
                 if ((rectangle.y  - rectangle.height) <= y) {
                     y -= speed;
-                    //this.setRotation();
+                    this.setRotation(0);
                 } else oldal = 3;
             }
             if (oldal == 3) {
                 if (rectangle.x <= x) {
                     x -= speed;
-                    //this.setRotation(f-90);
+                    this.setRotation(90);
                 } else oldal = 4;
             }
             if (oldal == 4) {
                 if (rectangle.y >= y) {
                     y += speed;
-                    //this.setRotation(f+180);
+                    this.setRotation(180);
                 } else oldal = 1;
             }
         }
