@@ -10,14 +10,17 @@ public class Pedal {
 
     public void Pressed() {
 
-        if (level >= 95) {
+        if (level >= 94) {
             level = 100;
-        } else if (level < 95) {
-            level += 10;
+        } else if (level < 94) {
+            level += 6;
         }
     }
 
     public void Decrease() {
-        level -= 9;
+        level -= 3;
+        if (level < 3) {
+            level = 0;
+        }
     }
 }

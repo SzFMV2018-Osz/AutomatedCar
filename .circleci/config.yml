@@ -7,7 +7,8 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+      #- image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:10-jdk
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -39,6 +40,12 @@ jobs:
 
       # run tests!
       - run: mvn integration-test
+      
+      # build javadoc
+      - run: mvn javadoc:javadoc
+      # publish Javadoc
+      # - run: chmod +x .publish_javadoc.sh
+      # - run: .publish_javadoc.sh
 general:
   branches:
     ignore:

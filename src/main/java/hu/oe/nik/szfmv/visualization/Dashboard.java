@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,28 +14,22 @@ public class Dashboard extends JPanel {
     public static final int MAX_BREAK_VALUE = 100;
     public static final int MIN_GAS_VALUE = 0;
     public static final int MAX_GAS_VALUE = 100;
+
     private final int width = 250;
     private final int height = 700;
     private final int backgroundColor = 0x888888;
 
     public int power;
-    private int newValue;
-
-    private int steeringWheelValue;
-
-    public int getSteeringWheelValue() {
-        return steeringWheelValue;
-    }
-
     Gui parent;
+    SamplePacket sp;
     Measurer tachometer;
     Measurer speedometer;
-
     Pedal gasPedal;
     Pedal breakPedal;
     Index index;
     AutoTransmission autoTr;
-
+    WheelTurn wheelTurning;
+    private int newValue;
     private JLabel steeringWheel;
     private JLabel debugLabel;
     private JLabel gearLabel;
@@ -42,9 +38,61 @@ public class Dashboard extends JPanel {
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
 
-    WheelTurn wheelTurning;
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
+    private Thread Timer = new Thread() {
+        int difference;
+
+        public void run() {
+            while (true) {
+
+                difference = gasPedal.level / 10 - breakPedal.level / 10;
+
+                if (newValue + difference < 100 && newValue + difference > 0) {
+                    newValue += difference;
+                }
+
+                setBreakProgress(breakPedal.level);
+                sp.setBreakpedalPosition(breakPedal.level);
+                setGasProgress(gasPedal.level);
+                sp.setGaspedalPosition(gasPedal.level);
+                setWheel(wheelTurning.level);
+                sp.setWheelPosition(wheelTurning.level);
+
+                power = newValue - 69;
+
+                if (newValue > 0) {
+                    newValue -= 4;
+                }
+
+                if (gasPedal.level > 0) {
+                    gasPedal.Decrease();
+                }
+
+                if (breakPedal.level > 0) {
+                    breakPedal.Decrease();
+                }
+
+                if (wheelTurning.level != 0) {
+                    wheelTurning.BackPosition();
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                }
+
+                setSpeed();
+                setPower();
+
+                setIndex(index.actIndex);
+                setCarPosition(parent.getVirtualFunctionBus().carPacket.getxPosition(), parent.getVirtualFunctionBus().carPacket.getyPosition());
+                setGear(autoTr.actGear.toString());
+                sp.setGear(autoTr.actGear.toString());
+                parent.getVirtualFunctionBus().samplePacket = sp;
+            }
+        }
+    };
 
     /**
      * Initialize the dashboard
@@ -56,9 +104,10 @@ public class Dashboard extends JPanel {
         setBounds(770, 0, width, height);
 
         parent = pt;
+        sp = new SamplePacket();
+
         power = 0;
         newValue = 0;
-        steeringWheelValue = 0;
 
         gasPedal = new Pedal();
         breakPedal = new Pedal();
@@ -78,7 +127,7 @@ public class Dashboard extends JPanel {
 
         gearLabel = addLabel((width / 2) - 30, 155, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
-        steeringWheel = addLabel(5, 500, "steering wheel: " + steeringWheelValue, 20);
+        steeringWheel = addLabel(5, 500, "steering wheel: " + 0, 20);
         carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 0);
 
         Timer.start();
@@ -225,50 +274,5 @@ public class Dashboard extends JPanel {
     private void setWheel(int value) {
         steeringWheel.setText("steering wheel: " + value);
     }
-
-    private Thread Timer = new Thread() {
-        int difference;
-
-        public void run() {
-            while (true) {
-
-                difference = gasPedal.level / 10 - breakPedal.level / 10;
-
-                if (newValue + difference < 100 && newValue + difference > 0) {
-                    newValue += difference;
-                }
-
-                setBreakProgress(breakPedal.level);
-                setGasProgress(gasPedal.level);
-
-                power = newValue - 69;
-
-                if (newValue > 0) {
-                    newValue -= 4;
-                }
-
-                if (gasPedal.level > 0) {
-                    gasPedal.Decrease();
-                }
-
-                if (breakPedal.level > 0) {
-                    breakPedal.Decrease();
-                }
-
-                setWheel(wheelTurning.level);
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
-
-                setSpeed();
-                setPower();
-
-                setIndex(index.actIndex);
-                setGear(autoTr.actGear.toString());
-            }
-        }
-    };
 
 }

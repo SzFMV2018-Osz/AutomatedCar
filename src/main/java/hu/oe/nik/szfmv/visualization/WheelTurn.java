@@ -24,4 +24,15 @@ public class WheelTurn {
         }
     }
 
+    public void BackPosition() {
+        if (level < 0) {
+            level += 2;
+        } else if (level > 0) {
+            level -= 2;
+        }
+        if (level < 3 && level > -3) {
+            level = 0;
+        }
+    }
+
 }
