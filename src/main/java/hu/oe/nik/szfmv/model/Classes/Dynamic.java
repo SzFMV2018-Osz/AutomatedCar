@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.environment.WorldObject;
+import javafx.scene.shape.Ellipse;
 
 import java.awt.*;
 
@@ -37,6 +38,7 @@ public abstract class Dynamic extends WorldObject {
 
     public void setRoute(int width, int height, int speed, boolean clockwise)
     {
+
         this.rectangle = new Rectangle(this.x,this.y, width, height);
         this.speed = speed;
         this.clockwise = clockwise;

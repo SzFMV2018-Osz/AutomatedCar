@@ -2,6 +2,8 @@ package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
+import java.math.*;
+
 
 public class NonPlayableCar extends Car implements ICollidable {
     int actualpos = 0;
@@ -67,13 +69,15 @@ public class NonPlayableCar extends Car implements ICollidable {
                 break;
             case 1:
 
-                double yspeed =(double) (250.0 / 90.0);
-                double xspeed =(double) (400.0 / 90.0);
-                xact += xspeed*2;
-                yact -= yspeed*2;
+             //   double yspeed =(double) (250.0 / 90.0);
+             //   double xspeed =(double) (400.0 / 90.0);
+              double  xact = (double) (740.0 + 400.0 * Math.cos((180.0+rotatio) * Math.PI / 180.0));
+              double  yact = (double) (610.0 + 250.0 * Math.sin((180.0+rotatio) * Math.PI / 180.0));
+               // xact += xspeed*2;
+              //  yact -= yspeed*2;
                 y = (int)yact;
                 x = (int)xact;
-                rotatio = rotatio + (2) ;
+                rotatio = rotatio + (1) ;
                 this.setRotation(rotatio);
                 if (rotatio >= 90) {
                   rotatio = 90;
