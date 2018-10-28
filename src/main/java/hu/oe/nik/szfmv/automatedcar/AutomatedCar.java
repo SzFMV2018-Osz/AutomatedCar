@@ -1,55 +1,70 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
-import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.common.DynamicMoving;
 import hu.oe.nik.szfmv.model.Classes.Car;
-import hu.oe.nik.szfmv.model.Interfaces.Playable;
 
-public class AutomatedCar extends Car implements Playable {
+import java.awt.*;
 
+public class AutomatedCar extends Car {
+    private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
-    private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+    private DynamicMoving dynamicMoving;
 
     /**
-     * Constructor of the AutomatedCar class
+     * Creates an object of the virtual world on the given coordinates with the given image.
      *
-     * @param x             the initial x coordinate of the car
-     * @param y             the initial y coordinate of the car
-     * @param imageFileName name of the image file used displaying the car on the course display
+     * @param x             the initial x coordinate of the object
+     * @param y             the initial y coordinate of the object
+     * @param imageFileName the filename of the image representing the object in the virtual world
      */
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
-        powertrainSystem = new PowertrainSystem(virtualFunctionBus);
         steeringSystem = new SteeringSystem(virtualFunctionBus);
+        dynamicMoving = new DynamicMoving(steeringSystem);
+        powertrainSystem = new PowertrainSystem(virtualFunctionBus, dynamicMoving);
 
         new Driver(virtualFunctionBus);
+
+        setCarPacket();
+    }
+
+    public VirtualFunctionBus getVirtualFunctionBus() {
+        return virtualFunctionBus;
+    }
+
+    private void setCarPacket() {
+        CarPacket carPacket = new CarPacket();
+        carPacket.setCarWidth(width);
+        carPacket.setCarHeigth(height);
+        virtualFunctionBus.carPacket = carPacket;
     }
 
     /**
-     * Provides a sample method for modifying the position of the car.
+     * Driving the Car
      */
     public void drive() {
         virtualFunctionBus.loop();
-
         calculatePositionAndOrientation();
     }
 
-    /**
-     * Calculates the new x and y coordinates of the {@link AutomatedCar} using the powertrain and the steering systems.
-     */
     private void calculatePositionAndOrientation() {
-        //TODO it is just a fake implementation
-        double speed = powertrainSystem.getSpeed();
-        double angularSpeed = steeringSystem.getAngularSpeed();
+        Point movingVector = powertrainSystem.getDynamicMoving().getVector();
+        double angularSpeed = steeringSystem.getTurningCircle();
 
-        x += speed;
-        y = 0;
+        x -= movingVector.getY();
+        y -= movingVector.getX();
+
+        virtualFunctionBus.carPacket.setxPosition(x);
+        virtualFunctionBus.carPacket.setyPosition(y);
 
         rotation += angularSpeed;
     }
+
 }

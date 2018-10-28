@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.environment;
 
-import hu.oe.nik.szfmv.model.XML_read_in.Xml;
+
+import hu.oe.nik.szfmv.model.Classes.Dynamic;
+import hu.oe.nik.szfmv.model.Classes.Static;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +11,6 @@ public class World {
     private int width = 0;
     private int height = 0;
     private List<WorldObject> worldObjects = new ArrayList<>();
- //   private List<WorldObject> complexWorldObjects = new ArrayList<>();
-  /*  public List<WorldObject> getComplexWorldObjects() {
-        return complexWorldObjects;
-    }*/
-
- /*   public void setComplexWorldObjects(List<WorldObject> complexWorldObjects) {
-        this.complexWorldObjects = complexWorldObjects;
-    }*/
-
 
 
     /**
@@ -61,6 +54,7 @@ public class World {
     public void addObjectToWorld(WorldObject o) {
         worldObjects.add(o);
     }
+
 
 
 

@@ -62,14 +62,14 @@ public class Camera {
     /**
      * Updating the position of the camera when the camera have a followable object
      */
-    public void Update() {
-        if ((followableObject.getX() > (displayWidth / scale / 2 - followableObject.getWidth() / 2) &&
+    public void update() {
+        if ((followableObject.getX() > (displayWidth / 2 - followableObject.getWidth() / 2) &&
                 followableObject.getX() < world.getWidth() - (displayWidth / 2 - followableObject.getWidth() / 2))) {
-                this.x = (int) Math.round( displayWidth /scale / 2 - followableObject.getX() - followableObject.getWidth() / 2);
+            this.x = (int) Math.round( displayWidth /scale / 2 - followableObject.getX() - followableObject.getWidth() / 2);
         }
         if ((followableObject.getY() > (displayHeight/ scale / 2 - followableObject.getHeight() / 2) &&
                 followableObject.getY() < world.getHeight() - (displayHeight / 2 - followableObject.getHeight() / 2))) {
-                this.y =(int) Math.round(displayHeight / scale / 2 - followableObject.getY() - followableObject.getHeight() / 2);
+            this.y =(int) Math.round(displayHeight / scale / 2 - followableObject.getY() - followableObject.getHeight() / 2);
         }
         System.out.println("x,y: " + x + "," + y);
         this.objectLastX = followableObject.getX();
@@ -82,7 +82,7 @@ public class Camera {
      * @param deltaX the movement value of the x cord
      * @param deltaY the movement value of the y cord
      */
-    public void MoveCamera(int deltaX, int deltaY) {
+    public void moveCamera(int deltaX, int deltaY) {
         if (this.x + deltaX <= 0 &&
                 Math.abs(this.x + deltaX) <= world.getWidth() - (displayWidth / 2)) {
             x += deltaX;
@@ -101,18 +101,10 @@ public class Camera {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     /**
      * @return the x cord of the camera
      */
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 }

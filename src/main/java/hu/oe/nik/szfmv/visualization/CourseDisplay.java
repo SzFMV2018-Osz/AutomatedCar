@@ -62,7 +62,7 @@ public class CourseDisplay extends JPanel {
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
 
-        camera.Update();
+        camera.update();
 
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage(camera);

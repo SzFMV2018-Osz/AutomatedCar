@@ -2,12 +2,7 @@ package hu.oe.nik.szfmv;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
-import hu.oe.nik.szfmv.common.Utils;
 import hu.oe.nik.szfmv.environment.World;
-import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Classes.Car;
-import hu.oe.nik.szfmv.model.Classes.Not_AutomatedCar;
-import hu.oe.nik.szfmv.model.Classes.Road_Element;
 import hu.oe.nik.szfmv.model.XML_read_in.XMLReader;
 import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.CourseDisplay;
@@ -15,19 +10,14 @@ import hu.oe.nik.szfmv.visualization.Gui;
 import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int[] ys = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
-    private static int[] xs = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
+    private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
+    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
     /**
      * Main entrypoint of the software
@@ -44,109 +34,17 @@ public class Main {
         t.setTargetFps(24);
 
         // create the world
-      //  World w = new World(800, 600);
-        World w = XMLReader.World_Maker();
-
-       /* try {
-            File fXmlFile = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
-            System.out.println(doc.getDocumentElement().getFirstChild().getNodeName());
-            w.setWidth(Integer.parseInt(doc.getDocumentElement().getAttribute("width")));
-            w.setHeight(Integer.parseInt(doc.getDocumentElement().getAttribute("height")));
-
-            NodeList objects = doc.getDocumentElement().getElementsByTagName("Object");
-            int ocount = objects.getLength();
-            NodeList poss = doc.getDocumentElement().getElementsByTagName("Position");
-            int pcount = poss.getLength();
-            NodeList trans = doc.getDocumentElement().getElementsByTagName("Transform");
-            int tcount = trans.getLength();
-            String[] names = {"road_2lane_rotary.png", "2_crossroad_1.png",
-                    "2_crossroad_2.png", "road_2lane_tjunctionleft.png",
-                    "road_2lane_90left.png", "road_2lane_90right.png", "road_2lane_45left.png",
-                    "road_2lane_45right.png", "road_2lane_6left.png",
-                    "road_2lane_6right.png", "car_2_white.png", "car_2_red.png"};
-
-            for (int i = 0; i < objects.getLength(); i++) {
-                String filename = objects.item(i).getAttributes().getNamedItem("type").getNodeValue() + ".png";
-                int x = Integer.parseInt(poss.item(i).getAttributes().getNamedItem("x").getNodeValue());
-                int y = Integer.parseInt(poss.item(i).getAttributes().getNamedItem("y").getNodeValue());
-                double m11 = Double.parseDouble(trans.item(i).getAttributes().getNamedItem("m11").getNodeValue());
-                double m12 = Double.parseDouble(trans.item(i).getAttributes().getNamedItem("m12").getNodeValue());
-                double m21 = Double.parseDouble(trans.item(i).getAttributes().getNamedItem("m21").getNodeValue());
-                double m22 = Double.parseDouble(trans.item(i).getAttributes().getNamedItem("m22").getNodeValue());
-                double matrix = Utils.convertMatrixToRadians(m11, m12, m21, m22);
-                float routate = (float) Utils.radianToDegree(matrix);
-                WorldObject obj = new WorldObject(x, y, filename);
-                switch (filename)
-                {
-                    case "road_2lane_rotary.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "2_crossroad_1.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "2_crossroad_2.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_tjunctionleft.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_90left.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_90right.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_45left.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_45right.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_6left.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "road_2lane_6right.png":
-                        obj = new Road_Element(x,y,filename);
-                        break;
-                    case "car_2_white.png":
-                        obj = new Not_AutomatedCar(x,y,filename);
-                        break;
-                    case "car_2_red.png":
-                        obj = new Not_AutomatedCar(x,y,filename);
-                        break;
-                    default:
-                             obj = new WorldObject(x, y, filename);
-                             break;
-
-                }
-
-                obj.setRotation(routate);
-                for (int l = 0; l < names.length; l++) {
-                    if (names[l].equals(filename)) {
-                        obj.setRotationPointX(xs[l]);
-                        obj.setRotationPointY(ys[l]);
-                    }
-                }
-                w.addObjectToWorld(obj);
-
-            }
-
-
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-        }*/
-
+        World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(0, 80, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
 
         // add car to the world
         w.addObjectToWorld(car);
+
         // create gui
         Gui gui = new Gui();
+        gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
 
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
@@ -197,16 +95,16 @@ class Keychecker extends KeyAdapter {
     public void keyPressed(KeyEvent event) {
 
         if (event.getKeyChar() == 'a') {
-            camera.MoveCamera(movespeed, 0);
+            camera.moveCamera(movespeed, 0);
         }
         if (event.getKeyChar() == 'd') {
-            camera.MoveCamera(-movespeed, 0);
+            camera.moveCamera(-movespeed, 0);
         }
         if (event.getKeyChar() == 'w') {
-            camera.MoveCamera(0, movespeed);
+            camera.moveCamera(0, movespeed);
         }
         if (event.getKeyChar() == 's') {
-            camera.MoveCamera(0, -movespeed);
+            camera.moveCamera(0, -movespeed);
         }
         if (event.getKeyChar() == '+') {
             camera.setScale(camera.getScale() + 0.1);
