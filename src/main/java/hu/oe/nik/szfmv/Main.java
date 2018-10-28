@@ -10,6 +10,9 @@ import hu.oe.nik.szfmv.visualization.Gui;
 import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import hu.oe.nik.szfmv.model.Classes.Person;
+import hu.oe.nik.szfmv.model.Classes.Tree;
+import  hu.oe.nik.szfmv.model.Classes.*;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -38,9 +41,16 @@ public class Main {
 
         // create an automated car
         AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+        Person person = new Person(1550,800,"man.png");
+        NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
 
         // add car to the world
         w.addObjectToWorld(car);
+
+        w.addObjectToWorld(person);
+        w.addObjectToWorld(car1);
+
+        person.setRoute(100,750,8,false);
 
         // create gui
         Gui gui = new Gui();
@@ -56,6 +66,8 @@ public class Main {
         while (true) {
             try {
                 car.drive();
+                person.move();
+                car1.movecar();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());

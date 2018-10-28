@@ -2,7 +2,31 @@ package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
+
 public class NonPlayableCar extends Car implements ICollidable {
+    int actualpos = 0;
+    int speed = 20;
+    int rotatio = 0;
+    double xact =0;
+    double yact = 0;
+
+    public int getActualpos() {
+        return actualpos;
+    }
+
+    public void setActualpos(int actualpos) {
+        this.actualpos = actualpos;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
@@ -26,5 +50,52 @@ public class NonPlayableCar extends Car implements ICollidable {
      */
     public NonPlayableCar(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
+    }
+
+    public void movecar() {
+        switch (actualpos){
+            case 0:
+                y-=speed;
+                if (y <= 610)
+                {
+                    y = 610;
+                    actualpos++;
+                    xact = x;
+                    yact = y;
+                }
+
+                break;
+            case 1:
+
+                double yspeed =(double) (250.0 / 90.0);
+                double xspeed =(double) (400.0 / 90.0);
+                xact += xspeed*2;
+                yact -= yspeed*2;
+                y = (int)yact;
+                x = (int)xact;
+                rotatio = rotatio + (2) ;
+                this.setRotation(rotatio);
+                if (rotatio >= 90) {
+                  rotatio = 90;
+                    x = 740;
+                    y = 360;
+                  actualpos++;
+                }
+                break;
+                case 2:
+                    x+=speed;
+                    if (x >= 3100)
+                    {
+                        x = 3100;
+                        actualpos++;
+                        xact = x;
+                        yact = y;
+                    }
+                    break;
+
+                default:
+
+                    break;
+        }
     }
 }
