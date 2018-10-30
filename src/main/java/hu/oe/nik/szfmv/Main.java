@@ -44,7 +44,7 @@ public class Main {
         Person person = new Person(1550,800,"man.png");
     //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
         NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
-        NonPlayableCar car2 = new NonPlayableCar(343,1800,"car_1_blue.png") ;
+        NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
         car2.setSpeed(10);
 
         // add car to the world
@@ -72,7 +72,7 @@ public class Main {
                 car.drive();
                 person.move();
                 car1.movecar();
-                car2.movecar();
+               // car2.movecar2();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
