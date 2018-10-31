@@ -14,10 +14,10 @@ public abstract class Dynamic extends WorldObject {
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
 
-    int oldal = 1;
-    Rectangle rectangle;
-    int speed;
-    boolean clockwise;
+   int oldal = 1;
+   // Rectangle rectangle;
+   // int speed;
+   // boolean clockwise;
     public Dynamic(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }
@@ -36,15 +36,16 @@ public abstract class Dynamic extends WorldObject {
         super(x, y, imageFileName, m11, m12, m21, m22);
     }
 
-    public void setRoute(int width, int height, int speed, boolean clockwise)
+    /*public void setRoute(int width, int height, int speed, boolean clockwise)
     {
 
         this.rectangle = new Rectangle(this.x,this.y, width, height);
         this.speed = speed;
         this.clockwise = clockwise;
-    }
+    }*/
 
-    public void move() {
+   // public abstract void  move();
+   /* public void move() {
         if (clockwise) {
             if (oldal == 1) {
                 if ((rectangle.y  - rectangle.height) <= y) {
@@ -96,5 +97,5 @@ public abstract class Dynamic extends WorldObject {
                 } else oldal = 1;
             }
         }
-    }
+    }*/
 }

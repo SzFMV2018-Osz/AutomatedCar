@@ -41,20 +41,20 @@ public class Main {
 
         // create an automated car
         AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
-        Person person = new Person(1550,800,"man.png");
+        Person person = new Person(1500,500,"man.png");
     //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
         NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
-        NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
-        car2.setSpeed(10);
+       // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
+       // car2.setSpeed(10);
 
         // add car to the world
         w.addObjectToWorld(car);
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
-        w.addObjectToWorld(car2);
+      //  w.addObjectToWorld(car2);
 
-        person.setRoute(100,750,8,false);
+       // person.setRoute(100,750,8,false);
 
         // create gui
         Gui gui = new Gui();
@@ -70,8 +70,8 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-                person.move();
-                car1.movecar();
+                person.moveperson();
+                car1.movecar1();
                // car2.movecar2();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();

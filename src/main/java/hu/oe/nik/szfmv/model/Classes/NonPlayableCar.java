@@ -8,6 +8,10 @@ import java.math.*;
 
 public class NonPlayableCar extends Car implements ICollidable {
     int actualpos = 0;
+    double speed = 20;
+    int rotatio = 0;
+    double xact =0;
+    double yact = 0;
 
 
 
@@ -28,11 +32,7 @@ public class NonPlayableCar extends Car implements ICollidable {
         this.speed = speed;
     }
 
-    double speed = 20;
-    int rotatio = 0;
-    double xact =0;
-    double yact = 0;
-    double ratio = 100;
+
 
 
 
@@ -62,7 +62,8 @@ public class NonPlayableCar extends Car implements ICollidable {
         super(x, y, imageFileName, m11, m12, m21, m22);
     }
 
-    public void movecar() {
+
+    public void movecar1() {
         switch (actualpos){
             case 0:
                 y-=speed ;
@@ -75,8 +76,8 @@ public class NonPlayableCar extends Car implements ICollidable {
                 break;
             case 1:
                 // 474,669
-                double  xact = (double) ((474.0+175.0+120.0) +( (474.0+175.0+120.0)  - (474.0-175+54)) * Math.cos((180.0+rotatio) * Math.PI / 180.0));
-                 double  yact = (double) ((669.0-120.0) + ( (669.0-120.0)  - (669.0-175.0-175.0+54.0)  ) * Math.sin((180.0+rotatio) * Math.PI / 180.0));
+                 xact = (double) ((474.0+175.0+120.0) +( (474.0+175.0+120.0)  - (474.0-175+54)) * Math.cos((180.0+rotatio) * Math.PI / 180.0));
+                   yact = (double) ((669.0-120.0) + ( (669.0-120.0)  - (669.0-175.0-175.0+54.0)  ) * Math.sin((180.0+rotatio) * Math.PI / 180.0));
                 y = (int)yact;
                 x = (int)xact;
                 rotatio = rotatio + (3) ;
