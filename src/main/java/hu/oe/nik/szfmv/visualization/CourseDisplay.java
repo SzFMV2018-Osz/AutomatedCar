@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -16,16 +18,19 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     public Camera camera;
+    Gui parent;
+    public Boolean drawTriangles;
 
     /**
      * Initialize the course display
      */
-    public CourseDisplay() {
+    public CourseDisplay(Gui pt) {
         // Not using any layout manager, but fixed coordinates
         setDoubleBuffered(true);
         setLayout(null);
         setBounds(0, 0, width, height);
-
+        parent = pt;
+        drawTriangles = false;
     }
 
     /**
@@ -47,6 +52,9 @@ public class CourseDisplay extends JPanel {
 
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
+        if (drawTriangles) {
+            drawSensor(g, parent.getVirtualFunctionBus().ultrasonic);
+        }
     }
 
     /**
@@ -80,5 +88,10 @@ public class CourseDisplay extends JPanel {
         invalidate();
         validate();
         repaint();
+    }
+
+    public void drawSensor(Graphics g, ISensor sensor) {
+        g.setColor(Color.GREEN);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(parent.getVirtualFunctionBus().carPacket.getxPosition(), parent.getVirtualFunctionBus().carPacket.getyPosition()), 30, 100, 0));
     }
 }
