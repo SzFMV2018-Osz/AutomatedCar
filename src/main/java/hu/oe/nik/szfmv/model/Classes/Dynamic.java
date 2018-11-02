@@ -1,9 +1,9 @@
 package hu.oe.nik.szfmv.model.Classes;
 
 import hu.oe.nik.szfmv.environment.WorldObject;
-import javafx.scene.shape.Ellipse;
+//import javafx.scene.shape.Ellipse;
 
-import java.awt.*;
+//import java.awt.*;
 
 public abstract class Dynamic extends WorldObject {
     /**
@@ -14,10 +14,17 @@ public abstract class Dynamic extends WorldObject {
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
 
-   int oldal = 1;
+   //int oldal = 1;
    // Rectangle rectangle;
    // int speed;
    // boolean clockwise;
+
+    /**
+     *
+     * @param x coordinate
+     * @param y coordinate
+     * @param imageFileName the name of the imagefile used for this type
+     */
     public Dynamic(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }

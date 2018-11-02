@@ -33,7 +33,9 @@ public class Person extends Dynamic implements ICollidable {
     }
 
 
-
+    /**
+     * Moves the person objects based on it's temporary values
+     */
     public void moveperson() {
         switch (actualpos) {
             case 0:
@@ -52,7 +54,7 @@ public class Person extends Dynamic implements ICollidable {
             case 1:
                 rotatio = 90;
                 this.setRotation(rotatio);
-              x +=speed;
+              x += speed;
                 if (x > 1650) {
                     actualpos++;
                 }
@@ -68,9 +70,9 @@ public class Person extends Dynamic implements ICollidable {
             case 3:
                 rotatio = 270;
                 this.setRotation(rotatio);
-                x-=speed;
+                x -= speed;
                 if (x < 1500) {
-                    actualpos=0;
+                    actualpos = 0;
                 }
                 break;
             default:
