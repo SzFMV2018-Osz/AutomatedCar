@@ -44,7 +44,7 @@ public class Camera {
         this.displayWidth = displayWidth;
         this.x = 0;
         this.y = 0;
-        this.scale = 0.2;
+        this.scale = 0.5;
         this.followableObject = followable;
         this.objectLastX = followableObject.getX();
         this.objectLastY = followableObject.getY();
