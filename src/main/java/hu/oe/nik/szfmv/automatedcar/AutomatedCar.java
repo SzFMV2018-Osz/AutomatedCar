@@ -70,6 +70,8 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.carPacket.setyPosition(y);
 
         rotation += angularSpeed;
+        virtualFunctionBus.carPacket.setCarRotation(rotation);
+
     }
 
 }

@@ -92,6 +92,15 @@ public class CourseDisplay extends JPanel {
 
     public void drawSensor(Graphics g, ISensor sensor) {
         g.setColor(Color.GREEN);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(parent.getVirtualFunctionBus().carPacket.getxPosition(), parent.getVirtualFunctionBus().carPacket.getyPosition()), 30, 100, 0));
+
+        float sensorRotation = 180 - (parent.getVirtualFunctionBus().carPacket.getCarRotation() % 360);
+        int carWidth = parent.getVirtualFunctionBus().carPacket.getCarWidth();
+
+        int sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * (carWidth / 2) + Math.sin(Math.toRadians(sensorRotation)) * 60);
+        int sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * 60 - Math.cos(Math.toRadians(sensorRotation)) * (carWidth / 2));
+
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, 60, sensorRotation + 20));
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 400, 25, sensorRotation));
+
     }
 }

@@ -19,4 +19,8 @@ public interface ReadOnlyCarPacket {
     int getyPosition();
 
     void setyPosition(int yPosition);
+
+    float getCarRotation();
+
+    void setCarRotation(float rotation);
 }
