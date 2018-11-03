@@ -4,7 +4,6 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.Physics;
 import hu.oe.nik.szfmv.environment.World;
-import hu.oe.nik.szfmv.model.Classes.Person;
 import hu.oe.nik.szfmv.model.XML_read_in.XMLReader;
 import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.CourseDisplay;
@@ -19,8 +18,9 @@ import java.awt.event.KeyEvent;
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
-    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
     public static boolean Gameloop = true;
+    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
+
     /**
      * Main entrypoint of the software
      *
@@ -40,9 +40,9 @@ public class Main {
 
         // create an automated car
         AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
-       // Person p = new Person(300,2500,"woman.png");
+        // Person p = new Person(300,2500,"woman.png");
         car.setRotation(45f);
-       // w.addObjectToWorld(p);
+        // w.addObjectToWorld(p);
         // add car to the world
         w.addObjectToWorld(car);
 
@@ -53,13 +53,13 @@ public class Main {
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
         display.camera = new Camera(display.getWidth(), display.getHeight(), w, car);
-         gui.addKeyListener(new Keychecker(car));
+        gui.addKeyListener(new Keychecker(car));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
         t.initialize();
         while (true) {
             try {
-                if(Gameloop) {
+                if (Gameloop) {
                     car.drive();
                     physics.update(w);
                 }
@@ -100,7 +100,7 @@ class Keychecker extends KeyAdapter {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-        if(Main.Gameloop) {
+        if (Main.Gameloop) {
             if (event.getKeyChar() == 'a') {
                 camera.setX(camera.getX() - movespeed);
             }

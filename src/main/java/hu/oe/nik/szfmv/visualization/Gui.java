@@ -13,11 +13,10 @@ public class Gui extends JFrame {
 
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
-
+    ArrayList<Integer> keysPressed;
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
-    ArrayList<Integer> keysPressed;
 
     /**
      * Initialize the GUI class
