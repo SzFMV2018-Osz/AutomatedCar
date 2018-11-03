@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.Physics;
 import hu.oe.nik.szfmv.environment.World;
+import hu.oe.nik.szfmv.model.Classes.Person;
 import hu.oe.nik.szfmv.model.XML_read_in.XMLReader;
 import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.CourseDisplay;
@@ -19,7 +20,7 @@ public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
     private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
-
+    public static boolean Gameloop = true;
     /**
      * Main entrypoint of the software
      *
@@ -38,7 +39,10 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(100, 100, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+       // Person p = new Person(300,2500,"woman.png");
+        car.setRotation(45f);
+       // w.addObjectToWorld(p);
         // add car to the world
         w.addObjectToWorld(car);
 
@@ -55,8 +59,10 @@ public class Main {
         t.initialize();
         while (true) {
             try {
-                car.drive();
-                physics.update(w);
+                if(Gameloop) {
+                    car.drive();
+                    physics.update(w);
+                }
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
@@ -94,19 +100,19 @@ class Keychecker extends KeyAdapter {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-
-        if (event.getKeyChar() == 'a') {
-            camera.setX(camera.getX() - movespeed);
+        if(Main.Gameloop) {
+            if (event.getKeyChar() == 'a') {
+                camera.setX(camera.getX() - movespeed);
+            }
+            if (event.getKeyChar() == 'd') {
+                camera.setX(camera.getX() + movespeed);
+            }
+            if (event.getKeyChar() == 'w') {
+                camera.setY(camera.getY() - movespeed);
+            }
+            if (event.getKeyChar() == 's') {
+                camera.setY(camera.getY() + movespeed);
+            }
         }
-        if (event.getKeyChar() == 'd') {
-            camera.setX(camera.getX() + movespeed);
-        }
-        if (event.getKeyChar() == 'w') {
-            camera.setY(camera.getY() - movespeed);
-        }
-        if (event.getKeyChar() == 's') {
-            camera.setY(camera.getY() + movespeed);
-        }
-
     }
 }

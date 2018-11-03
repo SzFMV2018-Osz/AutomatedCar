@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 
 import javax.swing.*;
@@ -68,39 +69,40 @@ public class Gui extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
+                if (Main.Gameloop) {
+                    if (!keysPressed.contains(e.getKeyCode())) {
+                        keysPressed.add(e.getKeyCode());
+                    }
 
-                if (!keysPressed.contains(e.getKeyCode())) {
-                    keysPressed.add(e.getKeyCode());
-                }
-                
-                if (keysPressed.contains(KeyEvent.VK_UP)) {
-                    dashboard.gasPedal.Pressed();
-                }
-                
-                if (keysPressed.contains(KeyEvent.VK_DOWN)) {
-                    dashboard.breakPedal.Pressed();
-                }
-                
-                if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-                    dashboard.wheelTurning.TurnRight();
-                } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
-                    dashboard.wheelTurning.TurnLeft();
-                }
-                
-                if (keysPressed.contains(KeyEvent.VK_Q)) {
-                    dashboard.index.TurnLeft();
-                } else if (keysPressed.contains(KeyEvent.VK_E)) {
-                    dashboard.index.TurnRight();
-                } else if (keysPressed.contains(KeyEvent.VK_W)) {
-                    dashboard.index.Warning();
-                } else if (keysPressed.contains(KeyEvent.VK_S)) {
-                    dashboard.index.SwitchBack();
-                }
-                
-                if (keysPressed.contains(KeyEvent.VK_D)) {
-                    dashboard.autoTr.ShiftUp();
-                } else if (keysPressed.contains(KeyEvent.VK_A)) {
-                    dashboard.autoTr.ShiftDown();
+                    if (keysPressed.contains(KeyEvent.VK_UP)) {
+                        dashboard.gasPedal.Pressed();
+                    }
+
+                    if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+                        dashboard.breakPedal.Pressed();
+                    }
+
+                    if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
+                        dashboard.wheelTurning.TurnRight();
+                    } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+                        dashboard.wheelTurning.TurnLeft();
+                    }
+
+                    if (keysPressed.contains(KeyEvent.VK_Q)) {
+                        dashboard.index.TurnLeft();
+                    } else if (keysPressed.contains(KeyEvent.VK_E)) {
+                        dashboard.index.TurnRight();
+                    } else if (keysPressed.contains(KeyEvent.VK_W)) {
+                        dashboard.index.Warning();
+                    } else if (keysPressed.contains(KeyEvent.VK_S)) {
+                        dashboard.index.SwitchBack();
+                    }
+
+                    if (keysPressed.contains(KeyEvent.VK_D)) {
+                        dashboard.autoTr.ShiftUp();
+                    } else if (keysPressed.contains(KeyEvent.VK_A)) {
+                        dashboard.autoTr.ShiftDown();
+                    }
                 }
             }
         };

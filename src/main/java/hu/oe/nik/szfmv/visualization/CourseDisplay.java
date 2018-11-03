@@ -1,11 +1,16 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -16,7 +21,8 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     public Camera camera;
-
+    private BufferedImage image;
+    AffineTransform t = new AffineTransform();
     /**
      * Initialize the course display
      */
@@ -25,6 +31,13 @@ public class CourseDisplay extends JPanel {
         setDoubleBuffered(true);
         setLayout(null);
         setBounds(0, 0, width, height);
+        try {
+             image = ImageIO.read(new File(ClassLoader.getSystemResource("gameover.png").getFile()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        t.scale(0.75,0.75);
+        t.translate(width / 2  -image.getWidth() / 2 * 0.75,height / 2 - image.getHeight()/2 * 0.75);
 
     }
 
@@ -70,12 +83,15 @@ public class CourseDisplay extends JPanel {
             if(object.isCollide())
             {
 
-                Rectangle collision = new Rectangle((int)object.getTransformation().getTranslateX(),(int)object.getTransformation().getTranslateY(),object.getWidth(),object.getHeight());
+                Rectangle collision = new Rectangle(0,0,object.getWidth(),object.getHeight());
+                Shape s = object.getTransformation().createTransformedShape(collision);
                 g2d.setPaint(new Color(255, 0, 0, 128));
-                g2d.fill(collision);
-                System.out.println("coll");
+                g2d.fill(s);
             }
             updateLastPosition(object);
+        }
+        if(Main.Gameloop == false){
+            g2d.drawImage(image, t,this);
         }
         return doubleBufferedScreen;
     }
