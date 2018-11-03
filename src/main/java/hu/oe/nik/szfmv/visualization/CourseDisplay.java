@@ -93,6 +93,7 @@ public class CourseDisplay extends JPanel {
     public void drawSensor(Graphics g, ISensor sensor) {
         g.setColor(Color.GREEN);
 
+
         float sensorRotation = 180 - (parent.getVirtualFunctionBus().carPacket.getCarRotation() % 360);
         int carWidth = parent.getVirtualFunctionBus().carPacket.getCarWidth();
 
