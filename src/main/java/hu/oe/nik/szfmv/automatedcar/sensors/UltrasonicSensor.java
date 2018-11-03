@@ -21,7 +21,8 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         super(virtualFunctionBus);
     }
 
-    public Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angleOfView, double sensorRotation) {
+    public Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angleOfView,
+            double sensorRotation) {
 
         double rotationInRad = toRadians(sensorRotation);
         double angleInRad = toRadians(angleOfView);
@@ -34,7 +35,8 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         a = rotate(a, sensorPosition, rotationInRad);
         b = rotate(b, sensorPosition, rotationInRad);
 
-        Polygon triangle = new Polygon(new int[]{sensorPosition.x, a.x, b.x}, new int[]{sensorPosition.y, a.y, b.y}, 3);
+        Polygon triangle = new Polygon(new int[] { sensorPosition.x, a.x, b.x },
+                new int[] { sensorPosition.y, a.y, b.y }, 3);
 
         return triangle;
 
