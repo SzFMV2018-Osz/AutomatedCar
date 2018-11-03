@@ -11,7 +11,8 @@ import java.awt.image.BufferedImage;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 
 /**
- * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
+ * CourseDisplay is for providing a viewport to the virtual world where the
+ * simulation happens.
  */
 public class CourseDisplay extends JPanel {
     private final int width = 770;
@@ -36,7 +37,8 @@ public class CourseDisplay extends JPanel {
     /**
      * Draws the world to the course display
      *
-     * @param world {@link World} object that describes the virtual world
+     * @param world
+     *            {@link World} object that describes the virtual world
      */
     public void drawWorld(World world) {
         paintComponent(getGraphics(), world);
@@ -45,11 +47,12 @@ public class CourseDisplay extends JPanel {
     /**
      * Inherited method that can paint on the JPanel.
      *
-     * @param g     {@link Graphics} object that can draw to the canvas
-     * @param world {@link World} object that describes the virtual world
+     * @param g
+     *            {@link Graphics} object that can draw to the canvas
+     * @param world
+     *            {@link World} object that describes the virtual world
      */
     protected void paintComponent(Graphics g, World world) {
-
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
         if (drawTriangles) {
@@ -60,7 +63,8 @@ public class CourseDisplay extends JPanel {
     /**
      * Rendering method to avoid flickering
      *
-     * @param world {@link World} object that describes the virtual world
+     * @param world
+     *            {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
     protected BufferedImage renderDoubleBufferedScreen(World world) {
@@ -79,7 +83,6 @@ public class CourseDisplay extends JPanel {
         }
         return doubleBufferedScreen;
     }
-
 
     /**
      * Intended to use for refreshing the course display after redrawing the world
@@ -102,58 +105,98 @@ public class CourseDisplay extends JPanel {
         int carWidth = parent.getVirtualFunctionBus().carPacket.getCarWidth();
         int carHeight = parent.getVirtualFunctionBus().carPacket.getCarHeigth();
 
-        //front sensors
+        // front sensors
         sensorviewdirection = sensorRotation;
         vertshift = 10;
         horizshift = carWidth / 2 + 30;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
         horizshift = carWidth / 2 - 30;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
-        //back sensors
+        // back sensors
         sensorviewdirection = sensorRotation + 180;
         vertshift = carHeight - 10;
         horizshift = carWidth / 2 + 30;
 
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
         horizshift = carWidth / 2 - 30;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
-        //right sensors
+        // right sensors
         sensorviewdirection = sensorRotation + 90;
         vertshift = 30;
         horizshift = carWidth - 5;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
         vertshift = carHeight - 30;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
-        //left sensors
+        // left sensors
         sensorviewdirection = sensorRotation - 90;
         vertshift = 30;
         horizshift = 5;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
         vertshift = carHeight - 30;
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition()
+                - Math.cos(Math.toRadians(sensorRotation)) * horizshift
+                + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition()
+                - Math.sin(Math.toRadians(sensorRotation)) * horizshift
+                - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview,
+                sensorviewdirection));
 
         System.out.println("vv");
 
