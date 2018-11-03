@@ -37,24 +37,5 @@ public class Physics
        return aRectangle.intersects(bRectangle);
    }
 
-    protected Rectangle getCollision(Rectangle rect1, Rectangle rect2) {
-        Area a1 = new Area(rect1);
-        Area a2 = new Area(rect2);
-        a1.intersect(a2);
-        return a1.getBounds();
-    }
 
-   /* protected boolean collision(WorldObject a, WorldObject b, int x, int y) {
-        boolean collision = false;
-
-        int spiderPixel = spider.getRGB(x - spiderBounds.x, y - spiderBounds.y);
-        int flyPixel = fly.getRGB(x - flyBounds.x, y - flyBounds.y);
-        // 255 is completely transparent, you might consider using something
-        // a little less absolute, like 225, to give you a sligtly
-        // higher hit right, for example...
-        if (((spiderPixel >> 24) & 0xFF) < 255 && ((flyPixel >> 24) & 0xFF) < 255) {
-            collision = true;
-        }
-        return collision;
-    }*/
 }
