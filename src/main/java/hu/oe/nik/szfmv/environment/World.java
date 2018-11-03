@@ -4,6 +4,10 @@ package hu.oe.nik.szfmv.environment;
 import hu.oe.nik.szfmv.model.Classes.Dynamic;
 import hu.oe.nik.szfmv.model.Classes.Static;
 
+
+//import hu.oe.nik.szfmv.model.XMLRead;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,11 @@ public class World {
     public World(int width, int height) {
         this.width = width;
         this.height = height;
+
       //  complexWorldObjects= new Xml().Obj_List();
+=======
+      //  worldObjects = XMLRead.Read();
+
     }
 
     public int getWidth() {
