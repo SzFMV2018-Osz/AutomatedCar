@@ -34,21 +34,25 @@ public class RadarSensor extends SystemComponent implements ISensor {
 
         double sensorRotationInRadian = Math.toRadians(sensorRotation);
 
-        leftPoint.x = (int) (sensorPosition.x + (leftPoint.x - sensorPosition.x) * Math.cos(sensorRotationInRadian)
-                - (leftPoint.y - sensorPosition.y) * Math.sin(sensorRotationInRadian));
-        leftPoint.y = (int) (sensorPosition.y + (leftPoint.x - sensorPosition.x) * Math.sin(sensorRotationInRadian)
-                + (leftPoint.y - sensorPosition.y) * Math.cos(sensorRotationInRadian));
-        rightPoint.x = (int) (sensorPosition.x + (rightPoint.x - sensorPosition.x) * Math.cos(sensorRotationInRadian)
-                - (rightPoint.y - sensorPosition.y) * Math.sin(sensorRotationInRadian));
-        rightPoint.y = (int) (sensorPosition.y + (rightPoint.x - sensorPosition.x) * Math.sin(sensorRotationInRadian)
-                + (rightPoint.y - sensorPosition.y) * Math.cos(sensorRotationInRadian));
+        leftPoint = rotate(leftPoint, sensorPosition, sensorRotationInRadian);
+        rightPoint = rotate(rightPoint, sensorPosition, sensorRotationInRadian);
 
         Polygon triangle = new Polygon();
         triangle.npoints = TRIANGLE_N;
         triangle.xpoints = new int[]{sensorPosition.x, leftPoint.x, rightPoint.x};
-        triangle.xpoints = new int[]{sensorPosition.y, leftPoint.y, rightPoint.y};
+        triangle.ypoints = new int[]{sensorPosition.y, leftPoint.y, rightPoint.y};
 
         return triangle;
+    }
+
+    private Point rotate(Point point, Point sennsorLocation, double rotation) {
+
+        double x = sennsorLocation.x + (point.x - sennsorLocation.x) * Math.cos(rotation)
+                - (point.y - sennsorLocation.y) * Math.sin(rotation);
+        double y = sennsorLocation.y + (point.x - sennsorLocation.x) * Math.sin(rotation)
+                + (point.y - sennsorLocation.y) * Math.cos(rotation);
+
+        return new Point((int) x, (int) y);
     }
 
     @Override
