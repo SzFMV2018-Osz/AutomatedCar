@@ -9,13 +9,16 @@ import javax.swing.JPanel;
 
 public class Measurer extends JPanel {
 
-    Dashboard parent;
-
+    int power;
     int maxValue;
     int viewValue;
     int diameter;
     Point position;
     Point size;
+
+    public void setPower(int power) {
+        this.power = power - 69;
+    }
 
     public void setSize(Point size) {
         this.size = size;
@@ -35,10 +38,6 @@ public class Measurer extends JPanel {
 
     public void setDiameter(int diameter) {
         this.diameter = diameter;
-    }
-
-    public Measurer(Dashboard pt) {
-        parent = pt;
     }
 
     @Override
@@ -64,8 +63,8 @@ public class Measurer extends JPanel {
         }
 
         int tx, ty;
-        tx = 58 + (int) (48 * Math.sin(parent.power * Math.PI / 90));
-        ty = 65 - (int) (48 * Math.cos(parent.power * Math.PI / 90));
+        tx = 58 + (int) (48 * Math.sin(power * Math.PI / 90));
+        ty = 65 - (int) (48 * Math.cos(power * Math.PI / 90));
         g.setColor(Color.RED);
         g.drawLine(diameter / 2 + 5, diameter / 2 + 5, tx, ty);
     }
