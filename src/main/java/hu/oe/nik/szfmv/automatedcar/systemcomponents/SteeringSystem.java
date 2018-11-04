@@ -1,7 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.bus.packets.steering.SteeringPacket;
 
 /**
  * Steering system is responsible for the turning of the car.
@@ -18,7 +17,6 @@ public class SteeringSystem extends SystemComponent {
     public SteeringSystem(VirtualFunctionBus virtualFunctionBus) {
 
         super(virtualFunctionBus);
-        this.virtualFunctionBus.steeringPacket = new SteeringPacket();
         turningCircle = 0;
         turningAngle = 0;
     }
@@ -33,14 +31,15 @@ public class SteeringSystem extends SystemComponent {
      * @param turningDegree Degree of the steering wheel
      */
     public void calculateTurningCircle(int turningDegree) {
-        if(turningDegree != 0){
-            turningAngle += turningDegree;
-            this.virtualFunctionBus.steeringPacket.setTurningAngle(turningAngle);
-        }
-        if(turningAngle >= 360){
-            turningAngle = 0;
-            this.virtualFunctionBus.steeringPacket.setTurningAngle(turningAngle);
-            //this.virtualFunctionBus.carPacket.setxPosition(this.virtualFunctionBus.carPacket.getxPosition()+turningAngle);
+        //turningCircle = (int) (virtualFunctionBus.carPacket.getCarHeigth()
+          //      / Math.tan((Math.toRadians((double) turningDegree))
+            //    + virtualFunctionBus.carPacket.getCarWidth()));
+        if(turningDegree == 0)
+            turningCircle = 0;
+       // else turningCircle = (int)(virtualFunctionBus.carPacket.getCarHeigth()/Math.sqrt(2-2*Math.cos(2*(double)turningDegree)/16));
+        else{
+            turningCircle = turningDegree;
+            turningAngle = turningDegree;
         }
     }
 

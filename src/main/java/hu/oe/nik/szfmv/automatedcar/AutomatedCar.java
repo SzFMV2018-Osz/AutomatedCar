@@ -5,13 +5,16 @@ import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
-import hu.oe.nik.szfmv.common.Vector;
+import hu.oe.nik.szfmv.common.DynamicMoving;
 import hu.oe.nik.szfmv.model.Classes.Car;
+
+import java.awt.*;
 
 public class AutomatedCar extends Car {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
+    private DynamicMoving dynamicMoving;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -23,13 +26,13 @@ public class AutomatedCar extends Car {
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
-        setCarPacket();
-
         steeringSystem = new SteeringSystem(virtualFunctionBus);
-        powertrainSystem = new PowertrainSystem(virtualFunctionBus);
+        dynamicMoving = new DynamicMoving(steeringSystem);
+        powertrainSystem = new PowertrainSystem(virtualFunctionBus, dynamicMoving);
 
         new Driver(virtualFunctionBus);
 
+        setCarPacket();
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -52,7 +55,7 @@ public class AutomatedCar extends Car {
     }
 
     private void calculatePositionAndOrientation() {
-        Vector movingVector = powertrainSystem.getVector();
+        Point movingVector = powertrainSystem.getDynamicMoving().getVector();
         double angularSpeed = steeringSystem.getTurningCircle();
 
         x -= movingVector.getY();
