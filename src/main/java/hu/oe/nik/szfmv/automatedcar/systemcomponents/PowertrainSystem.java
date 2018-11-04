@@ -171,7 +171,7 @@ public class PowertrainSystem extends SystemComponent {
             if (this.speed < 0) {
                 updateChanges(acceleration);
             }
-            
+
             if (this.speed > 0) {
                 stopImmediately();
             }
@@ -252,20 +252,17 @@ public class PowertrainSystem extends SystemComponent {
 
         double isReverseDouble = isReverse ? -1 : 1;
 
-        // I. Acceleration.
+        // Acceleration.
         if (this.actualRPM > this.currentRPM) {
             speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_WIND_RESISTANCE));
         } 
-        // II. Braking.
+        // Braking.
         else if (this.brakePedal > 0) {
             speedDelta = -1 * isReverseDouble * ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
         } 
-        // III. Slowing down.
+        // Slowing down.
         else {
-            // speedDelta = (-1 * this.getVelocityVectorMagnitude() + (double) ENGINE_BRAKE_TORQUE *
-            //         this.getAirResistanceMagnitude() * this.getRollingResistanceMagnitude()) / PERCENTAGE_DIVISOR;
-                    // System.out.println("speedDelta: " + speedDelta);
-            speedDelta = 0;
+            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_WIND_RESISTANCE / (double) PERCENTAGE_DIVISOR;
         }
 
         return speedDelta;
