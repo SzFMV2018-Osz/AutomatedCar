@@ -6,9 +6,9 @@ public abstract class Static extends WorldObject {
 
     /**
      *
-     * @param x
-     * @param y
-     * @param imageFileName
+     * @param x coordinate
+     * @param y coordinate
+     * @param imageFileName the name of the imagefile used for this type
      */
     public Static(int x, int y, String imageFileName) {
         super(x, y, imageFileName);

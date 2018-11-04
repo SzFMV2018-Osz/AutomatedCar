@@ -22,6 +22,9 @@ public class XMLReader {
     private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
     private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
+    private static int width = 800;
+    private static int height = 600;
+
     /**
      *
      * @Creates World object of the elements of rescource xml
@@ -29,7 +32,7 @@ public class XMLReader {
      */
     public static World worldMaker() {
         LOGGER.info(ConfigProvider.provide().getBoolean("general.debug"));
-        World w = new World(800, 600);
+        World w = new World(width, height);
 
         try {
             File fXmlFile = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
@@ -139,7 +142,7 @@ public class XMLReader {
 
                 }
 
-                obj.setRotation(routate);
+                obj.setRotation(-routate);
                 for (int l = 0; l < names.length; l++) {
                     if (names[l].equals(filename)) {
                         obj.setRotationPointX(xS[l]);
