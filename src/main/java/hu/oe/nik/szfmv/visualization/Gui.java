@@ -97,9 +97,9 @@ public class Gui extends JFrame {
                     dashboard.index.SwitchBack();
                 }
                 
-                if (keysPressed.contains(KeyEvent.VK_D)) {
+                if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
                     dashboard.autoTr.ShiftUp();
-                } else if (keysPressed.contains(KeyEvent.VK_A)) {
+                } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
                     dashboard.autoTr.ShiftDown();
                 }
             }
