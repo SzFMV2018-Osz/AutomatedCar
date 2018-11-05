@@ -6,6 +6,7 @@ import hu.oe.nik.szfmv.environment.WorldObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.cos;
@@ -15,6 +16,8 @@ import static java.lang.StrictMath.sin;
 import static java.lang.StrictMath.toRadians;
 
 public class UltrasonicSensor extends SystemComponent implements ISensor {
+
+    Polygon poly;
 
     public UltrasonicSensor(VirtualFunctionBus virtualFunctionBus) {
 
@@ -38,6 +41,8 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         Polygon triangle = new Polygon(new int[] { sensorPosition.x, a.x, b.x },
                 new int[] { sensorPosition.y, a.y, b.y }, 3);
 
+        poly = triangle;
+
         return triangle;
 
     }
@@ -55,8 +60,12 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     }
 
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
-        List<WorldObject> detected = null;
-
+        List<WorldObject> detected = new ArrayList<>();
+        for (WorldObject WO : worldObjects) {
+            if (poly.intersects(WO.getX(), WO.getY(), WO.getWidth(), WO.getHeight())) {
+                detected.add(WO);
+            }
+        }
         return detected;
     }
 
