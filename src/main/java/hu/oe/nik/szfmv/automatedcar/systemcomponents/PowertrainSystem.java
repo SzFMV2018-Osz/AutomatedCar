@@ -2,10 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
-import hu.oe.nik.szfmv.common.Resistences;
 import hu.oe.nik.szfmv.common.exceptions.NegativeNumberException;
-
-import java.awt.*;
 
 /**
  * Powertrain system is responsible for the movement of the car.
@@ -14,8 +11,6 @@ public class PowertrainSystem extends SystemComponent {
     public static final int MAX_RPM = 6000;
     public static final int MIN_RPM = 750;
 
-    private static final int SECONDS_IN_HOUR = 3600;
-    private static final int METERS_IN_KILOMETER = 1000;
     private static final double GEAR_RATIOS = 1.3;
     private static final int PERCENTAGE_DIVISOR = 100;
     private static final int SAMPLE_WEIGHT = 1000;
@@ -26,9 +21,6 @@ public class PowertrainSystem extends SystemComponent {
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -10.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
-    private static final double MAX_PERCENT = 20d;
-    private static final double MAX_WHEEL_ABS = 100;
-    private static final double MAX_TURNING_ANGLE_ABS = 20;
     private double speed;
     private int currentRPM;
     private int actualRPM;
@@ -36,9 +28,6 @@ public class PowertrainSystem extends SystemComponent {
     private int brakePedal;
     private String gearState;
     private boolean isReverse;
-    private Point vector;
-    private  int turningAngle;
-    private int steeringWheel;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
@@ -52,17 +41,6 @@ public class PowertrainSystem extends SystemComponent {
 
         this.currentRPM = MIN_RPM;
         this.actualRPM = this.currentRPM;
-        this.vector = new Point(0, 0);
-    }
-
-    /**
-     * Calculate the magnitude of the given vector
-     *
-     * @param vector given vector
-     * @return the magnitude
-     */
-    private static double calculateVectorMagnitude(Point vector) {
-        return Math.sqrt(Math.pow(vector.getX(), 2) + Math.pow(vector.getY(), 2));
     }
 
     @Override
@@ -70,16 +48,22 @@ public class PowertrainSystem extends SystemComponent {
         this.gearState = this.virtualFunctionBus.samplePacket.getGear();
         this.brakePedal = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
         this.gasPedal = this.virtualFunctionBus.samplePacket.getGaspedalPosition();
-        this.steeringWheel = this.virtualFunctionBus.samplePacket.getWheelPosition();
 
         try {
             this.actualRPM = calculateActualRpm(this.gasPedal);
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
- 
-        calculateTurningAngle(virtualFunctionBus.samplePacket.getWheelPosition());
+
         doPowerTrain();
+    }
+
+    /**
+     * Returns the speed of the object.
+     * @return Speed of the object.
+     */
+    public double getSpeed() {
+        return this.speed;
     }
 
     /**
@@ -181,14 +165,6 @@ public class PowertrainSystem extends SystemComponent {
         }
     }
 
-    public double getSpeed() {
-        return speed;
-    }
-
-    public Point getVector() {
-        return vector;
-    }
-
     /**
      * Calculate the actual rpm of the engine
      *
@@ -210,35 +186,6 @@ public class PowertrainSystem extends SystemComponent {
             this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         }
-    }
-
-    /**
-     * Gets the magnitude of the car's velocity vector
-     *
-     * @return the magnitude
-     */
-    private double getVelocityVectorMagnitude() {
-        return PowertrainSystem.calculateVectorMagnitude(getVector());
-    }
-
-    /**
-     * Gets the magnitude of the air resistance
-     *
-     * @return the magnitude
-     */
-    private double getAirResistanceMagnitude() {
-        return PowertrainSystem.calculateVectorMagnitude(Resistences.calculateAirResistance(
-                getVector()));
-    }
-
-    /**
-     * Gets the magnitude of the rolling resistance
-     *
-     * @return the magnitude
-     */
-    private double getRollingResistanceMagnitude() {
-        return PowertrainSystem.calculateVectorMagnitude(Resistences.calulateRollingResistance(
-                getVector()));
     }
 
     /**
@@ -275,7 +222,6 @@ public class PowertrainSystem extends SystemComponent {
     private void updateChanges(double speedDelta) {
         this.speed += speedDelta;
         this.currentRPM = this.actualRPM;
-        calculateNewVelocityVector();
 
         this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
     }
@@ -286,27 +232,8 @@ public class PowertrainSystem extends SystemComponent {
     private void stopImmediately() {
         this.speed = 0;
         this.currentRPM = this.actualRPM;
-        calculateNewVelocityVector();
 
         this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
-    }
-    
-    /**
-     * Calculate the new velocity vector
-     */
-    private void calculateNewVelocityVector() {
-        double road = (this.speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
-        int newY = (int) (Math.sin((double) this.turningAngle) * road);
-        int newX = (int) (Math.cos((double) this.turningAngle) * road);
-        vector = new Point(newX, newY);
-    }
-
-    public void calculateTurningAngle(int wheelPosition) {
-        this.turningAngle = (int) Math.round(((double) this.steeringWheel / MAX_WHEEL_ABS) * MAX_TURNING_ANGLE_ABS);
-    }
-
-    public int getTurningAngle() {
-        return turningAngle;
     }
 }
 

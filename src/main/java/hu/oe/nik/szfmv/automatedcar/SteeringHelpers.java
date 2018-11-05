@@ -2,9 +2,10 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import java.awt.geom.Point2D;
 
+// This class has been kindly borrowed from the 2017/2018/2 szfmv course.
+// See: https://github.com/SzFMV2018-Tavasz/AutomatedCar/blob/master/src/main/java/hu/oe/nik/szfmv/automatedcar/SteeringMethods.java
+
 public class SteeringHelpers {
-
-
     /**
      * @param xy             Car x and y position
      * @param carHeading     Car heading

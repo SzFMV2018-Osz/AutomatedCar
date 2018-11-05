@@ -6,10 +6,11 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.model.Classes.Car;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class AutomatedCar extends Car {
+    private static final int THREE_QUARTER_CIRCLE = 270;
+
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private PowertrainSystem powertrainSystem;
 
@@ -52,39 +53,41 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.loop();
     }
 
+    /**
+     * Calculates the position and the orientation of the car.
+     */
     private void calculatePositionAndOrientation() {
-        double carSpeed = virtualFunctionBus.powertrainPacket.getSpeed();
-        double angularSpeed = 0;
-        final double fps = 1;
-        final int threeQuarterCircle = 270;
+        double carSpeed = this.powertrainSystem.getSpeed();
+        double steeringAngle = 0;
+        
         try {
-            angularSpeed = SteeringHelpers.getSteerAngle(-this.virtualFunctionBus.samplePacket.getWheelPosition());
+            steeringAngle = SteeringHelpers.getSteerAngle(-this.virtualFunctionBus.samplePacket.getWheelPosition());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setCarPositionAndOrientation(carSpeed, angularSpeed);
-    }
 
-    private void setCarPositionAndOrientation(double carSpeed, double angularSpeed) {
-        final int threeQuarterCircle = 270;
-        double carHeading = Math.toRadians(threeQuarterCircle + rotation);
+        double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
         double halfWheelBase = (double) height / 2;
 
-        Point2D carPosition = new Point2D.Double(virtualFunctionBus.carPacket.getxPosition(), virtualFunctionBus.carPacket.getyPosition());
-        Object[] carPositionAndHeading = SteeringHelpers.getCarPositionAndCarHead(carPosition, carHeading, carSpeed,
-                angularSpeed, new int[] { width, height });
-        if (carPositionAndHeading[0].getClass() == Point2D.Double.class) {
-            carPosition = new Point2D.Double(((Point2D) carPositionAndHeading[0]).getX(),
-                    ((Point2D) carPositionAndHeading[0]).getY());
+        Point2D position = new Point2D.Double(
+            virtualFunctionBus.carPacket.getxPosition(), 
+            virtualFunctionBus.carPacket.getyPosition());
+        Object[] positionWithHeading = SteeringHelpers.getCarPositionAndCarHead(
+            position, carHeading, carSpeed, steeringAngle, new int[] { width, height });
+
+        if (positionWithHeading[0].getClass() == Point2D.Double.class) {
+            position = new Point2D.Double(
+                ((Point2D) positionWithHeading[0]).getX(), 
+                ((Point2D) positionWithHeading[0]).getY());
         }
 
-        if (carPositionAndHeading[1].getClass() == Double.class) {
-            carHeading = (Double) carPositionAndHeading[1];
+        if (positionWithHeading[1].getClass() == Double.class) {
+            carHeading = (double) positionWithHeading[1];
         }
 
-        this.setX((int)Math.round(carPosition.getX() - (double) width / 2));
-        this.setY((int)Math.round(carPosition.getY() - halfWheelBase));
-        rotation = (float) -Math.toDegrees(Math.toRadians(threeQuarterCircle) - carHeading);
+        this.setX((int)Math.round(position.getX() - (double) width / 2));
+        this.setY((int)Math.round(position.getY() - halfWheelBase));
+        rotation = (float) (-Math.toDegrees(Math.toRadians(THREE_QUARTER_CIRCLE) - carHeading));
 
         virtualFunctionBus.carPacket.setxPosition(this.getX());
         virtualFunctionBus.carPacket.setyPosition(this.getY());
