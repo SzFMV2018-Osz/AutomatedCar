@@ -77,20 +77,16 @@ public class PowertrainSystem extends SystemComponent {
             case "R":
                 this.isReverse = true;
                 reverse(speedDifference);
-
                 break;
             case "P":
                 park();
-                
                 break;
             case "N":
                 noGear(speedDifference);
-
                 break;
             case "D":
                 this.isReverse = false;
                 drive(speedDifference);
-
                 break;
             default:
                 break;
@@ -197,17 +193,17 @@ public class PowertrainSystem extends SystemComponent {
 
         double isReverseDouble = isReverse ? -1 : 1;
 
-        // Acceleration.
         if (this.actualRPM > this.currentRPM) {
+            // Acceleration.
             speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_RESISTANCE));
-        } 
-        // Braking.
-        else if (this.brakePedal > 0) {
-            speedDelta = -1 * isReverseDouble * ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
-        } 
-        // Slowing down.
-        else if (this.speed != 0) {
-            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / (double) PERCENTAGE_DIVISOR;
+        } else if (this.brakePedal > 0) {
+            // Braking.
+            speedDelta = -1 * isReverseDouble * 
+                ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
+        } else if (this.speed != 0) {
+            // Slowing down.
+            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
+                (double) PERCENTAGE_DIVISOR;
         }
 
         return speedDelta;

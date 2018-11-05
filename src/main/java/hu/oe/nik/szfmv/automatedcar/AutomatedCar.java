@@ -59,6 +59,8 @@ public class AutomatedCar extends Car {
     private void calculatePositionAndOrientation() {
         double carSpeed = this.powertrainSystem.getSpeed();
         double steeringAngle = 0;
+        double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
+        double halfWheelBase = (double) height / 2;
         
         try {
             steeringAngle = SteeringHelpers.getSteerAngle(-this.virtualFunctionBus.samplePacket.getWheelPosition());
@@ -66,9 +68,23 @@ public class AutomatedCar extends Car {
             e.printStackTrace();
         }
 
-        double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
-        double halfWheelBase = (double) height / 2;
+        Point2D position = calculateNewPosition(carSpeed, steeringAngle, carHeading);
 
+        this.setX((int)Math.round(position.getX() - (double) width / 2));
+        this.setY((int)Math.round(position.getY() - halfWheelBase));
+
+        virtualFunctionBus.carPacket.setxPosition(this.getX());
+        virtualFunctionBus.carPacket.setyPosition(this.getY());
+    }
+
+    /**
+     * Calculates the new position based on the speed and steering angle.
+     * @param carSpeed Speed of the car.
+     * @param steeringAngle Steering angle.
+     * @param carHeading Car heading.
+     * @return New position of the car.
+     */
+    private Point2D calculateNewPosition(double carSpeed, double steeringAngle, double carHeading) {
         Point2D position = new Point2D.Double(
             virtualFunctionBus.carPacket.getxPosition(), 
             virtualFunctionBus.carPacket.getyPosition());
@@ -85,11 +101,8 @@ public class AutomatedCar extends Car {
             carHeading = (double) positionWithHeading[1];
         }
 
-        this.setX((int)Math.round(position.getX() - (double) width / 2));
-        this.setY((int)Math.round(position.getY() - halfWheelBase));
         rotation = (float) (-Math.toDegrees(Math.toRadians(THREE_QUARTER_CIRCLE) - carHeading));
 
-        virtualFunctionBus.carPacket.setxPosition(this.getX());
-        virtualFunctionBus.carPacket.setyPosition(this.getY());
+        return position;
     }
 }
