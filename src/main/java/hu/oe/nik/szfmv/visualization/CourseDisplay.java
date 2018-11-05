@@ -1,14 +1,12 @@
 package hu.oe.nik.szfmv.visualization;
 
-import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
-import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -51,9 +49,8 @@ public class CourseDisplay extends JPanel {
     protected void paintComponent(Graphics g, World world) {
 
 
-
         if (drawTriangles) {
-            drawSensor(g,world);
+            drawSensor(g, world);
         }
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
@@ -95,15 +92,15 @@ public class CourseDisplay extends JPanel {
     public void drawSensor(Graphics g, World world) {
 
 
-
-        for (UltrasonicSensor sensor:parent.getVirtualFunctionBus().ultrasonicSensors
-             ) {
+        for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
+        ) {
             g.setColor(Color.GREEN);
             g.drawPolygon(sensor.getPoly());
-            WorldObject closest=sensor.closestObject(sensor.detectedObjects(world.getWorldObjects()));
+            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getWorldObjects()));
             g.setColor(Color.RED);
-            if (closest!=null)
-            {g.drawRect(closest.getX(),closest.getY(),closest.getWidth(),closest.getHeight());}
+            if (closest != null) {
+                g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
+            }
 
 
         }

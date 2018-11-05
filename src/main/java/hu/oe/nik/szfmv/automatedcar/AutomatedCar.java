@@ -2,7 +2,6 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
-import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
@@ -18,7 +17,7 @@ public class AutomatedCar extends Car {
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
     private DynamicMoving dynamicMoving;
-    private ArrayList<UltrasonicSensor> ultrasonicSensors=new ArrayList<UltrasonicSensor>();
+    private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<UltrasonicSensor>();
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -35,12 +34,10 @@ public class AutomatedCar extends Car {
         powertrainSystem = new PowertrainSystem(virtualFunctionBus, dynamicMoving);
         setCarPacket();
         AddUltrasonicSensors();
-        virtualFunctionBus.ultrasonicSensors=ultrasonicSensors;
-
+        virtualFunctionBus.ultrasonicSensors = ultrasonicSensors;
 
 
         new Driver(virtualFunctionBus);
-
 
 
     }
@@ -65,7 +62,6 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.loop();
 
 
-
     }
 
     private void calculatePositionAndOrientation() {
@@ -83,25 +79,24 @@ public class AutomatedCar extends Car {
 
     }
 
-    private void AddUltrasonicSensors()
-    {
+    private void AddUltrasonicSensors() {
         int carWidth = virtualFunctionBus.carPacket.getCarWidth();
         int carHeight = virtualFunctionBus.carPacket.getCarHeigth();
         //front sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,10,carWidth/2+30,0));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,10,carWidth/2-30,0));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 10, carWidth / 2 + 30, 0));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 10, carWidth / 2 - 30, 0));
 
         //back sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,carHeight-10,carWidth/2+30,180));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,carHeight-10,carWidth/2-30,180));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 10, carWidth / 2 + 30, 180));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 10, carWidth / 2 - 30, 180));
 
         //right sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,30,carWidth - 5,90));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,carHeight-30,carWidth - 5,90));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 30, carWidth - 5, 90));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 30, carWidth - 5, 90));
 
         //left sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,30,5,-90));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus,carHeight-30,5,-90));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 30, 5, -90));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 30, 5, -90));
 
     }
 
