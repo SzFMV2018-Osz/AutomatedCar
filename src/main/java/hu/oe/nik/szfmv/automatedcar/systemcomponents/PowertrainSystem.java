@@ -115,7 +115,7 @@ public class PowertrainSystem extends SystemComponent {
                 acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
                 updateChanges(acceleration);
             }
-        } else if (this.brakePedal > 0 && this.gasPedal == 0) {
+        } else if (this.gasPedal == 0) {
             if (this.speed > 0) {
                 updateChanges(acceleration);
             }
@@ -153,7 +153,7 @@ public class PowertrainSystem extends SystemComponent {
                 speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
                 updateChanges(speedDelta);
             }
-        } else if (this.brakePedal > 0 && this.gasPedal == 0) {
+        } else if (this.gasPedal == 0) {
             if (this.speed < 0) {
                 updateChanges(speedDelta);
             }
