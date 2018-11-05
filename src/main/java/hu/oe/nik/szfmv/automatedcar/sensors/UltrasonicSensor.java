@@ -6,6 +6,8 @@ import hu.oe.nik.szfmv.environment.WorldObject;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.round;
@@ -26,6 +28,7 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
 
 
     public UltrasonicSensor(VirtualFunctionBus virtualFunctionBus, int vertShift, int horizShift, double sensorViewDirection) {
+
 
         super(virtualFunctionBus);
         visualRange = 120;
@@ -59,6 +62,8 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         Polygon triangle = new Polygon(new int[]{sensorPosition.x, a.x, b.x},
                 new int[]{sensorPosition.y, a.y, b.y}, 3);
 
+        poly = triangle;
+
         return triangle;
 
     }
@@ -76,8 +81,12 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     }
 
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
-        List<WorldObject> detected = null;
-
+        List<WorldObject> detected = new ArrayList<>();
+        for (WorldObject WO : worldObjects) {
+            if (poly.intersects(WO.getX(), WO.getY(), WO.getWidth(), WO.getHeight())) {
+                detected.add(WO);
+            }
+        }
         return detected;
     }
 
