@@ -3,10 +3,12 @@ package hu.oe.nik.szfmv.automatedcar.sensors;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Interfaces.Collidable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.List;
+import java.util.Vector;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.round;
@@ -16,13 +18,37 @@ import static java.lang.StrictMath.toRadians;
 
 public class UltrasonicSensor extends SystemComponent implements ISensor {
 
-    public UltrasonicSensor(VirtualFunctionBus virtualFunctionBus) {
+    public Polygon getTriangle() {
+        return triangle;
+    }
+
+    Polygon triangle;
+    double visualRange;
+    double angleOfView;
+    int vertshift;
+    int horizshift;
+    Point sensorPositon;
+    double sensorRotation;
+    double sensorViewDirection;
+
+
+
+
+    public UltrasonicSensor(VirtualFunctionBus virtualFunctionBus, int vertShift, int horizShift, double sensorViewDirection) {
 
         super(virtualFunctionBus);
+        visualRange=120;
+        angleOfView=90;
+        this.vertshift=vertShift;
+        this.horizshift=horizShift;
+        this.sensorViewDirection=sensorViewDirection;
+        this.sensorPositon=new Point();
+
     }
 
     public Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angleOfView,
             double sensorRotation) {
+
 
         double rotationInRad = toRadians(sensorRotation);
         double angleInRad = toRadians(angleOfView);
@@ -60,8 +86,34 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         return detected;
     }
 
+    private void SensorPosCarToGlobal(int vertshift, int horizshift, double sensorRotation) {
+        sensorPositon.x = (int) (virtualFunctionBus.carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
+        sensorPositon.y = (int) (virtualFunctionBus.carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+    }
+
+    /*public WorldObject closestObject(List<WorldObject> detectedObjects)
+    {
+        if (detectedObjects!=null)
+        {
+            WorldObject closest=detectedObjects.get(0);
+        }
+        for (WorldObject item:detectedObjects
+             ) {
+
+
+            
+        }
+    }*/
+
     @Override
     public void loop() {
+
+
+        SensorPosCarToGlobal(this.vertshift,this.horizshift, sensorRotation);
+        sensorRotation = 180 - (virtualFunctionBus.carPacket.getCarRotation() % 360);
+        triangle=locateSensorTriangle(sensorPositon,visualRange,angleOfView,sensorRotation+sensorViewDirection);
+
+
 
     }
 }
