@@ -94,61 +94,66 @@ public class CourseDisplay extends JPanel {
     public void drawSensor(Graphics g, ISensor sensor) {
         g.setColor(Color.GREEN);
         int angleofview = 90;
+        int visualRange = 120;
         int vertshift;
         int horizshift;
         float sensorviewdirection;
         float sensorRotation = 180 - (parent.getVirtualFunctionBus().carPacket.getCarRotation() % 360);
         int carWidth = parent.getVirtualFunctionBus().carPacket.getCarWidth();
         int carHeight = parent.getVirtualFunctionBus().carPacket.getCarHeigth();
+        Polygon triangle;
 
         //front sensors
         sensorviewdirection = sensorRotation;
         vertshift = 10;
         horizshift = carWidth / 2 + 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         horizshift = carWidth / 2 - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         //back sensors
         sensorviewdirection = sensorRotation + 180;
         vertshift = carHeight - 10;
         horizshift = carWidth / 2 + 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         horizshift = carWidth / 2 - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         //right sensors
         sensorviewdirection = sensorRotation + 90;
         vertshift = 30;
         horizshift = carWidth - 5;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         vertshift = carHeight - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         //left sensors
         sensorviewdirection = sensorRotation - 90;
         vertshift = 30;
         horizshift = 5;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
         vertshift = carHeight - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        triangle = SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview, visualRange, sensorviewdirection, sensor);
+        g.drawPolygon(triangle);
 
     }
 
-    private void SensorPosCarToGlobal(int vertshift, int horizshift, float sensorRotation, int angleOfView) {
+    private Polygon SensorPosCarToGlobal(int vertshift, int horizshift, float sensorRotation, int angleOfView, int visualRange, float sensorviewdirection, ISensor sensor) {
         sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
         sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
+        Polygon triangle = sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), visualRange, angleOfView, sensorviewdirection);
+        triangle.translate(camera.getX(), camera.getY());
+        return triangle;
     }
 }
