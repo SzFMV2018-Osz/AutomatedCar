@@ -6,6 +6,7 @@ public class CarPacket implements ReadOnlyCarPacket {
     private int carWidth;
     private int xPosition;
     private int yPosition;
+    private float rotation;
 
     public int getxPosition() {
         return xPosition;
@@ -39,5 +40,14 @@ public class CarPacket implements ReadOnlyCarPacket {
 
     public void setCarWidth(int carWidth) {
         this.carWidth = carWidth;
+    }
+
+    @Override
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 }

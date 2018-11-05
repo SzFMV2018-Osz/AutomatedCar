@@ -22,11 +22,13 @@ public class PowertrainSystem extends SystemComponent {
     private static final double SAMPLE_WIND_RESISTANCE = 1.5;
     private static final int ENGINE_BRAKE_TORQUE = 70;
     private static final double MAX_BRAKE_DECELERATION = 25;
-    private static final double MAX_FORWARD_SPEED = 50;
+    private static final double MAX_FORWARD_SPEED = 10;
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -10.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
     private static final double MAX_PERCENT = 20d;
+    private static final double MAX_WHEEL_ABS = 100;
+    private static final double MAX_TURNING_ANGLE_ABS = 20;
     private double speed;
     private int currentRPM;
     private int actualRPM;
@@ -35,19 +37,18 @@ public class PowertrainSystem extends SystemComponent {
     private String gearState;
     private boolean isReverse;
     private Point vector;
-    private SteeringSystem steeringSystem;
+    private  int turningAngle;
+    private int steeringWheel;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
      *
      * @param virtualFunctionBus {@link VirtualFunctionBus} used to connect {@link SystemComponent}s
-     * @param steeringSystem      {@link SteeringSystem}
      */
-    public PowertrainSystem(VirtualFunctionBus virtualFunctionBus, SteeringSystem steeringSystem) {
+    public PowertrainSystem(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
         this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
-        this.steeringSystem = steeringSystem;
 
         this.currentRPM = MIN_RPM;
         this.actualRPM = this.currentRPM;
@@ -66,16 +67,18 @@ public class PowertrainSystem extends SystemComponent {
 
     @Override
     public void loop() {
-        this.gearState = virtualFunctionBus.samplePacket.getGear();
-        this.brakePedal = virtualFunctionBus.samplePacket.getBreakpedalPosition();
-        this.gasPedal = virtualFunctionBus.samplePacket.getGaspedalPosition();
+        this.gearState = this.virtualFunctionBus.samplePacket.getGear();
+        this.brakePedal = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
+        this.gasPedal = this.virtualFunctionBus.samplePacket.getGaspedalPosition();
+        this.steeringWheel = this.virtualFunctionBus.samplePacket.getWheelPosition();
 
         try {
             this.actualRPM = calculateActualRpm(this.gasPedal);
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
-
+ 
+        calculateTurningAngle(virtualFunctionBus.samplePacket.getWheelPosition());
         doPowerTrain();
     }
 
@@ -186,10 +189,6 @@ public class PowertrainSystem extends SystemComponent {
         return vector;
     }
 
-    public SteeringSystem getSteeringSystem() {
-        return steeringSystem;
-    }
-
     /**
      * Calculate the actual rpm of the engine
      *
@@ -297,9 +296,17 @@ public class PowertrainSystem extends SystemComponent {
      */
     private void calculateNewVelocityVector() {
         double road = (this.speed / SECONDS_IN_HOUR) * METERS_IN_KILOMETER;
-        int newY = (int) (Math.sin((double) steeringSystem.getTurningAngle()) * road);
-        int newX = (int) (Math.cos((double) steeringSystem.getTurningAngle()) * road);
+        int newY = (int) (Math.sin((double) this.turningAngle) * road);
+        int newX = (int) (Math.cos((double) this.turningAngle) * road);
         vector = new Point(newX, newY);
+    }
+
+    public void calculateTurningAngle(int wheelPosition) {
+        this.turningAngle = (int) Math.round(((double) this.steeringWheel / MAX_WHEEL_ABS) * MAX_TURNING_ANGLE_ABS);
+    }
+
+    public int getTurningAngle() {
+        return turningAngle;
     }
 }
 

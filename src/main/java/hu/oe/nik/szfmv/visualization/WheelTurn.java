@@ -12,7 +12,7 @@ public class WheelTurn {
         if (level >= 95) {
             level = 100;
         } else if (level < 95) {
-            level += 1;
+            level += 5;
         }
     }
 
@@ -20,7 +20,7 @@ public class WheelTurn {
         if (level <= -95) {
             level = -100;
         } else if (level > -95) {
-            level -= 1;
+            level -= 5;
         }
     }
 

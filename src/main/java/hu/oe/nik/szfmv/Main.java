@@ -40,7 +40,7 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png");
         Person person = new Person(1500,500,"man.png");
     //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
         NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
