@@ -48,10 +48,6 @@ public class CourseDisplay extends JPanel {
      */
     protected void paintComponent(Graphics g, World world) {
 
-
-        if (drawTriangles) {
-            drawSensor(g, world);
-        }
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
@@ -70,11 +66,17 @@ public class CourseDisplay extends JPanel {
 
         camera.update();
 
+
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage(camera.getX(), camera.getY());
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }
+
+        if (drawTriangles) {
+            drawSensor(g2d, world);
+        }
+
 
         return doubleBufferedScreen;
     }
@@ -89,14 +91,14 @@ public class CourseDisplay extends JPanel {
         repaint();
     }
 
-    public void drawSensor(Graphics g, World world) {
+    public void drawSensor(Graphics2D g, World world) {
 
 
         for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
         ) {
             g.setColor(Color.GREEN);
             g.drawPolygon(sensor.getPoly());
-            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getWorldObjects()));
+            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
             g.setColor(Color.RED);
             if (closest != null) {
                 g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
