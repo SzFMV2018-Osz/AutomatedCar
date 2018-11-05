@@ -14,7 +14,7 @@ public class PowertrainSystem extends SystemComponent {
     private static final double GEAR_RATIOS = 1.3;
     private static final int PERCENTAGE_DIVISOR = 100;
     private static final int SAMPLE_WEIGHT = 1000;
-    private static final double SAMPLE_WIND_RESISTANCE = 1.5;
+    private static final double SAMPLE_RESISTANCE = 1.5;
     private static final int ENGINE_BRAKE_TORQUE = 70;
     private static final double MAX_BRAKE_DECELERATION = 25;
     private static final double MAX_FORWARD_SPEED = 10;
@@ -110,12 +110,12 @@ public class PowertrainSystem extends SystemComponent {
      * @param acceleration acceleration
      */
     private void drive(double acceleration) {
-        if (this.brakePedal == 0) {
+        if (this.brakePedal == 0 && this.gasPedal > 0) {
             if (acceleration > 0 && this.speed < MAX_FORWARD_SPEED ||
                 acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
                 updateChanges(acceleration);
             }
-        } else {
+        } else if (this.brakePedal > 0 && this.gasPedal == 0) {
             if (this.speed > 0) {
                 updateChanges(acceleration);
             }
@@ -145,18 +145,17 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Set speed when gearstate is R - reverse
      *
-     * @param acceleration acceleration
+     * @param speedDelta Speed delta.
      */
-    private void reverse(double acceleration) {
-        if (this.brakePedal == 0) {
-            if (acceleration < 0 && (this.speed > MAX_REVERSE_SPEED) ||
-                acceleration > 0 && this.speed < MIN_REVERSE_SPEED) {
-                updateChanges(acceleration);
+    private void reverse(double speedDelta) {
+        if (this.brakePedal == 0 && this.gasPedal > 0) {
+            if (speedDelta < 0 && (this.speed > MAX_REVERSE_SPEED) ||
+                speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
+                updateChanges(speedDelta);
             }
-
-        } else {
+        } else if (this.brakePedal > 0 && this.gasPedal == 0) {
             if (this.speed < 0) {
-                updateChanges(acceleration);
+                updateChanges(speedDelta);
             }
 
             if (this.speed > 0) {
@@ -194,21 +193,21 @@ public class PowertrainSystem extends SystemComponent {
      * @return the speed delta
      */
     private double calculateSpeedDifference() {
-        double speedDelta;
+        double speedDelta = 0;
 
         double isReverseDouble = isReverse ? -1 : 1;
 
         // Acceleration.
         if (this.actualRPM > this.currentRPM) {
-            speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_WIND_RESISTANCE));
+            speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_RESISTANCE));
         } 
         // Braking.
         else if (this.brakePedal > 0) {
             speedDelta = -1 * isReverseDouble * ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
         } 
         // Slowing down.
-        else {
-            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_WIND_RESISTANCE / (double) PERCENTAGE_DIVISOR;
+        else if (this.speed != 0) {
+            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / (double) PERCENTAGE_DIVISOR;
         }
 
         return speedDelta;
