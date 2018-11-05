@@ -17,7 +17,6 @@ public class CourseDisplay extends JPanel {
     private final int width = 770;
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
-    private int sersorCenterX, sersorCenterY;
     public Camera camera;
     Gui parent;
     public Boolean drawTriangles;
@@ -54,7 +53,7 @@ public class CourseDisplay extends JPanel {
 
 
         if (drawTriangles) {
-            drawSensor(g);
+            drawSensor(g,world);
         }
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
@@ -80,9 +79,6 @@ public class CourseDisplay extends JPanel {
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }
 
-
-
-
         return doubleBufferedScreen;
     }
 
@@ -96,21 +92,22 @@ public class CourseDisplay extends JPanel {
         repaint();
     }
 
-    public void drawSensor(Graphics g) {
-        g.setColor(Color.GREEN);
+    public void drawSensor(Graphics g, World world) {
+
+
 
         for (UltrasonicSensor sensor:parent.getVirtualFunctionBus().ultrasonicSensors
              ) {
-            g.drawPolygon(sensor.getTriangle());
+            g.setColor(Color.GREEN);
+            g.drawPolygon(sensor.getPoly());
+            WorldObject closest=sensor.closestObject(sensor.detectedObjects(world.getWorldObjects()));
+            g.setColor(Color.RED);
+            if (closest!=null)
+            {g.drawRect(closest.getX(),closest.getY(),closest.getWidth(),closest.getHeight());}
+
+
         }
 
-
     }
 
-
-
-            private void SensorPosCarToGlobal(int vertshift, int horizshift, float sensorRotation, int angleOfView) {
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-    }
 }

@@ -4,9 +4,11 @@ import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Interfaces.Collidable;
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Vector;
 
@@ -18,11 +20,10 @@ import static java.lang.StrictMath.toRadians;
 
 public class UltrasonicSensor extends SystemComponent implements ISensor {
 
-    public Polygon getTriangle() {
-        return triangle;
-    }
 
-    Polygon triangle;
+
+
+    Polygon poly;
     double visualRange;
     double angleOfView;
     int vertshift;
@@ -44,6 +45,10 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         this.sensorViewDirection=sensorViewDirection;
         this.sensorPositon=new Point();
 
+    }
+
+    public Polygon getPoly() {
+        return poly;
     }
 
     public Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angleOfView,
@@ -91,19 +96,23 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
         sensorPositon.y = (int) (virtualFunctionBus.carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
     }
 
-    /*public WorldObject closestObject(List<WorldObject> detectedObjects)
+    public WorldObject closestObject(List<WorldObject> detectedObjects)
     {
-        if (detectedObjects!=null)
+        WorldObject closest;
+        if (detectedObjects!=null) {closest=detectedObjects.get(0);}
+        else
+        {return null;}
+        for (WorldObject item:detectedObjects )
         {
-            WorldObject closest=detectedObjects.get(0);
-        }
-        for (WorldObject item:detectedObjects
-             ) {
-
-
+            if (Point2D.distance(item.getX(),item.getY(),sensorPositon.x,sensorPositon.y)<
+                    Point2D.distance(closest.getX(), closest.getY(),sensorPositon.x,sensorPositon.y))
+            {
+                closest=item;
+            }
             
         }
-    }*/
+        return  closest;
+    }
 
     @Override
     public void loop() {
@@ -111,7 +120,8 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
 
         SensorPosCarToGlobal(this.vertshift,this.horizshift, sensorRotation);
         sensorRotation = 180 - (virtualFunctionBus.carPacket.getCarRotation() % 360);
-        triangle=locateSensorTriangle(sensorPositon,visualRange,angleOfView,sensorRotation+sensorViewDirection);
+        poly=locateSensorTriangle(sensorPositon,visualRange,angleOfView,sensorRotation+sensorViewDirection);
+
 
 
 
