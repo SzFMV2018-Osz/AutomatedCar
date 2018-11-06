@@ -76,19 +76,21 @@ public class SteeringHelpers {
      * @return steeringAngle between -60 and 60 degree.
      * @throws Exception wrong parameter Exception
      */
-    public static double getSteerAngle(double wheelPosition) throws Exception {
+    public static double getSteerAngle(double wheelPosition) {
 
         final double maxLeft = 100d;
         final double maxRight = -100d;
 
-        if (wheelPosition > maxLeft || wheelPosition < maxRight) {
-            throw new Exception();
+        if (wheelPosition > maxLeft) {
+            wheelPosition = maxLeft;
+        }
+        if (wheelPosition < maxRight) {
+            wheelPosition = maxRight;
         }
 
         // From -60 to 60 degree
         double steerAngle;
         final double MULTIPLIER = -0.6;
-
 
         steerAngle = wheelPosition * MULTIPLIER;
         steerAngle = Math.toRadians(steerAngle);

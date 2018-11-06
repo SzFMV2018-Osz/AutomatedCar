@@ -62,11 +62,7 @@ public class AutomatedCar extends Car {
         double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
         double halfWheelBase = (double) height / 2;
         
-        try {
-            steeringAngle = SteeringHelpers.getSteerAngle(-this.virtualFunctionBus.samplePacket.getWheelPosition());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        steeringAngle = SteeringHelpers.getSteerAngle(-this.virtualFunctionBus.samplePacket.getWheelPosition());
 
         Point2D position = calculateNewPosition(carSpeed, steeringAngle, carHeading);
 
