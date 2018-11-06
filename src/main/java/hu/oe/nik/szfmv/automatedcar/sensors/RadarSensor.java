@@ -5,11 +5,13 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RadarSensor extends SystemComponent implements ISensor {
 
     private static final int TRIANGLE_N = 3;
+    private Polygon radarTriangle;
 
     /**
      * @param virtualFunctionBus This Bus help to communicate with other SystemComponent
@@ -42,6 +44,8 @@ public class RadarSensor extends SystemComponent implements ISensor {
         triangle.xpoints = new int[]{sensorPosition.x, leftPoint.x, rightPoint.x};
         triangle.ypoints = new int[]{sensorPosition.y, leftPoint.y, rightPoint.y};
 
+        this.radarTriangle = triangle;
+
         return triangle;
     }
 
@@ -60,9 +64,22 @@ public class RadarSensor extends SystemComponent implements ISensor {
 
     }
 
+    /**
+     * Returns a list of world objects what sees the radar
+     * @param worldObjects all world objects
+     * @return detected world objects
+     */
     @Override
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
-        return null;
+        List<WorldObject> detectedObject = new ArrayList<>();
+
+        worldObjects.forEach(item -> {
+            if (this.radarTriangle.contains(item.getX(), item.getY(), item.getWidth(), item.getHeight())) {
+                detectedObject.add(item);
+            }
+        });
+
+        return  detectedObject;
     }
 
     @Override
