@@ -25,8 +25,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
         super(virtualFunctionBus);
 
         this.virtualFunctionBus.sensorPacket = new SensorPacket();
-        this.sensorPosition = new Point(this.virtualFunctionBus.carPacket.getxPosition(),
-                this.virtualFunctionBus.carPacket.getyPosition()+this.virtualFunctionBus.carPacket.getCarWidth()/2);
+        //this.sensorPosition = new Point(this.virtualFunctionBus.carPacket.getxPosition(), this.virtualFunctionBus.carPacket.getyPosition()+this.virtualFunctionBus.carPacket.getCarWidth()/2);
         triangle = new Polygon();
     }
 
