@@ -96,12 +96,14 @@ public class CourseDisplay extends JPanel {
 
         for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
         ) {
+            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
+
+            sensor.setSensorPositon(new Point(camera.getX(), camera.getY()));
             g.setColor(Color.GREEN);
             g.drawPolygon(sensor.getPoly());
-            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
             g.setColor(Color.RED);
             if (closest != null) {
-                g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
+                g.drawRect(closest.getX() + camera.getX(), closest.getY() + camera.getY(), closest.getWidth(), closest.getHeight());
             }
 
 

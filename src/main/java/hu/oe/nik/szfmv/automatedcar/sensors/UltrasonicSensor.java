@@ -4,11 +4,9 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,9 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     double sensorRotation;
     double sensorViewDirection;
 
+    public void setSensorPositon(Point sensorPositon) {
+        this.poly.translate(sensorPositon.x, sensorPositon.y);
+    }
 
     public UltrasonicSensor(VirtualFunctionBus virtualFunctionBus, int vertShift, int horizShift, double sensorViewDirection) {
 
@@ -85,7 +86,7 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
         List<WorldObject> detected = new ArrayList<>();
         for (WorldObject WO : worldObjects) {
-            if ( poly.intersects(WO.getX(), WO.getY(), WO.getWidth(), WO.getHeight()) && !(WO instanceof  AutomatedCar)) {
+            if (poly.intersects(WO.getX(), WO.getY(), WO.getWidth(), WO.getHeight()) && !(WO instanceof AutomatedCar)) {
                 detected.add(WO);
             }
         }
@@ -118,8 +119,8 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     public void loop() {
 
 
-        SensorPosCarToGlobal(this.vertshift, this.horizshift, sensorRotation);
         sensorRotation = 180 - (virtualFunctionBus.carPacket.getCarRotation() % 360);
+        SensorPosCarToGlobal(this.vertshift, this.horizshift, sensorRotation);
         poly = locateSensorTriangle(sensorPositon, visualRange, angleOfView, sensorRotation + sensorViewDirection);
 
 
