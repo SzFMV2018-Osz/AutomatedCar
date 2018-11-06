@@ -2,16 +2,22 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
+import hu.oe.nik.szfmv.automatedcar.sensors.CameraSensor;
+import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
+import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.model.Classes.Car;
 
 import java.awt.geom.Point2D;
+import java.util.List;
 
 public class AutomatedCar extends Car {
     private static final int THREE_QUARTER_CIRCLE = 270;
+    private static final double CAMERA_RELATIVE_POSITION_IN_PERCENT = 0.8;
 
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+    private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
 
     /**
@@ -25,10 +31,21 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         setCarPacket();
-
+        createSensors();
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
 
         new Driver(virtualFunctionBus);
+    }
+
+    private void createSensors() {
+        RadarSensor radarSensor = new RadarSensor(virtualFunctionBus);
+        radarSensor.getPositionOnCar().x = width / 2;
+        radarSensor.getPositionOnCar().y = 0;
+        sensorList.add(radarSensor);
+        CameraSensor cameraSensor = new CameraSensor(virtualFunctionBus);
+        cameraSensor.getPositionOnCar().x = width / 2;
+        cameraSensor.getPositionOnCar().y = (int) (height * CAMERA_RELATIVE_POSITION_IN_PERCENT);
+        sensorList.add(cameraSensor);
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -61,13 +78,13 @@ public class AutomatedCar extends Car {
         double steeringAngle = 0;
         double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
         double halfWheelBase = (double) height / 2;
-        
+
         steeringAngle = SteeringHelpers.getSteerAngle(-this.virtualFunctionBus.samplePacket.getWheelPosition());
 
         Point2D position = calculateNewPosition(carSpeed, steeringAngle, carHeading);
 
-        this.setX((int)Math.round(position.getX() - (double) width / 2));
-        this.setY((int)Math.round(position.getY() - halfWheelBase));
+        this.setX((int) Math.round(position.getX() - (double) width / 2));
+        this.setY((int) Math.round(position.getY() - halfWheelBase));
 
         virtualFunctionBus.carPacket.setxPosition(this.getX());
         virtualFunctionBus.carPacket.setyPosition(this.getY());
@@ -75,22 +92,23 @@ public class AutomatedCar extends Car {
 
     /**
      * Calculates the new position based on the speed and steering angle.
-     * @param carSpeed Speed of the car.
+     *
+     * @param carSpeed      Speed of the car.
      * @param steeringAngle Steering angle.
-     * @param carHeading Car heading.
+     * @param carHeading    Car heading.
      * @return New position of the car.
      */
     private Point2D calculateNewPosition(double carSpeed, double steeringAngle, double carHeading) {
         Point2D position = new Point2D.Double(
-            virtualFunctionBus.carPacket.getxPosition(), 
-            virtualFunctionBus.carPacket.getyPosition());
+                virtualFunctionBus.carPacket.getxPosition(),
+                virtualFunctionBus.carPacket.getyPosition());
         Object[] positionWithHeading = SteeringHelpers.getCarPositionAndCarHead(
-            position, carHeading, carSpeed, steeringAngle, new int[] { width, height });
+                position, carHeading, carSpeed, steeringAngle, new int[]{width, height});
 
         if (positionWithHeading[0].getClass() == Point2D.Double.class) {
             position = new Point2D.Double(
-                ((Point2D) positionWithHeading[0]).getX(), 
-                ((Point2D) positionWithHeading[0]).getY());
+                    ((Point2D) positionWithHeading[0]).getX(),
+                    ((Point2D) positionWithHeading[0]).getY());
         }
 
         if (positionWithHeading[1].getClass() == Double.class) {

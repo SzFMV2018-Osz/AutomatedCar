@@ -12,6 +12,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private static final int TRIANGLE_N = 3;
     private static final int VISUAL_RANGE = 80;
     private static final int ANGLE_OF_VIEW = 60;
+    private Point positionOnCar;
     private Polygon radarTriangle;
 
     /**
@@ -20,6 +21,10 @@ public class CameraSensor extends SystemComponent implements ISensor {
      */
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+    }
+
+    public Point getPositionOnCar() {
+        return positionOnCar;
     }
 
     @Override
