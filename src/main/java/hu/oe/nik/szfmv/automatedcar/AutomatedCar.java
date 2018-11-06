@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
+import hu.oe.nik.szfmv.automatedcar.sensors.CameraSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SteeringSystem;
@@ -12,6 +13,7 @@ public class AutomatedCar extends Car {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private PowertrainSystem powertrainSystem;
     private SteeringSystem steeringSystem;
+    private CameraSensor cameraSensor;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -27,6 +29,8 @@ public class AutomatedCar extends Car {
 
         steeringSystem = new SteeringSystem(virtualFunctionBus);
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
+
+        cameraSensor = new CameraSensor(virtualFunctionBus);
 
         new Driver(virtualFunctionBus);
 

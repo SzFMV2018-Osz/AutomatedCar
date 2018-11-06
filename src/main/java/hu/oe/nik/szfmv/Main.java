@@ -52,6 +52,7 @@ public class Main {
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
+        car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
       //  w.addObjectToWorld(car2);
 
        // person.setRoute(100,750,8,false);

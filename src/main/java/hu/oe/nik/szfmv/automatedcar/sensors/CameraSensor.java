@@ -1,15 +1,21 @@
 package hu.oe.nik.szfmv.automatedcar.sensors;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.SensorPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CameraSensor extends SystemComponent implements ISensor {
 
     private static final int TRIANGLE_N = 3;
+    private Point sensorPosition;
+    Polygon triangle;
+    private boolean rightLane;
+    private int distanceFromBorder;
 
     /**
      * @param virtualFunctionBus This Bus help to communicate with other SystemComponent
@@ -17,11 +23,17 @@ public class CameraSensor extends SystemComponent implements ISensor {
      */
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+
+        this.virtualFunctionBus.sensorPacket = new SensorPacket();
+        this.sensorPosition = new Point(this.virtualFunctionBus.carPacket.getxPosition(),
+                this.virtualFunctionBus.carPacket.getyPosition()+this.virtualFunctionBus.carPacket.getCarWidth()/2);
+        triangle = new Polygon();
     }
 
     @Override
     public Polygon locateSensorTriangle(Point sensorPosition, double visualRange,
                                         double angelOfView, double sensorRotation) {
+        this.sensorPosition = sensorPosition;
         Point leftPoint = new Point();
         Point rightPoint = new Point();
 
@@ -56,12 +68,18 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
-
+        locateSensorTriangle(newSensorPosition,0, 0, newSensorRotation);
     }
 
     @Override
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
-        return null;
+        List<WorldObject> list = new ArrayList<>();
+        for (WorldObject worldObject : worldObjects){
+            Rectangle rectangle = new Rectangle(worldObject.getX(), worldObject.getY(), worldObject.getWidth(), worldObject.getHeight());
+            if(triangle.intersects(rectangle))
+                list.add(worldObject);
+        }
+        return list;
     }
 
     @Override
