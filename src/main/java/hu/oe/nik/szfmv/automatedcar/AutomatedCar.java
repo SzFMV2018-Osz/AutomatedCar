@@ -39,6 +39,10 @@ public class AutomatedCar extends Car {
         new Driver(virtualFunctionBus);
     }
 
+
+    /**
+     * Create the car's sensors
+     */
     private void createSensors() {
         RadarSensor radarSensor = new RadarSensor(virtualFunctionBus);
         radarSensor.getPositionOnCar().x = width / 2;
@@ -74,6 +78,7 @@ public class AutomatedCar extends Car {
 
     /**
      * Calculates the position and the orientation of the car.
+     * Refresh the positions of the sensors
      */
     private void calculatePositionAndOrientation() {
         double carSpeed = this.powertrainSystem.getSpeed();
@@ -94,6 +99,9 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.carPacket.setyPosition(this.getY());
     }
 
+    /**
+     * Refresh the positions of the sensors
+     */
     private void calculateSensorPositions() {
         for (ISensor sensor : sensorList) {
             sensor.refreshSensor(new Point(getX(), getY()), rotation);
