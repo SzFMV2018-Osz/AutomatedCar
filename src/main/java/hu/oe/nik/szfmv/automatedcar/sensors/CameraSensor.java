@@ -10,6 +10,10 @@ import java.util.List;
 public class CameraSensor extends SystemComponent implements ISensor {
 
     private static final int TRIANGLE_N = 3;
+    private static final int POSITION_ON_CAR_X = 0;
+    private static final int POSITION_ON_CAR_Y = 0;
+    private static final int VISUAL_RANGE = 0;
+    private static final int ANGLE_OF_VIEW = 0;
 
     /**
      * @param virtualFunctionBus This Bus help to communicate with other SystemComponent
@@ -66,6 +70,14 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void loop() {
+        //locateSensorTriangle(calculateActualPosition());
+    }
 
+
+    /**
+     * @return actual position of the sensor
+     */
+    Point calculateActualPosition() {
+        return null;
     }
 }
