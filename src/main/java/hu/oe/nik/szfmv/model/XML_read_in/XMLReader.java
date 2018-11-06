@@ -67,34 +67,34 @@ public class XMLReader {
                 float routate = (float) Utils.radianToDegree(matrix);
                 WorldObject obj;
                 switch (filename) {
-                    case "road_2lane_straight":
+                    case "road_2lane_straight.png":
                         obj = new Road(x, y, filename);
                         break;
-                    case "road_2lane_tjunctionright":
+                    case "road_2lane_tjunctionright.png":
                         obj = new Road(x, y, filename);
                         break;
-                    case "parking_space_parallel":
+                    case "parking_space_parallel.png":
                         obj = new Road(x, y, filename);
                         break;
-                    case "crosswalk":
+                    case "crosswalk.png":
                         obj = new Road(x, y, filename);
                         break;
-                    case "roadsign_parking_right":
+                    case "roadsign_parking_right.png":
                         obj = new RoadSign(x, y, filename);
                         break;
-                    case "roadsign_priority_stop":
+                    case "roadsign_priority_stop.png":
                         obj = new RoadSign(x, y, filename);
                         break;
-                    case "roadsign_speed_40":
+                    case "roadsign_speed_40.png":
                         obj = new RoadSign(x, y, filename);
                         break;
-                    case "roadsign_speed_50":
+                    case "roadsign_speed_50.png":
                         obj = new RoadSign(x, y, filename);
                         break;
-                    case "roadsign_speed_60":
+                    case "roadsign_speed_60.png":
                         obj = new RoadSign(x, y, filename);
                         break;
-                    case "tree":
+                    case "tree.png":
                         obj = new Tree(x, y, filename);
                         break;
                     case "road_2lane_rotary.png":
@@ -147,6 +147,7 @@ public class XMLReader {
                     }
                 }
                 w.addObjectToWorld(obj);
+
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

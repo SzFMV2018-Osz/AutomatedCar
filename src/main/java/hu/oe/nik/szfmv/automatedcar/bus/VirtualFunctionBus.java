@@ -3,7 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.bus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.ReadOnlyPowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.ReadOnlySamplePacket;
-import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ public class VirtualFunctionBus {
     public ReadOnlySamplePacket samplePacket;
     public ReadOnlyPowertrainPacket powertrainPacket;
     public ReadOnlyCarPacket carPacket;
-
-    public ISensor ultrasonic;
+    public ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<UltrasonicSensor>();
 
     private List<SystemComponent> components = new ArrayList<>();
+
 
     /**
      * Registers the provided {@link SystemComponent}

@@ -1,14 +1,12 @@
 package hu.oe.nik.szfmv.visualization;
 
-import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
-import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -17,7 +15,6 @@ public class CourseDisplay extends JPanel {
     private final int width = 770;
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
-    private int sersorCenterX, sersorCenterY;
     public Camera camera;
     Gui parent;
     public Boolean drawTriangles;
@@ -51,11 +48,7 @@ public class CourseDisplay extends JPanel {
      */
     protected void paintComponent(Graphics g, World world) {
 
-
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
-        if (drawTriangles) {
-            drawSensor(g, parent.getVirtualFunctionBus().ultrasonic);
-        }
     }
 
     /**
@@ -73,11 +66,18 @@ public class CourseDisplay extends JPanel {
 
         camera.update();
 
+
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage(camera.getX(), camera.getY());
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }
+
+        if (drawTriangles) {
+            drawSensor(g2d, world);
+        }
+
+
         return doubleBufferedScreen;
     }
 
@@ -91,64 +91,24 @@ public class CourseDisplay extends JPanel {
         repaint();
     }
 
-    public void drawSensor(Graphics g, ISensor sensor) {
-        g.setColor(Color.GREEN);
-        int angleofview = 90;
-        int vertshift;
-        int horizshift;
-        float sensorviewdirection;
-        float sensorRotation = 180 - (parent.getVirtualFunctionBus().carPacket.getCarRotation() % 360);
-        int carWidth = parent.getVirtualFunctionBus().carPacket.getCarWidth();
-        int carHeight = parent.getVirtualFunctionBus().carPacket.getCarHeigth();
+    public void drawSensor(Graphics2D g, World world) {
 
-        //front sensors
-        sensorviewdirection = sensorRotation;
-        vertshift = 10;
-        horizshift = carWidth / 2 + 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
 
-        horizshift = carWidth / 2 - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
+        ) {
+            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
 
-        //back sensors
-        sensorviewdirection = sensorRotation + 180;
-        vertshift = carHeight - 10;
-        horizshift = carWidth / 2 + 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+            sensor.setSensorPositon(new Point(camera.getX(), camera.getY()));
+            g.setColor(Color.GREEN);
+            g.drawPolygon(sensor.getPoly());
+            g.setColor(Color.RED);
+            if (closest != null) {
+                g.drawRect(closest.getX() + camera.getX(), closest.getY() + camera.getY(), closest.getWidth(), closest.getHeight());
+            }
 
-        horizshift = carWidth / 2 - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
 
-        //right sensors
-        sensorviewdirection = sensorRotation + 90;
-        vertshift = 30;
-        horizshift = carWidth - 5;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
-
-        vertshift = carHeight - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
-
-        //left sensors
-        sensorviewdirection = sensorRotation - 90;
-        vertshift = 30;
-        horizshift = 5;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
-
-        vertshift = carHeight - 30;
-        SensorPosCarToGlobal(vertshift, horizshift, sensorRotation, angleofview);
-        g.drawPolygon(sensor.locateSensorTriangle(new Point(sersorCenterX, sersorCenterY), 120, angleofview, sensorviewdirection));
+        }
 
     }
 
-    private void SensorPosCarToGlobal(int vertshift, int horizshift, float sensorRotation, int angleOfView) {
-        sersorCenterX = (int) (parent.getVirtualFunctionBus().carPacket.getxPosition() - Math.cos(Math.toRadians(sensorRotation)) * horizshift + Math.sin(Math.toRadians(sensorRotation)) * vertshift);
-        sersorCenterY = (int) (parent.getVirtualFunctionBus().carPacket.getyPosition() - Math.sin(Math.toRadians(sensorRotation)) * horizshift - Math.cos(Math.toRadians(sensorRotation)) * vertshift);
-    }
 }
