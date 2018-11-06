@@ -78,6 +78,8 @@ public class Dashboard extends JPanel {
                 setGear(autoTr.actGear.toString());
                 sp.setGear(autoTr.actGear.toString());
                 parent.getVirtualFunctionBus().samplePacket = sp;
+
+                //wheelTurning.setIsTurning(false);
             }
         }
     };
