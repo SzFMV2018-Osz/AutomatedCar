@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.common;
 
+import java.awt.*;
+
 public final class Resistences {
 
     private static final double C_DRAG = 0.4257;
@@ -10,11 +12,11 @@ public final class Resistences {
      * @param velocityVector vector
      * @return the vector of the air resistance
      */
-    public static Vector calculateAirResistance(Vector velocityVector) {
-        double speed = Math.sqrt(Math.pow(velocityVector.getX(), 2) + Math.pow(velocityVector.getY(), 2));
-        Vector fDrag = new Vector();
-        fDrag.setX(-C_DRAG * velocityVector.getX() * speed);
-        fDrag.setY(-C_DRAG * velocityVector.getY() * speed);
+    public static Point calculateAirResistance(Point velocityVector) {
+        double speed = Math.sqrt(Math.pow(velocityVector.x, 2) + Math.pow(velocityVector.y, 2));
+        Point fDrag = new Point();
+        fDrag.x = (int) (-C_DRAG * velocityVector.x * speed);
+        fDrag.y = (int) (-C_DRAG * velocityVector.y * speed);
         return fDrag;
 
     }
@@ -24,10 +26,10 @@ public final class Resistences {
      * @param velocityVector vector
      * @return the vector of the rolling resistance
      */
-    public static Vector calulateRollingResistance(Vector velocityVector) {
-        Vector fRolling = new Vector();
-        fRolling.setX(-C_ROLLING * velocityVector.getX());
-        fRolling.setY(-C_ROLLING * velocityVector.getY());
+    public static Point calulateRollingResistance(Point velocityVector) {
+        Point fRolling = new Point();
+        fRolling.x = (int) (-C_ROLLING * velocityVector.x);
+        fRolling.y = (int) (-C_ROLLING * velocityVector.y);
         return fRolling;
     }
 }

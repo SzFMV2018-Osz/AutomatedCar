@@ -71,7 +71,7 @@ public class Camera {
                 followableObject.getY() < world.getHeight() - (displayHeight / 2 - followableObject.getHeight() / 2))) {
             this.y =(int) Math.round(displayHeight / scale / 2 - followableObject.getY() - followableObject.getHeight() / 2);
         }
-        System.out.println("x,y: " + x + "," + y);
+        //System.out.println("x,y: " + x + "," + y);
         this.objectLastX = followableObject.getX();
         this.objectLastY = followableObject.getY();
     }
