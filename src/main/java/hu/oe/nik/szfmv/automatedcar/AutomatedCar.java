@@ -9,12 +9,14 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.model.Classes.Car;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.List;
 
 public class AutomatedCar extends Car {
     private static final int THREE_QUARTER_CIRCLE = 270;
     private static final double CAMERA_RELATIVE_POSITION_IN_PERCENT = 0.8;
+    private static final double RADAR_RELATIVE_POSITION_IN_PERCENT = 0.95;
 
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
@@ -40,7 +42,7 @@ public class AutomatedCar extends Car {
     private void createSensors() {
         RadarSensor radarSensor = new RadarSensor(virtualFunctionBus);
         radarSensor.getPositionOnCar().x = width / 2;
-        radarSensor.getPositionOnCar().y = 0;
+        radarSensor.getPositionOnCar().y = (int) (height * RADAR_RELATIVE_POSITION_IN_PERCENT);
         sensorList.add(radarSensor);
         CameraSensor cameraSensor = new CameraSensor(virtualFunctionBus);
         cameraSensor.getPositionOnCar().x = width / 2;
@@ -86,9 +88,18 @@ public class AutomatedCar extends Car {
         this.setX((int) Math.round(position.getX() - (double) width / 2));
         this.setY((int) Math.round(position.getY() - halfWheelBase));
 
+        calculateSensorPositions();
+
         virtualFunctionBus.carPacket.setxPosition(this.getX());
         virtualFunctionBus.carPacket.setyPosition(this.getY());
     }
+
+    private void calculateSensorPositions() {
+        for (ISensor sensor : sensorList) {
+            sensor.refreshSensor(new Point(getX(), getY()), rotation);
+        }
+    }
+
 
     /**
      * Calculates the new position based on the speed and steering angle.

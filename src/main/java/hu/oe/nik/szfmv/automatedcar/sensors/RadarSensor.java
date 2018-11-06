@@ -66,7 +66,9 @@ public class RadarSensor extends SystemComponent implements ISensor {
 
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
-        radarTriangle = locateSensorTriangle(newSensorPosition, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
+        Point newPositon = new Point(newSensorPosition.x + positionOnCar.x, newSensorPosition.y + positionOnCar.y);
+        newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
+        radarTriangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
     }
 
     /**
