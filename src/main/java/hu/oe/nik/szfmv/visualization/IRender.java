@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.visualization;
 
 public interface IRender {
-    void InitImage();
+    void initImage();
 
-    void RotateImage(int cameraX, int cameraY);
+    void rotateImage(Camera camera);
 }

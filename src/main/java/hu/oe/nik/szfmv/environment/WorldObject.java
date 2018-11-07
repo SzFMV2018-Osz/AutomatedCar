@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.environment;
 
 
+import hu.oe.nik.szfmv.model.Classes.PhysicsModel;
+import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.IRender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +28,10 @@ public class WorldObject implements IRender {
     protected double[][] tMatrix;
     protected int lastX;
     protected int lastY;
-    //temporaly sollution
+    protected int xVelocity;
+    protected int yVelocity;
     protected boolean collide;
+    protected PhysicsModel physicsModel;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -42,7 +46,7 @@ public class WorldObject implements IRender {
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
-        InitImage();
+        initImage();
         tMatrix = new double[2][2];
         collide = false;
     }
@@ -64,11 +68,23 @@ public class WorldObject implements IRender {
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
-        InitImage();
+        initImage();
         tMatrix[1][1] = m11;
         tMatrix[1][2] = m12;
         tMatrix[2][1] = m21;
         tMatrix[2][2] = m22;
+    }
+
+    public void setxVelocity(int xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public void setyVelocity(int yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
+    public PhysicsModel getPhysicsModel() {
+        return physicsModel;
     }
 
     public boolean isCollide() {
@@ -171,7 +187,7 @@ public class WorldObject implements IRender {
      * Create the image file for render
      */
     @Override
-    public void InitImage() {
+    public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
             this.width = image.getWidth();
@@ -184,14 +200,28 @@ public class WorldObject implements IRender {
     /**
      * Rotate the image to the correct pos
      *
-     * @param cameraX the camera x for offset
-     * @param cameraY the camera y for offset
+     * @param camera the camera object of the world
      */
     @Override
-    public void RotateImage(int cameraX, int cameraY) {
+    public void rotateImage(Camera camera) {
+        this.x += xVelocity;
+        this.y += yVelocity;
         transformTheImageToCorrectPos = new AffineTransform();
-        transformTheImageToCorrectPos.rotate(Math.toRadians(-rotation), cameraX + x, cameraY + y);
-        transformTheImageToCorrectPos.translate(cameraX + x - rotationPointX, cameraY + y - rotationPointY);
+        transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
+        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), camera.getX() + x, camera.getY() + y);
+        transformTheImageToCorrectPos.translate(camera.getX() + x - rotationPointX, camera.getY() + y - rotationPointY);
+        if (0 < xVelocity) {
+            xVelocity--;
+        }
+        if (0 > xVelocity) {
+            xVelocity++;
+        }
+        if (0 < yVelocity) {
+            yVelocity--;
+        }
+        if (0 > yVelocity) {
+            yVelocity++;
+        }
 
     }
 }

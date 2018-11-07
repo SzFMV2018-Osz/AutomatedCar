@@ -2,11 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
-import hu.oe.nik.szfmv.common.DynamicMoving;
-import hu.oe.nik.szfmv.common.Resistences;
 import hu.oe.nik.szfmv.common.exceptions.NegativeNumberException;
-
-import java.awt.*;
 
 /**
  * Powertrain system is responsible for the movement of the car.
@@ -18,93 +14,80 @@ public class PowertrainSystem extends SystemComponent {
     private static final double GEAR_RATIOS = 1.3;
     private static final int PERCENTAGE_DIVISOR = 100;
     private static final int SAMPLE_WEIGHT = 1000;
+    private static final double SAMPLE_RESISTANCE = 1.5;
     private static final int ENGINE_BRAKE_TORQUE = 70;
     private static final double MAX_BRAKE_DECELERATION = 25;
-    private static final double MAX_FORWARD_SPEED = 5.0605;
+    private static final double MAX_FORWARD_SPEED = 10;
     private static final double MIN_FORWARD_SPEED = 4.3888;
-    private static final double MAX_REVERSE_SPEED = -5.278;
+    private static final double MAX_REVERSE_SPEED = -10.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
-    private static final double MAX_PERCENT = 20d;
-    private DynamicMoving dynamicMoving;
     private double speed;
     private int currentRPM;
     private int actualRPM;
     private int gasPedal;
     private int brakePedal;
     private String gearState;
+    private boolean isReverse;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
      *
-     * @param dynamicMoving      {@link DynamicMoving}
      * @param virtualFunctionBus {@link VirtualFunctionBus} used to connect {@link SystemComponent}s
      */
-    public PowertrainSystem(VirtualFunctionBus virtualFunctionBus, DynamicMoving dynamicMoving) {
+    public PowertrainSystem(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
         this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
-        this.dynamicMoving = dynamicMoving;
+
         this.currentRPM = MIN_RPM;
         this.actualRPM = this.currentRPM;
     }
 
-    /**
-     * Calculate the magnitude of the given vector
-     *
-     * @param vector given vector
-     * @return the magnitude
-     */
-    private static double calculateVectorMagnitude(Point vector) {
-        return Math.sqrt(Math.pow(vector.getX(), 2) + Math.pow(vector.getY(), 2));
-    }
-
-    public DynamicMoving getDynamicMoving() {
-        return dynamicMoving;
-    }
-
     @Override
     public void loop() {
-        gearState = virtualFunctionBus.samplePacket.getGear();
-        switch (gearState) {
-            case "R":
-                dynamicMoving.calculateNewVector((virtualFunctionBus.samplePacket.getGaspedalPosition()
-                        / MAX_PERCENT) * MAX_REVERSE_SPEED);
-                break;
-            case "D":
-                dynamicMoving.calculateNewVector(
-                        (virtualFunctionBus.samplePacket.getGaspedalPosition()
-                                / MAX_PERCENT) * MIN_FORWARD_SPEED);
-                break;
-            default:
-                break;
-        }
+        this.gearState = this.virtualFunctionBus.samplePacket.getGear();
+        this.brakePedal = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
+        this.gasPedal = this.virtualFunctionBus.samplePacket.getGaspedalPosition();
+
         try {
-            actualRPM = calculateActualRpm(virtualFunctionBus.samplePacket.getGaspedalPosition());
+            this.actualRPM = calculateActualRpm(this.gasPedal);
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
+
         doPowerTrain();
+    }
+
+    /**
+     * Returns the speed of the object.
+     *
+     * @return Speed of the object.
+     */
+    public double getSpeed() {
+        return this.speed;
     }
 
     /**
      * Do Power Train
      */
     private void doPowerTrain() {
-        double acceleration = calculateSpeedDifference();
+        double speedDifference = calculateSpeedDifference();
 
         // gearState : R(1), P(2), N(3), D(4)
         switch (gearState) {
             case "R":
-                reverse(acceleration);
+                this.isReverse = true;
+                reverse(speedDifference);
                 break;
             case "P":
                 park();
                 break;
             case "N":
-                noGear(acceleration);
+                noGear(speedDifference);
                 break;
             case "D":
-                drive(acceleration);
+                this.isReverse = false;
+                drive(speedDifference);
                 break;
             default:
                 break;
@@ -115,8 +98,7 @@ public class PowertrainSystem extends SystemComponent {
      * Set speed when gearstate is P - park
      */
     private void park() {
-        speed = 0;
-        this.dynamicMoving.calculateNewVector(speed);
+        stopImmediately();
     }
 
     /**
@@ -125,17 +107,18 @@ public class PowertrainSystem extends SystemComponent {
      * @param acceleration acceleration
      */
     private void drive(double acceleration) {
-        if (brakePedal == 0) {
-            if ((acceleration > 0 && speed < MAX_FORWARD_SPEED) || (acceleration < 0 && speed > MIN_FORWARD_SPEED)) {
+        if (this.brakePedal == 0 && this.gasPedal > 0) {
+            if (acceleration > 0 && this.speed < MAX_FORWARD_SPEED ||
+                    acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
                 updateChanges(acceleration);
             }
-        } else {
-            if (speed > 0) {
+        } else if (this.gasPedal == 0) {
+            if (this.speed > 0) {
                 updateChanges(acceleration);
             }
-            if (speed < 0) {
-                speed = 0;
-                this.dynamicMoving.calculateNewVector(speed);
+
+            if (this.speed < 0) {
+                stopImmediately();
             }
         }
     }
@@ -150,9 +133,8 @@ public class PowertrainSystem extends SystemComponent {
             if (Math.abs(speed) > 0) {
                 updateChanges(acceleration);
             }
-            if (speed < 0) {
-                speed = 0;
-                this.dynamicMoving.calculateNewVector(speed);
+            if (this.speed < 0) {
+                stopImmediately();
             }
         }
     }
@@ -160,26 +142,23 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Set speed when gearstate is R - reverse
      *
-     * @param acceleration acceleration
+     * @param speedDelta Speed delta.
      */
-    private void reverse(double acceleration) {
-        if (brakePedal == 0) {
-            if ((acceleration < 0 && speed > MAX_REVERSE_SPEED) || (acceleration > 0 && speed < MIN_REVERSE_SPEED)) {
-                updateChanges(acceleration);
+    private void reverse(double speedDelta) {
+        if (this.brakePedal == 0 && this.gasPedal > 0) {
+            if (speedDelta < 0 && (this.speed > MAX_REVERSE_SPEED) ||
+                    speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
+                updateChanges(speedDelta);
             }
-        } else {
-            if (speed < 0) {
-                updateChanges(acceleration);
+        } else if (this.gasPedal == 0) {
+            if (this.speed < 0) {
+                updateChanges(speedDelta);
             }
-            if (speed > 0) {
-                speed = 0;
-                this.dynamicMoving.calculateNewVector(speed);
+
+            if (this.speed > 0) {
+                stopImmediately();
             }
         }
-    }
-
-    public double getSpeed() {
-        return speed;
     }
 
     /**
@@ -198,40 +177,18 @@ public class PowertrainSystem extends SystemComponent {
             this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         } else {
-            double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
-            int actual = (int) ((gasPedalPosition * multiplier) + this.currentRPM);
-            this.virtualFunctionBus.powertrainPacket.setRpm(actual);
-            return actual;
+            if (speed != 0) {
+                double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
+                int actual = (int) ((gasPedalPosition * multiplier) + this.currentRPM);
+                this.virtualFunctionBus.powertrainPacket.setRpm(actual);
+                return actual;
+            } else {
+                double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
+                int actual = (int) ((gasPedalPosition * multiplier));
+                this.virtualFunctionBus.powertrainPacket.setRpm(actual);
+                return actual;
+            }
         }
-    }
-
-    /**
-     * Gets the magnitude of the car's velocity vector
-     *
-     * @return the magnitude
-     */
-    private double getVelocityVectorMagnitude() {
-        return PowertrainSystem.calculateVectorMagnitude(this.dynamicMoving.getVector());
-    }
-
-    /**
-     * Gets the magnitude of the air resistance
-     *
-     * @return the magnitude
-     */
-    private double getAirResistanceMagnitude() {
-        return PowertrainSystem.calculateVectorMagnitude(Resistences.calculateAirResistance(
-                this.dynamicMoving.getVector()));
-    }
-
-    /**
-     * Gets the magnitude of the rolling resistance
-     *
-     * @return the magnitude
-     */
-    private double getRollingResistanceMagnitude() {
-        return PowertrainSystem.calculateVectorMagnitude(Resistences.calulateRollingResistance(
-                this.dynamicMoving.getVector()));
     }
 
     /**
@@ -240,19 +197,21 @@ public class PowertrainSystem extends SystemComponent {
      * @return the speed delta
      */
     private double calculateSpeedDifference() {
-        double speedDelta;
-        int brakePedalPosition = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
+        double speedDelta = 0;
+
+        double isReverseDouble = isReverse ? -1 : 1;
 
         if (this.actualRPM > this.currentRPM) {
-            speedDelta = (this.getVelocityVectorMagnitude() + this.actualRPM * GEAR_RATIOS) /
-                    (this.getAirResistanceMagnitude() * SAMPLE_WEIGHT *
-                            this.getRollingResistanceMagnitude());
-        } else if (brakePedalPosition > 0) {
-            speedDelta = -1 * this.getVelocityVectorMagnitude() + ((MAX_BRAKE_DECELERATION /
-                    (double) PERCENTAGE_DIVISOR) * brakePedalPosition);
-        } else {
-            speedDelta = (-1 * this.getVelocityVectorMagnitude() + (double) ENGINE_BRAKE_TORQUE *
-                    this.getAirResistanceMagnitude() * this.getRollingResistanceMagnitude()) / PERCENTAGE_DIVISOR;
+            // Acceleration.
+            speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_RESISTANCE));
+        } else if (this.brakePedal > 0) {
+            // Braking.
+            speedDelta = -1 * isReverseDouble *
+                    ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
+        } else if (this.speed != 0) {
+            // Slowing down.
+            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE /
+                    (double) PERCENTAGE_DIVISOR;
         }
 
         return speedDelta;
@@ -267,8 +226,22 @@ public class PowertrainSystem extends SystemComponent {
         this.speed += speedDelta;
         this.currentRPM = this.actualRPM;
 
-        this.dynamicMoving.calculateNewVector(speedDelta);
         this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
     }
+
+    /**
+     * Stops the car immediately.
+     */
+    public void stopImmediately() {
+        this.speed = 0;
+        if (actualRPM <= MAX_RPM) {
+            this.currentRPM = this.actualRPM;
+        } else {
+            this.currentRPM = MAX_RPM;
+        }
+
+        this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
+    }
+
 }
 

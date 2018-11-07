@@ -27,6 +27,10 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
+# Visual Studio Code specific files
+.factorypath
+.vscode/
+
 # log4j2 configuration files
 src/main/resources/log4j2.xml
 src/main/resources/log4j2.yml
