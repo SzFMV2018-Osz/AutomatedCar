@@ -112,7 +112,8 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
 
     /**
-     * Search the nearest road sign in the list of the found road signs
+     * Search the nearest road sign in the list of the found road signs. If there are not any detected sign, set
+     * null.
      */
     private void searchNearestRoadSign() {
         List<WorldObject> detectedRoadSigns = this.getDetectedRoadSigns();
@@ -131,6 +132,10 @@ public class CameraSensor extends SystemComponent implements ISensor {
             }
 
             this.virtualFunctionBus.sensorPacket.setDetectedRoadSign(nearest);
+            this.virtualFunctionBus.sensorPacket.setDistanceOfRoadSign(minDistance);
+        } else {
+            this.virtualFunctionBus.sensorPacket.setDetectedRoadSign(null);
+            this.virtualFunctionBus.sensorPacket.setDistanceOfRoadSign(0d);
         }
     }
 

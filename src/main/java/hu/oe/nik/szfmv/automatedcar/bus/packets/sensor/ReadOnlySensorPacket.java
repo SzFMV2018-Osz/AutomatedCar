@@ -31,4 +31,16 @@ public interface ReadOnlySensorPacket {
      * @param detectedRoadSign detected road sign
      */
     void setDetectedRoadSign(WorldObject detectedRoadSign);
+
+    /**
+     * Gets the distance of the road sign from the car
+     * @return the distance of the road sign
+     */
+    double getDistanceOfRoadSign();
+
+    /**
+     * Sets the distance of the road sign
+     * @param distanceOfRoadSign distance of the rad sign
+     */
+    void setDistanceOfRoadSign(double distanceOfRoadSign);
 }
