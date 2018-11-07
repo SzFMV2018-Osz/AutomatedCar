@@ -44,7 +44,7 @@ public class Timer {
     public void updateFPS() {
         long time = getTime();
         if (time - lastFPS > 1000) {
-            System.out.println("FPS: " + fps + ", " + OFSET_FPS + " offset fps, " + TARGET_FPS + " target fps");
+            //System.out.println("FPS: " + fps + ", " + OFSET_FPS + " offset fps, " + TARGET_FPS + " target fps");
             if (fps != TARGET_FPS && fps < TARGET_FPS) {
                 OFSET_FPS += 0.5 * (TARGET_FPS - fps);
             } else if (fps != TARGET_FPS && fps > TARGET_FPS) {
