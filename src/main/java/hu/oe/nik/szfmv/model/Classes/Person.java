@@ -5,17 +5,6 @@ import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 public class Person extends Dynamic implements ICollidable {
 
     /**
-     *
-     * @param x coordinate
-     * @param y coordinate
-     * @param imageFileName the name of the imagefile used for this type
-     */
-    public Person(int x, int y, String imageFileName) {
-        super(x, y, imageFileName);
-    }
-
-    /**
-     *
      * @param x coordinate
      * @param y coordinate
      * @param imageFileName the name of the imagefile used for this type
@@ -27,17 +16,22 @@ public class Person extends Dynamic implements ICollidable {
 
     int actualheight_man = 67;
     int actualwidth_man = 38;
-    int weight_man=80;
-
+    int weight_man = 80;
     int actualheight_woman = 72;
     int actualwidth_woman = 38;
-    int weight_woman=50;
-
-    int startingdamage=0;
-    int damagelimit=100;
-
+    int weight_woman = 50;
+    int startingdamage = 0;
+    int damagelimit = 100;
     boolean notdead = false;
-    boolean notfatal= false;
+    boolean notfatal = false;
+    /**
+     * @param x             coordinate
+     * @param y             coordinate
+     * @param imageFileName the name of the imagefile used for this type
+     */
+    public Person(int x, int y, String imageFileName) {
+        super(x, y, imageFileName);
+    }
 
     public Person(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
@@ -45,7 +39,7 @@ public class Person extends Dynamic implements ICollidable {
         PhysicsModel physicsModel = new PhysicsModel();
 
 
-        switch(imageFileName) {
+        switch (imageFileName) {
             case "man":
                 physicsModel.setDamage(startingdamage);
                 physicsModel.setDamagelimit(damagelimit);
@@ -67,7 +61,6 @@ public class Person extends Dynamic implements ICollidable {
             default: // Optional
                 // Statements
         }
-
 
 
     }

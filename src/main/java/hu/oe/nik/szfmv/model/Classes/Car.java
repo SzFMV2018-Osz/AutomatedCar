@@ -40,18 +40,18 @@ public abstract class Car extends Dynamic implements ICollidable {
     int weight_car_3=2500;
 
     //károsodás mértéke: alapból 0, első ütközésnél 50, másodiknál 100, ami a végét is jelenti a jármű működésének mert a limit is 100
-    int startingdamage=0;
-    int damagedstate=50;
-    int damagelimit=100;
-    int fulldamagedstate=100;
-    
+    int startingdamage = 0;
+    int damagedstate = 50;
+    int damagelimit = 100;
+    int fulldamagedstate = 100;
+
     //jármú állapota
     boolean notdead = false;
-    boolean dead=true;
+    boolean dead = true;
 
     //járókelő/biciklis ütközés
-    boolean notfatal= false;
-    boolean fatal=true;
+    boolean notfatal = false;
+    boolean fatal = true;
     
     
     public Car(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {

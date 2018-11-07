@@ -28,11 +28,11 @@ public class Tree extends RoadObsticle implements ICollidable {
     //a fa törzsének mérete 25 pixelben lett megállapítva
 
     int actualheight = 25;
-    int startingdamage=0;
-    int damagelimit=100;
-    int weight_tree=99999;
+    int startingdamage = 0;
+    int damagelimit = 100;
+    int weight_tree = 99999;
     boolean notdead = false;
-    boolean notfatal= false;
+    boolean notfatal = false;
 
 
 

@@ -5,17 +5,6 @@ import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 public class Cyclist extends Dynamic implements ICollidable {
 
     /**
-     *
-     * @param x coordinate
-     * @param y coordinate
-     * @param imageFileName the name of the imagefile used for this type
-     */
-    public Cyclist(int x, int y, String imageFileName) {
-        super(x, y, imageFileName);
-    }
-
-    /**
-     *
      * @param x coordinate
      * @param y coordinate
      * @param imageFileName the name of the imagefile used for this type
@@ -26,15 +15,21 @@ public class Cyclist extends Dynamic implements ICollidable {
      */
 
     /* a biciklis magassága/szélessége pixel szerint*/
-     int actualheight= 126;
-     int actualwidth = 51;
-     int weight_cyclist = 100;
-
-    int startingdamage=0;
-    int damagelimit=100;
-
+    int actualheight = 126;
+    int actualwidth = 51;
+    int weight_cyclist = 100;
+    int startingdamage = 0;
+    int damagelimit = 100;
     boolean notdead = false;
-    boolean notfatal= false;
+    boolean notfatal = false;
+    /**
+     * @param x             coordinate
+     * @param y             coordinate
+     * @param imageFileName the name of the imagefile used for this type
+     */
+    public Cyclist(int x, int y, String imageFileName) {
+        super(x, y, imageFileName);
+    }
 
     public Cyclist(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
