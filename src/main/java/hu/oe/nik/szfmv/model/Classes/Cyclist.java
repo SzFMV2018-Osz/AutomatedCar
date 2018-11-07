@@ -30,12 +30,18 @@ public class Cyclist extends Dynamic implements ICollidable {
      */
     public Cyclist(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
+        initPhysicModel();
     }
 
     public Cyclist(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
+        initPhysicModel();
 
-        PhysicsModel physicsModel = new PhysicsModel();
+
+    }
+
+    private void initPhysicModel() {
+        physicsModel = new PhysicsModel();
         physicsModel.setDamage(startingDamage);
         physicsModel.setDamageLimit(damageLimit);
         physicsModel.setIsDead(notDead);

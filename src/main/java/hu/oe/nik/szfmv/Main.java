@@ -75,9 +75,9 @@ public class Main {
 
                     gui.inputUpdate();
                     car.drive();
-                    physics.update(w);
                     person.moveperson();
                     car1.movecar1();
+                    physics.update(w,display.camera);
                 }
 
 

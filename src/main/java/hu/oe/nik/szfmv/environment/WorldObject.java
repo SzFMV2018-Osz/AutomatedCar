@@ -44,7 +44,7 @@ public class WorldObject implements IRender {
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
-        InitImage();
+        initImage();
         tMatrix = new double[2][2];
         collide = false;
     }
@@ -66,11 +66,15 @@ public class WorldObject implements IRender {
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
-        InitImage();
+        initImage();
         tMatrix[1][1] = m11;
         tMatrix[1][2] = m12;
         tMatrix[2][1] = m21;
         tMatrix[2][2] = m22;
+    }
+
+    public PhysicsModel getPhysicsModel() {
+        return physicsModel;
     }
 
     public boolean isCollide() {
@@ -113,7 +117,9 @@ public class WorldObject implements IRender {
         this.rotationPointY = rotationPointY;
     }
 
-    public int getX() { return this.x; }
+    public int getX() {
+        return this.x;
+    }
 
     public void setX(int x) {
         this.x = x;
@@ -171,7 +177,7 @@ public class WorldObject implements IRender {
      * Create the image file for render
      */
     @Override
-    public void InitImage() {
+    public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
             this.width = image.getWidth();
@@ -183,10 +189,11 @@ public class WorldObject implements IRender {
 
     /**
      * Rotate the image to the correct pos
+     *
      * @param camera the camera object of the world
      */
     @Override
-    public void RotateImage(Camera camera) {
+    public void rotateImage(Camera camera) {
         transformTheImageToCorrectPos = new AffineTransform();
         transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
         transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), camera.getX() + x, camera.getY() + y);

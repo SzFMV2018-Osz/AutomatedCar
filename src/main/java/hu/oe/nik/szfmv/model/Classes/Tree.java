@@ -22,7 +22,6 @@ public class Tree extends RoadObsticle implements ICollidable {
     int weightTree = 99999;
     boolean notDead = false;
     boolean notFatal = false;
-    private PhysicsModel physicsModel;
 
     /**
      * @param x             coordinate
@@ -31,11 +30,16 @@ public class Tree extends RoadObsticle implements ICollidable {
      */
     public Tree(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
+        initPhysicModel();
     }
 
     public Tree(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
+        initPhysicModel();
 
+    }
+
+    private void initPhysicModel(){
         physicsModel = new PhysicsModel();
         physicsModel.setDamage(startingDamage);
         physicsModel.setDamageLimit(damageLimit);
@@ -45,10 +49,5 @@ public class Tree extends RoadObsticle implements ICollidable {
         physicsModel.setWidth(actualHeight);
         physicsModel.setHeight(actualHeight);
     }
-
-    public PhysicsModel getPhysicsModel() {
-        return physicsModel;
-    }
-
 
 }

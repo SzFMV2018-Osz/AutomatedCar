@@ -101,4 +101,7 @@ public class AutomatedCar extends Car {
 
         return position;
     }
+    public void stopImmediately(){
+        this.powertrainSystem.stopImmediately();
+    }
 }

@@ -79,16 +79,16 @@ public class CourseDisplay extends JPanel {
         camera.update();
 
         for (WorldObject object : world.getWorldObjects()) {
-            object.RotateImage(camera);
+
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
             if (object.isCollide()) {
 
-                Rectangle collision = new Rectangle(0, 0, object.getWidth(), object.getHeight());
+                Rectangle collision = new Rectangle(object.getWidth()/2 - object.getPhysicsModel().getWidth()/ 2, object.getHeight()/2 - object.getPhysicsModel().getHeight()/2, object.getPhysicsModel().getWidth(), object.getPhysicsModel().getHeight());
                 Shape s = object.getTransformation().createTransformedShape(collision);
                 g2d.setPaint(new Color(255, 0, 0, 128));
                 g2d.fill(s);
             }
-            updateLastPosition(object);
+
         }
         if (Main.Gameloop == false) {
             g2d.drawImage(image, t, this);
@@ -100,10 +100,7 @@ public class CourseDisplay extends JPanel {
     /**
      * Intended to use for refreshing the course display after redrawing the world
      */
-    private void updateLastPosition(WorldObject object) {
-        object.setLastX(object.getX());
-        object.setLastY(object.getY());
-    }
+
 
     public void refreshFrame() {
         invalidate();

@@ -30,7 +30,6 @@ public class Person extends Dynamic implements ICollidable {
     int damageLimit = 100;
     boolean notDead = false;
     boolean notFatal = false;
-    private PhysicsModel physicsModel;
 
     /**
      * @param x             coordinate
@@ -39,15 +38,19 @@ public class Person extends Dynamic implements ICollidable {
      */
     public Person(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
+        initPhysicModel(imageFileName);
     }
 
     public Person(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
+       initPhysicModel(imageFileName);
+    }
+    private void initPhysicModel(String imageFileName){
         physicsModel = new PhysicsModel();
 
 
         switch (imageFileName) {
-            case "man":
+            case "man.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -56,7 +59,7 @@ public class Person extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthhMan);
                 physicsModel.setHeight(actualHeightMan);
                 break; // optional
-            case "woman":
+            case "woman.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -68,14 +71,7 @@ public class Person extends Dynamic implements ICollidable {
             default: // Optional
                 // Statements
         }
-
-
     }
-
-    public PhysicsModel getPhysicsModel() {
-        return physicsModel;
-    }
-
     /**
      * Moves the person objects based on it's temporary values
      */

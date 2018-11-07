@@ -45,5 +45,5 @@ public class SamplePacket implements ReadOnlySamplePacket {
         this.gaspedalPosition = gaspedalPosition;
     }
 
-    // TODO implement all of the HMI signals
+
 }
