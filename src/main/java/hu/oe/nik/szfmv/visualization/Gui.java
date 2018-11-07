@@ -60,16 +60,10 @@ public class Gui extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
-                if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-                    dashboard.wheelTurning.setIsTurning(false);
-                } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
-                    dashboard.wheelTurning.setIsTurning(false);
-                }
-
                 if (keysPressed.contains(e.getKeyCode())) {
                     keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
                 }
+                // TODO Auto-generated method stub
 
             }
 
