@@ -60,6 +60,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Returns the speed of the object.
+     *
      * @return Speed of the object.
      */
     public double getSpeed() {
@@ -108,7 +109,7 @@ public class PowertrainSystem extends SystemComponent {
     private void drive(double acceleration) {
         if (this.brakePedal == 0 && this.gasPedal > 0) {
             if (acceleration > 0 && this.speed < MAX_FORWARD_SPEED ||
-                acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
+                    acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
                 updateChanges(acceleration);
             }
         } else if (this.gasPedal == 0) {
@@ -146,7 +147,7 @@ public class PowertrainSystem extends SystemComponent {
     private void reverse(double speedDelta) {
         if (this.brakePedal == 0 && this.gasPedal > 0) {
             if (speedDelta < 0 && (this.speed > MAX_REVERSE_SPEED) ||
-                speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
+                    speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
                 updateChanges(speedDelta);
             }
         } else if (this.gasPedal == 0) {
@@ -198,12 +199,12 @@ public class PowertrainSystem extends SystemComponent {
             speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_RESISTANCE));
         } else if (this.brakePedal > 0) {
             // Braking.
-            speedDelta = -1 * isReverseDouble * 
-                ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
+            speedDelta = -1 * isReverseDouble *
+                    ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
         } else if (this.speed != 0) {
             // Slowing down.
-            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
-                (double) PERCENTAGE_DIVISOR;
+            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE /
+                    (double) PERCENTAGE_DIVISOR;
         }
 
         return speedDelta;

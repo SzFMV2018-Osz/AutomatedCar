@@ -12,6 +12,10 @@ import java.util.List;
 public class CameraSensor extends SystemComponent implements ISensor {
 
     private static final int TRIANGLE_N = 3;
+    private static final int VISUAL_RANGE = 80;
+    private static final int ANGLE_OF_VIEW = 60;
+    private Point positionOnCar;
+    private Polygon radarTriangle;
     private boolean rightLane;
     private int distanceFromBorder;
     private Polygon triangle;
@@ -24,6 +28,10 @@ public class CameraSensor extends SystemComponent implements ISensor {
         super( virtualFunctionBus );
 
         triangle = new Polygon();
+    }
+
+    public Point getPositionOnCar() {
+        return positionOnCar;
     }
 
     @Override
@@ -63,7 +71,9 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
-        locateSensorTriangle( newSensorPosition, 0, 0, newSensorRotation );
+        Point newPositon = new Point(newSensorPosition.x + positionOnCar.x, newSensorPosition.y + positionOnCar.y);
+        newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
+        radarTriangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
     }
 
     @Override
@@ -81,6 +91,6 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void loop() {
-
     }
+
 }
