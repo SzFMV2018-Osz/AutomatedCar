@@ -7,7 +7,8 @@ import java.util.List;
 
 public class SensorPacket implements ReadOnlySensorPacket {
 
-    List<WorldObject> detectedObjects;
+    private List<WorldObject> detectedObjects;
+    private WorldObject detectedRoadSign;
 
     /**
      * PowertrainPacket consturctor
@@ -23,5 +24,15 @@ public class SensorPacket implements ReadOnlySensorPacket {
     @Override
     public void setDetectedObjects(List<WorldObject> worldObjects) {
         detectedObjects = worldObjects;
+    }
+
+    @Override
+    public WorldObject getDetectedRoadSign() {
+        return this.detectedRoadSign;
+    }
+
+    @Override
+    public void setDetectedRoadSign(WorldObject detectedRoadSign) {
+        this.detectedRoadSign = detectedRoadSign;
     }
 }

@@ -19,4 +19,16 @@ public interface ReadOnlySensorPacket {
      * @param worldObjects in the angle of view of the camera sensor
      */
     void setDetectedObjects(List<WorldObject> worldObjects);
+
+    /**
+     * Gets the detedted road sign
+     * @return road sign
+     */
+    WorldObject getDetectedRoadSign();
+
+    /**
+     * Sets the detected road sign
+     * @param detectedRoadSign detected road sign
+     */
+    void setDetectedRoadSign(WorldObject detectedRoadSign);
 }
