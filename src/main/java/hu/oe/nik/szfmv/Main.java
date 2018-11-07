@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
+import hu.oe.nik.szfmv.environment.Physics;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.model.XML_read_in.XMLReader;
 import hu.oe.nik.szfmv.visualization.Camera;
@@ -17,6 +18,7 @@ import java.awt.event.KeyEvent;
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
+    public static boolean Gameloop = true;
     private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
 
     /**
@@ -28,7 +30,7 @@ public class Main {
 
         // log the current debug mode in config
         LOGGER.info(ConfigProvider.provide().getBoolean("general.debug"));
-
+        Physics physics = new Physics();
         // set timer for fps rate
         Timer t = new Timer();
         t.setTargetFps(24);
@@ -37,7 +39,10 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(100, 100, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+        // Person p = new Person(300,2500,"woman.png");
+        car.setRotation(45f);
+        // w.addObjectToWorld(p);
         // add car to the world
         w.addObjectToWorld(car);
 
@@ -48,13 +53,16 @@ public class Main {
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
         display.camera = new Camera(display.getWidth(), display.getHeight(), w, car);
-        // gui.addKeyListener(new Keychecker(display.camera));
+        gui.addKeyListener(new Keychecker(car));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
         t.initialize();
         while (true) {
             try {
-                car.drive();
+                if (Gameloop) {
+                    car.drive();
+                    physics.update(w);
+                }
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
@@ -72,14 +80,14 @@ public class Main {
  */
 class Keychecker extends KeyAdapter {
     private final int movespeed = 10;
-    private Camera camera;
+    private AutomatedCar camera;
 
     /**
      * Init the key checker
      *
      * @param c the camera object to move the camera
      */
-    public Keychecker(Camera c) {
+    public Keychecker(AutomatedCar c) {
         this.camera = c;
 
 
@@ -92,19 +100,19 @@ class Keychecker extends KeyAdapter {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-
-        if (event.getKeyChar() == 'a') {
-            camera.moveCamera(movespeed, 0);
+        if (Main.Gameloop) {
+            if (event.getKeyChar() == 'a') {
+                camera.setX(camera.getX() - movespeed);
+            }
+            if (event.getKeyChar() == 'd') {
+                camera.setX(camera.getX() + movespeed);
+            }
+            if (event.getKeyChar() == 'w') {
+                camera.setY(camera.getY() - movespeed);
+            }
+            if (event.getKeyChar() == 's') {
+                camera.setY(camera.getY() + movespeed);
+            }
         }
-        if (event.getKeyChar() == 'd') {
-            camera.moveCamera(-movespeed, 0);
-        }
-        if (event.getKeyChar() == 'w') {
-            camera.moveCamera(0, movespeed);
-        }
-        if (event.getKeyChar() == 's') {
-            camera.moveCamera(0, -movespeed);
-        }
-
     }
 }

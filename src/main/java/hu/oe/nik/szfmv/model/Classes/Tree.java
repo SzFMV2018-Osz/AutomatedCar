@@ -48,4 +48,6 @@ public class Tree extends RoadObsticle implements ICollidable {
         physicsModel.setWidth(actualHeight);
         physicsModel.setHeight(actualHeight);
     }
+
+
 }
