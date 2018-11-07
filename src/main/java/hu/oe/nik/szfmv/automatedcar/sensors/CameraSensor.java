@@ -4,6 +4,8 @@ import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.SensorPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Classes.Bollard;
+import hu.oe.nik.szfmv.model.Classes.RoadSign;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -76,7 +78,30 @@ public class CameraSensor extends SystemComponent implements ISensor {
                 list.add( worldObject );
             }
         }
+
+        this.virtualFunctionBus.sensorPacket.setDetectedObjects(list);
+
         return list;
+    }
+
+    private WorldObject getNearestRoadSign() {
+
+        List<WorldObject> detectedRoadSigns = new ArrayList<>();
+
+        for (WorldObject sign : this.virtualFunctionBus.sensorPacket.getDetectedObjects()) {
+            if (sign.getClass().equals(RoadSign.class)) {
+                detectedRoadSigns.add(sign);
+            }
+        }
+
+
+
+        return new WorldObject(0,0,"asd");
+    }
+
+    private double calculateDistanceFromCamera(WorldObject object) {
+        return Math.sqrt(Math.pow(virtualFunctionBus.carPacket.getxPosition() - object.getX(), 2)
+                + Math.pow(virtualFunctionBus.carPacket.getyPosition() - object.getY(), 2));
     }
 
     @Override
