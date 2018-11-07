@@ -51,6 +51,8 @@ public class RadarSensor extends SystemComponent implements ISensor {
         triangle.xpoints = new int[]{sensorPosition.x, leftPoint.x, rightPoint.x};
         triangle.ypoints = new int[]{sensorPosition.y, leftPoint.y, rightPoint.y};
 
+        radarTriangle = triangle;
+
         return triangle;
     }
 
