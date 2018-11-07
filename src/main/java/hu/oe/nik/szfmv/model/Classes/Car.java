@@ -61,7 +61,7 @@ public abstract class Car extends Dynamic implements ICollidable {
 
         PhysicsModel physicsModel = new PhysicsModel();
 
-        switch(imageFileName) {
+        switch(imageFileName){
             case "car_1_blue" :
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);

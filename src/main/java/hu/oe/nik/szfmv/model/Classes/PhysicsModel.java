@@ -72,11 +72,11 @@ public class PhysicsModel {
         return height * width;
     }
 
-    public void addDamage(int Damage) {
+    public void addDamage(int damage) {
         this.damage += damage;
     }
 
-    public void CalculateDead() {
+    public void calculateDead() {
         if (!fatal) {
             if (damage == damageLimit) {
                 isDead = true;
