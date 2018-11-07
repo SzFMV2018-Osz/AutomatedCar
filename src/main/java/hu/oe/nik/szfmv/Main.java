@@ -4,6 +4,10 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.Physics;
 import hu.oe.nik.szfmv.environment.World;
+import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Classes.Car;
+import hu.oe.nik.szfmv.model.Classes.NonPlayableCar;
+import hu.oe.nik.szfmv.model.Classes.Person;
 import hu.oe.nik.szfmv.model.XML_read_in.XMLReader;
 import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.CourseDisplay;
@@ -11,9 +15,6 @@ import hu.oe.nik.szfmv.visualization.Gui;
 import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import hu.oe.nik.szfmv.model.Classes.Person;
-import hu.oe.nik.szfmv.model.Classes.Tree;
-import  hu.oe.nik.szfmv.model.Classes.*;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -43,20 +44,25 @@ public class Main {
 
         // create an automated car
         AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png");
-        Person person = new Person(1500,500,"man.png");
-    //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
-        NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
-       // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
-       // car2.setSpeed(10);
+        Car c = new Car(1500, 1500, "car_2_red.png");
+        Person person = new Person(1500, 500, "man.png");
+        //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
+        NonPlayableCar car1 = new NonPlayableCar(343, 1500, "car_2_red.png");
+        // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
+        // car2.setSpeed(10);
 
         // add car to the world
-        w.addObjectToWorld(car);
+
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
-      //  w.addObjectToWorld(car2);
+        w.addObjectToWorld(c);
+        w.addObjectToWorld(car);
 
-       // person.setRoute(100,750,8,false);
+
+        //  w.addObjectToWorld(car2);
+
+        // person.setRoute(100,750,8,false);
 
         // create gui
         Gui gui = new Gui();
@@ -65,6 +71,10 @@ public class Main {
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
         display.camera = new Camera(display.getWidth(), display.getHeight(), w, car);
+        for (WorldObject object : w.getWorldObjects()) {
+            object.rotateImage(display.camera);
+        }
+
         gui.addKeyListener(new Keychecker(display.camera));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
@@ -77,11 +87,11 @@ public class Main {
                     car.drive();
                     person.moveperson();
                     car1.movecar1();
-                    physics.update(w,display.camera);
+                    physics.update(w, display.camera);
                 }
 
 
-               // car2.movecar2();
+                // car2.movecar2();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());

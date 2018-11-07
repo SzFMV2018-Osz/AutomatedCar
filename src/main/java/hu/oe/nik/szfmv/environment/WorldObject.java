@@ -28,6 +28,8 @@ public class WorldObject implements IRender {
     protected double[][] tMatrix;
     protected int lastX;
     protected int lastY;
+    protected int xVelocity;
+    protected int yVelocity;
     protected boolean collide;
     protected PhysicsModel physicsModel;
 
@@ -71,6 +73,14 @@ public class WorldObject implements IRender {
         tMatrix[1][2] = m12;
         tMatrix[2][1] = m21;
         tMatrix[2][2] = m22;
+    }
+
+    public void setxVelocity(int xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public void setyVelocity(int yVelocity) {
+        this.yVelocity = yVelocity;
     }
 
     public PhysicsModel getPhysicsModel() {
@@ -194,10 +204,24 @@ public class WorldObject implements IRender {
      */
     @Override
     public void rotateImage(Camera camera) {
+        this.x += xVelocity;
+        this.y += yVelocity;
         transformTheImageToCorrectPos = new AffineTransform();
         transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
         transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), camera.getX() + x, camera.getY() + y);
         transformTheImageToCorrectPos.translate(camera.getX() + x - rotationPointX, camera.getY() + y - rotationPointY);
+        if (0 < xVelocity) {
+            xVelocity--;
+        }
+        if (0 > xVelocity) {
+            xVelocity++;
+        }
+        if (0 < yVelocity) {
+            yVelocity--;
+        }
+        if (0 > yVelocity) {
+            yVelocity++;
+        }
 
     }
 }

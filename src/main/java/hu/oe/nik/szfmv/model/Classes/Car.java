@@ -1,9 +1,10 @@
 package hu.oe.nik.szfmv.model.Classes;
 
 
+import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
-public abstract class Car extends Dynamic implements ICollidable {
+public class Car extends Dynamic implements ICollidable {
 
     /**
      * @param x             coordinate
@@ -56,13 +57,10 @@ public abstract class Car extends Dynamic implements ICollidable {
         initPhysicModel(imageFileName);
 
     }
-    private void initPhysicModel(String imageFileName){
+
+    private void initPhysicModel(String imageFileName) {
 
         physicsModel = new PhysicsModel();
-
-
-
-
 
 
         switch (imageFileName) {
@@ -277,25 +275,26 @@ public abstract class Car extends Dynamic implements ICollidable {
         }
     }
 
-    public void setNewImage(){
-        if(physicsModel.getDamage()== this.damagedState){
-            imageFileName.replace(".png","_damaged.png");
+    public void setNewImage() {
+        if (physicsModel.getDamage() >= this.damagedState) {
+            if (!imageFileName.contains("_damaged")) {
+                this.imageFileName = imageFileName.replace(".png", "_damaged.png");
+            }
+        }
+        if (physicsModel.getDamage() >= this.damageLimit) {
+            if (!imageFileName.contains("_full"))
+                this.imageFileName = imageFileName.replace(".png", "_full.png");
+            Main.Gameloop = false;
         }
 
-        if(physicsModel.getDamage()== this.damageLimit){
-            imageFileName.replace(".png","_full.png");
-        }
 
-        if(physicsModel.isFatal()){
-            if(physicsModel.getDamage()== this.damagedState){
-                imageFileName.replace(".png","_blooded.png");
-            }
-            else{
-                imageFileName.replace(".png","_blooded.png");
-            }
+        if (physicsModel.isFatal()) {
+            if (!imageFileName.contains("_blooded.png") && !imageFileName.contains("_full.png"))
+                this.imageFileName = imageFileName.replace(".png", "_blooded.png");
+
         }
         this.initImage();
+
+
     }
-
 }
-

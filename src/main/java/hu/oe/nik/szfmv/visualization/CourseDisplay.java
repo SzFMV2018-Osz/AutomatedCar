@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.visualization;
 import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class CourseDisplay extends JPanel {
             e.printStackTrace();
         }
         t.scale(0.75, 0.75);
-        t.translate(width / 2 - image.getWidth() / 2 * 0.75, height / 2 - image.getHeight() / 2 * 0.75);
+        t.translate(width / 2 - image.getWidth() / 2 * 0.75, height / 2 - image.getHeight() / 2 * 0.75 - 50);
 
     }
 
@@ -81,9 +82,9 @@ public class CourseDisplay extends JPanel {
         for (WorldObject object : world.getWorldObjects()) {
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
-            if (object.isCollide()) {
+            if (object instanceof ICollidable && false) {
 
-                Rectangle collision = new Rectangle(object.getWidth()/2 - object.getPhysicsModel().getWidth()/ 2, object.getHeight()/2 - object.getPhysicsModel().getHeight()/2, object.getPhysicsModel().getWidth(), object.getPhysicsModel().getHeight());
+                Rectangle collision = new Rectangle(object.getWidth() / 2 - object.getPhysicsModel().getWidth() / 2, object.getHeight() / 2 - object.getPhysicsModel().getHeight() / 2, object.getPhysicsModel().getWidth(), object.getPhysicsModel().getHeight());
                 Shape s = object.getTransformation().createTransformedShape(collision);
                 g2d.setPaint(new Color(255, 0, 0, 128));
                 g2d.fill(s);
