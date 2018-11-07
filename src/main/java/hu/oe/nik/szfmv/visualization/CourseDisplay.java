@@ -6,6 +6,7 @@ import hu.oe.nik.szfmv.environment.WorldObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 /**
@@ -68,7 +69,7 @@ public class CourseDisplay extends JPanel {
 
 
         for (WorldObject object : world.getWorldObjects()) {
-            object.RotateImage(camera.getX(), camera.getY());
+            object.RotateImage(camera);
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }
@@ -92,23 +93,29 @@ public class CourseDisplay extends JPanel {
     }
 
     public void drawSensor(Graphics2D g, World world) {
+        AffineTransform transformTheImageToCorrectPos;
+        transformTheImageToCorrectPos = new AffineTransform();
+        transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
+        transformTheImageToCorrectPos.translate(camera.getX(), camera.getY());
 
 
         for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
         ) {
             WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
-
-            sensor.setSensorPositon(new Point(camera.getX(), camera.getY()));
+            
             g.setColor(Color.GREEN);
+            g.setTransform(transformTheImageToCorrectPos);
             g.drawPolygon(sensor.getPoly());
             g.setColor(Color.RED);
             if (closest != null) {
-                g.drawRect(closest.getX() + camera.getX(), closest.getY() + camera.getY(), closest.getWidth(), closest.getHeight());
+                g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
             }
 
 
         }
 
     }
+
+
 
 }
