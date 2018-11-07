@@ -1,7 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.sensors;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.SensorPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
@@ -25,8 +24,8 @@ public class CameraSensor extends SystemComponent implements ISensor {
      *                           Create Radar sensor
      */
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
-        super( virtualFunctionBus );
-
+        super(virtualFunctionBus);
+        positionOnCar = new Point();
         triangle = new Polygon();
     }
 
@@ -40,16 +39,16 @@ public class CameraSensor extends SystemComponent implements ISensor {
         Point leftPoint = new Point();
         Point rightPoint = new Point();
 
-        double angleInRadian = Math.toRadians( angelOfView );
-        double sensorRotationInRadian = Math.toRadians( sensorRotation );
+        double angleInRadian = Math.toRadians(angelOfView);
+        double sensorRotationInRadian = Math.toRadians(sensorRotation);
 
-        leftPoint.x = (int) (Math.round( sensorPosition.x + Math.tan( angleInRadian / 2 ) ) * visualRange);
-        leftPoint.y = (int) Math.round( sensorPosition.y + visualRange );
-        rightPoint.x = (int) (Math.round( sensorPosition.x - Math.tan( angleInRadian / 2 ) ) * visualRange);
-        rightPoint.y = (int) Math.round( sensorPosition.y + visualRange );
+        leftPoint.x = (int) (Math.round(sensorPosition.x + Math.tan(angleInRadian / 2)) * visualRange);
+        leftPoint.y = (int) Math.round(sensorPosition.y + visualRange);
+        rightPoint.x = (int) (Math.round(sensorPosition.x - Math.tan(angleInRadian / 2)) * visualRange);
+        rightPoint.y = (int) Math.round(sensorPosition.y + visualRange);
 
-        leftPoint = rotate( leftPoint, sensorPosition, sensorRotationInRadian );
-        rightPoint = rotate( rightPoint, sensorPosition, sensorRotationInRadian );
+        leftPoint = rotate(leftPoint, sensorPosition, sensorRotationInRadian);
+        rightPoint = rotate(rightPoint, sensorPosition, sensorRotationInRadian);
 
         triangle = new Polygon();
         triangle.npoints = TRIANGLE_N;
@@ -61,12 +60,12 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     private Point rotate(Point point, Point sennsorLocation, double rotation) {
 
-        double x = sennsorLocation.x + (point.x - sennsorLocation.x) * Math.cos( rotation )
-                - (point.y - sennsorLocation.y) * Math.sin( rotation );
-        double y = sennsorLocation.y + (point.x - sennsorLocation.x) * Math.sin( rotation )
-                + (point.y - sennsorLocation.y) * Math.cos( rotation );
+        double x = sennsorLocation.x + (point.x - sennsorLocation.x) * Math.cos(rotation)
+                - (point.y - sennsorLocation.y) * Math.sin(rotation);
+        double y = sennsorLocation.y + (point.x - sennsorLocation.x) * Math.sin(rotation)
+                + (point.y - sennsorLocation.y) * Math.cos(rotation);
 
-        return new Point( (int) x, (int) y );
+        return new Point((int) x, (int) y);
     }
 
     @Override
@@ -80,10 +79,10 @@ public class CameraSensor extends SystemComponent implements ISensor {
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
         List<WorldObject> list = new ArrayList<>();
         for (WorldObject worldObject : worldObjects) {
-            Rectangle rectangle = new Rectangle( worldObject.getX(), worldObject.getY(),
-                    worldObject.getWidth(), worldObject.getHeight() );
-            if (triangle.intersects( rectangle )) {
-                list.add( worldObject );
+            Rectangle rectangle = new Rectangle(worldObject.getX(), worldObject.getY(),
+                    worldObject.getWidth(), worldObject.getHeight());
+            if (triangle.intersects(rectangle)) {
+                list.add(worldObject);
             }
         }
         return list;

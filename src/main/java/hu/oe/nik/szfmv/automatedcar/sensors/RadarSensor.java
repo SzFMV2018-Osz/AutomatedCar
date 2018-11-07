@@ -22,6 +22,8 @@ public class RadarSensor extends SystemComponent implements ISensor {
      */
     public RadarSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+        radarTriangle = new Polygon();
+        positionOnCar = new Point();
     }
 
     public Point getPositionOnCar() {
