@@ -72,12 +72,15 @@ public class Main {
         while (true) {
             try {
                 if (Gameloop) {
+
+                    gui.inputUpdate();
                     car.drive();
                     physics.update(w);
+                    person.moveperson();
+                    car1.movecar1();
                 }
-                car.drive();
-                person.moveperson();
-                car1.movecar1();
+
+
                // car2.movecar2();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();

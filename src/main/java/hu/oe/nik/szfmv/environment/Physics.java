@@ -44,5 +44,13 @@ public class Physics {
         return sa.intersects(sb.getBounds());
     }
 
+    private void staticColide(WorldObject a, WorldObject b){
+
+    }
+
+    private void dynamiccColide(WorldObject a, WorldObject b){
+
+    }
+
 
 }

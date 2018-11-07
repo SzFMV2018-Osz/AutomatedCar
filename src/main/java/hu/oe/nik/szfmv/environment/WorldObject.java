@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.environment;
 
 
+import hu.oe.nik.szfmv.model.Classes.PhysicsModel;
 import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.IRender;
 import org.apache.logging.log4j.LogManager;
@@ -27,8 +28,8 @@ public class WorldObject implements IRender {
     protected double[][] tMatrix;
     protected int lastX;
     protected int lastY;
-    //temporaly sollution
     protected boolean collide;
+    protected PhysicsModel physicsModel;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.

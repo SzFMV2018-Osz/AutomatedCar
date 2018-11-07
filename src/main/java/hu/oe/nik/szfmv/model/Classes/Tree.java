@@ -5,17 +5,6 @@ import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 public class Tree extends RoadObsticle implements ICollidable {
 
     /**
-     *
-     * @param x coordinate
-     * @param y coordinate
-     * @param imageFileName the name of the imagefile used for this type
-     */
-    public Tree(int x, int y, String imageFileName) {
-        super(x, y, imageFileName);
-    }
-
-    /**
-     *
      * @param x coordinate
      * @param y coordinate
      * @param imageFileName the name of the imagefile used for this type
@@ -33,13 +22,21 @@ public class Tree extends RoadObsticle implements ICollidable {
     int weightTree = 99999;
     boolean notDead = false;
     boolean notFatal = false;
+    private PhysicsModel physicsModel;
 
-
+    /**
+     * @param x             coordinate
+     * @param y             coordinate
+     * @param imageFileName the name of the imagefile used for this type
+     */
+    public Tree(int x, int y, String imageFileName) {
+        super(x, y, imageFileName);
+    }
 
     public Tree(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         super(x, y, imageFileName, m11, m12, m21, m22);
 
-        PhysicsModel physicsModel = new PhysicsModel();
+        physicsModel = new PhysicsModel();
         physicsModel.setDamage(startingDamage);
         physicsModel.setDamageLimit(damageLimit);
         physicsModel.setIsDead(notDead);
@@ -47,6 +44,10 @@ public class Tree extends RoadObsticle implements ICollidable {
         physicsModel.setWeight(weightTree);
         physicsModel.setWidth(actualHeight);
         physicsModel.setHeight(actualHeight);
+    }
+
+    public PhysicsModel getPhysicsModel() {
+        return physicsModel;
     }
 
 
