@@ -277,5 +277,25 @@ public abstract class Car extends Dynamic implements ICollidable {
         }
     }
 
+    public void setNewImage(){
+        if(physicsModel.getDamage()== this.damagedState){
+            imageFileName.replace(".png","_damaged.png");
+        }
+
+        if(physicsModel.getDamage()== this.damageLimit){
+            imageFileName.replace(".png","_full.png");
+        }
+
+        if(physicsModel.isFatal()){
+            if(physicsModel.getDamage()== this.damagedState){
+                imageFileName.replace(".png","_blooded.png");
+            }
+            else{
+                imageFileName.replace(".png","_blooded.png");
+            }
+        }
+        this.initImage();
+    }
+
 }
 
