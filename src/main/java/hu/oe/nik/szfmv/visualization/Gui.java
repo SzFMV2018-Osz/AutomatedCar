@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -39,7 +40,7 @@ public class Gui extends JFrame {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
-        courseDisplay = new CourseDisplay();
+        courseDisplay = new CourseDisplay(this);
         add(courseDisplay);
 
         dashboard = new Dashboard(this);
@@ -59,13 +60,13 @@ public class Gui extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                
+
                 if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
                     dashboard.wheelTurning.setIsTurning(false);
                 } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
                     dashboard.wheelTurning.setIsTurning(false);
                 }
-                
+
                 if (keysPressed.contains(e.getKeyCode())) {
                     keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
                 }
@@ -78,21 +79,21 @@ public class Gui extends JFrame {
                 if (!keysPressed.contains(e.getKeyCode())) {
                     keysPressed.add(e.getKeyCode());
                 }
-                
+
                 if (keysPressed.contains(KeyEvent.VK_UP)) {
                     dashboard.gasPedal.Pressed();
                 }
-                
+
                 if (keysPressed.contains(KeyEvent.VK_DOWN)) {
                     dashboard.breakPedal.Pressed();
                 }
-                
+
                 if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
                     dashboard.wheelTurning.TurnRight();
                 } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
                     dashboard.wheelTurning.TurnLeft();
                 }
-                
+
                 if (keysPressed.contains(KeyEvent.VK_Q)) {
                     dashboard.index.TurnLeft();
                 } else if (keysPressed.contains(KeyEvent.VK_E)) {
@@ -102,11 +103,15 @@ public class Gui extends JFrame {
                 } else if (keysPressed.contains(KeyEvent.VK_S)) {
                     dashboard.index.SwitchBack();
                 }
-                
-                if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
+
+                if (keysPressed.contains(KeyEvent.VK_D)) {
                     dashboard.autoTr.ShiftUp();
-                } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
+                } else if (keysPressed.contains(KeyEvent.VK_A)) {
                     dashboard.autoTr.ShiftDown();
+                }
+
+                if (keysPressed.contains(KeyEvent.VK_X)) {
+                    getCourseDisplay().drawTriangles = !getCourseDisplay().drawTriangles;
                 }
             }
         };

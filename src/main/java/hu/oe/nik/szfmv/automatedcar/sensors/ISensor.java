@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface ISensor {
-    Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angelOfView, double sensorRotation);
+    Polygon locateSensorTriangle(Point sensorPosition, double visualRange, double angleOfView, double sensorRotation);
 
     void refreshSensor(Point newSensorPosition, double newSensorRotation);
 
