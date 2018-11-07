@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.environment;
 
 
+import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.IRender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -111,9 +112,7 @@ public class WorldObject implements IRender {
         this.rotationPointY = rotationPointY;
     }
 
-    public int getX() {
-        return this.x;
-    }
+    public int getX() { return this.x; }
 
     public void setX(int x) {
         this.x = x;
@@ -183,15 +182,14 @@ public class WorldObject implements IRender {
 
     /**
      * Rotate the image to the correct pos
-     *
-     * @param cameraX the camera x for offset
-     * @param cameraY the camera y for offset
+     * @param camera the camera object of the world
      */
     @Override
-    public void RotateImage(int cameraX, int cameraY) {
+    public void RotateImage(Camera camera) {
         transformTheImageToCorrectPos = new AffineTransform();
-        transformTheImageToCorrectPos.rotate(Math.toRadians(-rotation), cameraX + x, cameraY + y);
-        transformTheImageToCorrectPos.translate(cameraX + x - rotationPointX, cameraY + y - rotationPointY);
+        transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
+        transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), camera.getX() + x, camera.getY() + y);
+        transformTheImageToCorrectPos.translate(camera.getX() + x - rotationPointX, camera.getY() + y - rotationPointY);
 
     }
 }
