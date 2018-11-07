@@ -1,12 +1,13 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -16,16 +17,19 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     public Camera camera;
+    Gui parent;
+    public Boolean drawTriangles;
 
     /**
      * Initialize the course display
      */
-    public CourseDisplay() {
+    public CourseDisplay(Gui pt) {
         // Not using any layout manager, but fixed coordinates
         setDoubleBuffered(true);
         setLayout(null);
         setBounds(0, 0, width, height);
-
+        parent = pt;
+        drawTriangles = false;
     }
 
     /**
@@ -45,7 +49,6 @@ public class CourseDisplay extends JPanel {
      */
     protected void paintComponent(Graphics g, World world) {
 
-
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
@@ -64,11 +67,18 @@ public class CourseDisplay extends JPanel {
 
         camera.update();
 
+
         for (WorldObject object : world.getWorldObjects()) {
             object.RotateImage(camera);
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
         }
+
+        if (drawTriangles) {
+            drawSensor(g2d, world);
+        }
+
+
         return doubleBufferedScreen;
     }
 
@@ -81,4 +91,31 @@ public class CourseDisplay extends JPanel {
         validate();
         repaint();
     }
+
+    public void drawSensor(Graphics2D g, World world) {
+        AffineTransform transformTheImageToCorrectPos;
+        transformTheImageToCorrectPos = new AffineTransform();
+        transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
+        transformTheImageToCorrectPos.translate(camera.getX(), camera.getY());
+
+
+        for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
+        ) {
+            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
+            
+            g.setColor(Color.GREEN);
+            g.setTransform(transformTheImageToCorrectPos);
+            g.drawPolygon(sensor.getPoly());
+            g.setColor(Color.RED);
+            if (closest != null) {
+                g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
+            }
+
+
+        }
+
+    }
+
+
+
 }
