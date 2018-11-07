@@ -57,7 +57,7 @@ public abstract class Car extends Dynamic implements ICollidable {
         physicsModel = new PhysicsModel();
 
         switch (imageFileName) {
-            case "car_1_blue":
+            case "car_1_blue.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -67,7 +67,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setHeight(actualHeightCar1);
 
                 break;
-            case "car_1_red":
+            case "car_1_red.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -76,7 +76,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_1_white":
+            case "car_1_white.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -85,7 +85,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_2_blue":
+            case "car_2_blue.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -94,7 +94,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_2_red":
+            case "car_2_red.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -112,7 +112,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_3_black":
+            case "car_3_black.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -120,7 +120,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar3);
                 physicsModel.setHeight(actualHeightCar3);
                 break;
-            case "car_1_blue_damaged":
+            case "car_1_blue_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -129,7 +129,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_1_red_damaged":
+            case "car_1_red_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -138,7 +138,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_1_white_damaged":
+            case "car_1_white_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -147,7 +147,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_2_blue_damaged":
+            case "car_2_blue_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -156,7 +156,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_2_red_damaged":
+            case "car_2_red_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -165,7 +165,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_2_white_damaged":
+            case "car_2_white_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -174,7 +174,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_3_black_damaged":
+            case "car_3_black_damaged.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(notDead);
@@ -182,7 +182,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar3);
                 physicsModel.setHeight(actualHeightCar3);
                 break;
-            case "car_1_blue_damaged_full":
+            case "car_1_blue_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -191,7 +191,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_1_red_damaged_full":
+            case "car_1_red_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -200,7 +200,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_1_white_damaged_full":
+            case "car_1_white_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -209,7 +209,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar1);
                 physicsModel.setHeight(actualHeightCar1);
                 break;
-            case "car_2_blue_damaged_full":
+            case "car_2_blue_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -218,7 +218,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_2_red_damaged_full":
+            case "car_2_red_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -227,7 +227,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_2_white_damaged_full":
+            case "car_2_white_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -236,7 +236,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_3_black_damaged_full":
+            case "car_3_black_damaged_full.png":
                 physicsModel.setDamage(fullDamagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -244,7 +244,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar3);
                 physicsModel.setHeight(actualHeightCar3);
                 break;
-            case "car_2_white_blooded":
+            case "car_2_white_blooded.png":
                 physicsModel.setDamage(startingDamage);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -253,7 +253,7 @@ public abstract class Car extends Dynamic implements ICollidable {
                 physicsModel.setWidth(actualWidthCar2);
                 physicsModel.setHeight(actualHeightCar2);
                 break;
-            case "car_2_white_damaged_blooded":
+            case "car_2_white_damaged_blooded.png":
                 physicsModel.setDamage(damagedState);
                 physicsModel.setDamageLimit(damageLimit);
                 physicsModel.setIsDead(dead);
@@ -267,6 +267,26 @@ public abstract class Car extends Dynamic implements ICollidable {
 
         }
 
+    }
+
+    public void setNewImage(){
+        if(physicsModel.getDamage()== this.damagedState){
+            imageFileName.replace(".png","_damaged.png");
+        }
+
+        if(physicsModel.getDamage()== this.damageLimit){
+            imageFileName.replace(".png","_full.png");
+        }
+
+        if(physicsModel.isFatal()){
+            if(physicsModel.getDamage()== this.damagedState){
+                imageFileName.replace(".png","_blooded.png");
+            }
+            else{
+                imageFileName.replace(".png","_blooded.png");
+            }
+        }
+        this.initImage();
     }
 
     public PhysicsModel getPhysicsModel() {
