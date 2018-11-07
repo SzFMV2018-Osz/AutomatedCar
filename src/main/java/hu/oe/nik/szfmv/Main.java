@@ -74,6 +74,7 @@ public class Main {
                 person.moveperson();
                 car1.movecar1();
                // car2.movecar2();
+                gui.handleKeysPressed();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
