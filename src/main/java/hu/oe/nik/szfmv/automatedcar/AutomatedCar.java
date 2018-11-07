@@ -21,6 +21,7 @@ public class AutomatedCar extends Car {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
+    private CameraSensor cameraSensor;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -35,6 +36,7 @@ public class AutomatedCar extends Car {
         setCarPacket();
         createSensors();
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
+        cameraSensor = new CameraSensor(virtualFunctionBus);
 
         new Driver(virtualFunctionBus);
     }

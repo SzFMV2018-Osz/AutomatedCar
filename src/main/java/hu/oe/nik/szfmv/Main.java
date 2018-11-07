@@ -52,6 +52,7 @@ public class Main {
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
+        car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
       //  w.addObjectToWorld(car2);
 
        // person.setRoute(100,750,8,false);
@@ -73,6 +74,7 @@ public class Main {
                 person.moveperson();
                 car1.movecar1();
                // car2.movecar2();
+                gui.handleKeysPressed();
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
