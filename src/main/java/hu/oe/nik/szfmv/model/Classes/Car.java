@@ -26,31 +26,33 @@ public abstract class Car extends Dynamic implements ICollidable {
      * @param m21           transformation
      * @param m22           transformation
      */
+
     //a különböző autók pixelpontos pontos mérete
-    int actualheight_car_1 =238;
-    int actualwidth_car_1 = 95;
-    int weight_car_1=1400;
+    int actualHeightCar1 = 238;
+    int actualWidthCar1 = 95;
+    int weightCar1 = 1400;
     
-    int actualheight_car_2 =207;
-    int actualwidth_car_2 = 89;
-    int weight_car_2=1100;
+    int actualHeightCar2 = 207;
+    int actualWidthCar2 = 89;
+    int weightCar2 = 1100;
+ 
+    int actualHeightCar3 = 287;
+    int actualWidthCar3 = 98;
+    int weightCar3 = 2500;
 
-    int actualheight_car_3 =287;
-    int actualwidth_car_3 = 98;
-    int weight_car_3=2500;
-
-    //károsodás mértéke: alapból 0, első ütközésnél 50, másodiknál 100, ami a végét is jelenti a jármű működésének mert a limit is 100
-    int startingdamage = 0;
-    int damagedstate = 50;
-    int damagelimit = 100;
-    int fulldamagedstate = 100;
+    //károsodás mértéke: alapból 0, első ütközésnél 50, másodiknál 100, ami
+    // a végét is jelenti a jármű működésének mert a limit is 100
+    int startingDamage = 0;
+    int damagedState = 50;
+    int damageLimit = 100;
+    int fullDamagedState = 100;
 
     //jármú állapota
-    boolean notdead = false;
+    boolean notDead = false;
     boolean dead = true;
 
     //járókelő/biciklis ütközés
-    boolean notfatal = false;
+    boolean notFatal = false;
     boolean fatal = true;
     
     
@@ -61,213 +63,213 @@ public abstract class Car extends Dynamic implements ICollidable {
 
         switch(imageFileName) {
             case "car_1_blue" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal);
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal);
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
 
-                break; // optional
+                break; 
             case "car_1_red" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_1_white" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_2_blue" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_red" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_white" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_3_black" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setWeight(weight_car_3);
-                physicsModel.setWidth(actualwidth_car_3);
-                physicsModel.setHeight(actualheight_car_3);
-                break; // optional
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setWeight(weightCar3);
+                physicsModel.setWidth(actualWidthCar3);
+                physicsModel.setHeight(actualHeightCar3);
+                break; 
             case "car_1_blue_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_1_red_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel. setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel. setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_1_white_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_2_blue_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_red_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_white_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_3_black_damaged" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setWeight(weight_car_3);
-                physicsModel.setWidth(actualwidth_car_3);
-                physicsModel.setHeight(actualheight_car_3);
-                break; // optional
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setWeight(weightCar3);
+                physicsModel.setWidth(actualWidthCar3);
+                physicsModel.setHeight(actualHeightCar3);
+                break; 
             case "car_1_blue_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_1_red_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_1_white_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_1);
-                physicsModel.setWidth(actualwidth_car_1);
-                physicsModel.setHeight(actualheight_car_1);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar1);
+                physicsModel.setWidth(actualWidthCar1);
+                physicsModel.setHeight(actualHeightCar1);
+                break; 
             case "car_2_blue_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_red_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_white_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.setFatal(notfatal); 
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setFatal(notFatal); 
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_3_black_damaged_full" :
-                physicsModel.setDamage(fulldamagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
-                physicsModel.weight=2500;
-                physicsModel.setWidth(actualwidth_car_3);
-                physicsModel.setHeight(actualheight_car_3);
-                break; // optional
+                physicsModel.setDamage(fullDamagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
+                physicsModel.setWeight(weightCar3);
+                physicsModel.setWidth(actualWidthCar3);
+                physicsModel.setHeight(actualHeightCar3);
+                break; 
             case "car_2_white_blooded" :
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
                 physicsModel.setFatal(fatal);
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
             case "car_2_white_damaged_blooded" :
-                physicsModel.setDamage(damagedstate);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(dead);
+                physicsModel.setDamage(damagedState);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(dead);
                 physicsModel.setFatal(fatal);
-                physicsModel.setWeight(weight_car_2);
-                physicsModel.setWidth(actualwidth_car_2);
-                physicsModel.setHeight(actualheight_car_2);
-                break; // optional
-            // You can have any number of case statements.
-            default : // Optional
-                // Statements
+                physicsModel.setWeight(weightCar2);
+                physicsModel.setWidth(actualWidthCar2);
+                physicsModel.setHeight(actualHeightCar2);
+                break; 
+
+            default : 
+
         }
 
     }

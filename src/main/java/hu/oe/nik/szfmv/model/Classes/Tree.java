@@ -27,12 +27,12 @@ public class Tree extends RoadObsticle implements ICollidable {
 
     //a fa törzsének mérete 25 pixelben lett megállapítva
 
-    int actualheight = 25;
-    int startingdamage = 0;
-    int damagelimit = 100;
-    int weight_tree = 99999;
-    boolean notdead = false;
-    boolean notfatal = false;
+    int actualHeight = 25;
+    int startingDamage = 0;
+    int damageLimit = 100;
+    int weightTree = 99999;
+    boolean notDead = false;
+    boolean notFatal = false;
 
 
 
@@ -40,12 +40,12 @@ public class Tree extends RoadObsticle implements ICollidable {
         super(x, y, imageFileName, m11, m12, m21, m22);
 
         PhysicsModel physicsModel = new PhysicsModel();
-        physicsModel.setDamage(startingdamage);
-        physicsModel.setDamagelimit(damagelimit);
-        physicsModel.setIsdead(notdead);
-        physicsModel.setFatal(notfatal);
-        physicsModel.setWeight(weight_tree);
-        physicsModel.setWidth(actualheight);
-        physicsModel.setHeight(actualheight);
+        physicsModel.setDamage(startingDamage);
+        physicsModel.setDamageLimit(damageLimit);
+        physicsModel.setIsDead(notDead);
+        physicsModel.setFatal(notFatal);
+        physicsModel.setWeight(weightTree);
+        physicsModel.setWidth(actualHeight);
+        physicsModel.setHeight(actualHeight);
     }
 }

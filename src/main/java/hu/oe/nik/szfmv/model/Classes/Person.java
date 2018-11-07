@@ -14,16 +14,17 @@ public class Person extends Dynamic implements ICollidable {
      * @param m22 transformation
      */
 
-    int actualheight_man = 67;
-    int actualwidth_man = 38;
-    int weight_man = 80;
-    int actualheight_woman = 72;
-    int actualwidth_woman = 38;
-    int weight_woman = 50;
-    int startingdamage = 0;
-    int damagelimit = 100;
-    boolean notdead = false;
-    boolean notfatal = false;
+    int actualHeightMan = 67;
+    int actualWidthhMan = 38;
+    int weightMan = 80;
+    int actualHeightWoman = 72;
+    int actualWidthhWoman = 38;
+    int weightWoman = 50;
+    int startingDamage = 0;
+    int damageLimit = 100;
+    boolean notDead = false;
+    boolean notFatal = false;
+
     /**
      * @param x             coordinate
      * @param y             coordinate
@@ -41,22 +42,22 @@ public class Person extends Dynamic implements ICollidable {
 
         switch (imageFileName) {
             case "man":
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal);
-                physicsModel.setWeight(weight_man);
-                physicsModel.setWidth(actualwidth_man);
-                physicsModel.setHeight(actualheight_man);
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal);
+                physicsModel.setWeight(weightMan);
+                physicsModel.setWidth(actualWidthhMan);
+                physicsModel.setHeight(actualHeightMan);
                 break; // optional
             case "woman":
-                physicsModel.setDamage(startingdamage);
-                physicsModel.setDamagelimit(damagelimit);
-                physicsModel.setIsdead(notdead);
-                physicsModel.setFatal(notfatal);
-                physicsModel.setWeight(weight_woman);
-                physicsModel.setWidth(actualwidth_woman);
-                physicsModel.setHeight(actualheight_woman);
+                physicsModel.setDamage(startingDamage);
+                physicsModel.setDamageLimit(damageLimit);
+                physicsModel.setIsDead(notDead);
+                physicsModel.setFatal(notFatal);
+                physicsModel.setWeight(weightWoman);
+                physicsModel.setWidth(actualWidthhWoman);
+                physicsModel.setHeight(actualHeightWoman);
                 break; // optional
             default: // Optional
                 // Statements

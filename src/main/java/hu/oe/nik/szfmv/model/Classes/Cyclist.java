@@ -15,13 +15,14 @@ public class Cyclist extends Dynamic implements ICollidable {
      */
 
     /* a biciklis magassága/szélessége pixel szerint*/
-    int actualheight = 126;
-    int actualwidth = 51;
-    int weight_cyclist = 100;
-    int startingdamage = 0;
-    int damagelimit = 100;
-    boolean notdead = false;
-    boolean notfatal = false;
+    int actualHeight = 126;
+    int actualWidth = 51;
+    int weightCyclist = 100;
+    int startingDamage = 0;
+    int damageLimit = 100;
+    boolean notDead = false;
+    boolean notFatal = false;
+
     /**
      * @param x             coordinate
      * @param y             coordinate
@@ -35,12 +36,12 @@ public class Cyclist extends Dynamic implements ICollidable {
         super(x, y, imageFileName, m11, m12, m21, m22);
 
         PhysicsModel physicsModel = new PhysicsModel();
-        physicsModel.setDamage(startingdamage);
-        physicsModel.setDamagelimit(damagelimit);
-        physicsModel.setIsdead(notdead);
-        physicsModel.setFatal(notfatal);
-        physicsModel.setWeight(weight_cyclist);
-        physicsModel.setWidth(actualwidth);
-        physicsModel.setHeight(actualheight);
+        physicsModel.setDamage(startingDamage);
+        physicsModel.setDamageLimit(damageLimit);
+        physicsModel.setIsDead(notDead);
+        physicsModel.setFatal(notFatal);
+        physicsModel.setWeight(weightCyclist);
+        physicsModel.setWidth(actualWidth);
+        physicsModel.setHeight(actualHeight);
     }
 }

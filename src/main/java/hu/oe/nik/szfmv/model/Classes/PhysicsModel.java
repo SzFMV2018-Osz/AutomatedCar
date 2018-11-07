@@ -5,8 +5,8 @@ public class PhysicsModel {
     public int width;
     public int weight;
     public int damage;
-    public int damagelimit;
-    public boolean isdead;
+    public int damageLimit;
+    public boolean isDead;
     public boolean fatal;
 
     public PhysicsModel() {
@@ -40,7 +40,7 @@ public class PhysicsModel {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(int width) {
         this.weight = weight;
     }
 
@@ -52,51 +52,51 @@ public class PhysicsModel {
         this.damage = damage;
     }
 
-    public boolean isIsdead() {
-        return isdead;
+    public boolean isIsDead() {
+        return isDead;
     }
 
-    public void setIsdead(boolean isdead) {
-        this.isdead = isdead;
+    public void setIsDead(boolean isDead) {
+        this.isDead = isDead;
     }
 
-    public int getDamagelimit() {
-        return damagelimit;
+    public int getDamageLimit() {
+        return damageLimit;
     }
 
-    public void setDamagelimit(int damagelimit) {
-        this.damagelimit = damagelimit;
+    public void setDamageLimit(int damageLimit) {
+        this.damageLimit = damageLimit;
     }
 
     public int getArea() {
         return height * width;
     }
 
-    public void addDamage(int damage) {
+    public void addDamage(int Damage) {
         this.damage += damage;
     }
 
     public void CalculateDead() {
         if (!fatal) {
-            if (damage == damagelimit) {
-                isdead = true;
+            if (damage == damageLimit) {
+                isDead = true;
             } else {
-                isdead = false;
+                isDead = false;
             }
         } else {
-            isdead = true;
+            isDead = true;
         }
 
     }
 
 
-   /* public PhysicsModel(int width,int height,int weight, int damage, int damagelimit, boolean isdead){
+   /* public PhysicsModel(int width,int height,int Weight, int Damage, int DamageLimit, boolean IsDead){
         this.width=width;
         this.height=height;
-        this.weight=weight;
-        this.damage=damage;
-        this.damagelimit =damagelimit;
-        this.isdead=isdead;
+        this.Weight=Weight;
+        this.Damage=Damage;
+        this.DamageLimit =DamageLimit;
+        this.IsDead=IsDead;
     }*/
 
 }
