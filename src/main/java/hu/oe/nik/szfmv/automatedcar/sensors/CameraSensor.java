@@ -71,6 +71,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
+
         Point newPositon = new Point(newSensorPosition.x + positionOnCar.x,
                 newSensorPosition.y + positionOnCar.y);
 
@@ -151,6 +152,6 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void loop() {
-
     }
+
 }

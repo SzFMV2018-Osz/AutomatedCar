@@ -11,6 +11,9 @@ import java.util.List;
 public class RadarSensor extends SystemComponent implements ISensor {
 
     private static final int TRIANGLE_N = 3;
+    private static final int VISUAL_RANGE = 200;
+    private static final int ANGLE_OF_VIEW = 60;
+    private Point positionOnCar;
     private Polygon radarTriangle;
 
     /**
@@ -19,6 +22,10 @@ public class RadarSensor extends SystemComponent implements ISensor {
      */
     public RadarSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+    }
+
+    public Point getPositionOnCar() {
+        return positionOnCar;
     }
 
     @Override
@@ -44,28 +51,31 @@ public class RadarSensor extends SystemComponent implements ISensor {
         triangle.xpoints = new int[]{sensorPosition.x, leftPoint.x, rightPoint.x};
         triangle.ypoints = new int[]{sensorPosition.y, leftPoint.y, rightPoint.y};
 
-        this.radarTriangle = triangle;
+        radarTriangle = triangle;
 
         return triangle;
     }
 
-    private Point rotate(Point point, Point sennsorLocation, double rotation) {
+    private Point rotate(Point point, Point sensorLocation, double rotation) {
 
-        double x = sennsorLocation.x + (point.x - sennsorLocation.x) * Math.cos(rotation)
-                - (point.y - sennsorLocation.y) * Math.sin(rotation);
-        double y = sennsorLocation.y + (point.x - sennsorLocation.x) * Math.sin(rotation)
-                + (point.y - sennsorLocation.y) * Math.cos(rotation);
+        double x = sensorLocation.x + (point.x - sensorLocation.x) * Math.cos(rotation)
+                - (point.y - sensorLocation.y) * Math.sin(rotation);
+        double y = sensorLocation.y + (point.x - sensorLocation.x) * Math.sin(rotation)
+                + (point.y - sensorLocation.y) * Math.cos(rotation);
 
         return new Point((int) x, (int) y);
     }
 
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
-
+        Point newPositon = new Point(newSensorPosition.x + positionOnCar.x, newSensorPosition.y + positionOnCar.y);
+        newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
+        radarTriangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
     }
 
     /**
      * Returns a list of world objects what sees the radar
+     *
      * @param worldObjects all world objects
      * @return detected world objects
      */
@@ -79,7 +89,7 @@ public class RadarSensor extends SystemComponent implements ISensor {
             }
         });
 
-        return  detectedObject;
+        return detectedObject;
     }
 
     @Override
