@@ -65,6 +65,13 @@ public class Gui extends JFrame {
                 } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
                     dashboard.wheelTurning.setIsTurning(false);
                 }
+
+                if (keysPressed.contains(KeyEvent.VK_UP)) {
+                    dashboard.gasPedal.setIsPressed(false);
+                }
+                if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+                    dashboard.breakPedal.setIsPressed(false);
+                }
                 
                 if (keysPressed.contains(e.getKeyCode())) {
                     keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
