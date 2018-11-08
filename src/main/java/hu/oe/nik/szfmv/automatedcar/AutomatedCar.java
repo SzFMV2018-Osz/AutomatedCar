@@ -113,7 +113,6 @@ public class AutomatedCar extends Car {
     public void stopImmediately(){
         this.powertrainSystem.stopImmediately();
     }
-}
 
 
     private void AddUltrasonicSensors() {
