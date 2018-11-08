@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.visualization;
 import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -39,7 +40,7 @@ public class Gui extends JFrame {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
-        courseDisplay = new CourseDisplay();
+        courseDisplay = new CourseDisplay(this);
         add(courseDisplay);
 
         dashboard = new Dashboard(this);

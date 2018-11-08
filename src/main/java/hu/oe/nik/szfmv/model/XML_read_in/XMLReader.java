@@ -150,6 +150,7 @@ public class XMLReader {
                     }
                 }
                 w.addObjectToWorld(obj);
+
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
