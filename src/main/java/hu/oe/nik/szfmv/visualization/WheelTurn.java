@@ -39,10 +39,12 @@ public class WheelTurn {
     public void BackPosition() {
         if (isTurning) return;
 
-        if (level < 0) {
+        if (level < -20) {
             level += BACK_POSITION_STEPS;
-        } else if (level > 0) {
+        } else if (level > 20) {
             level -= BACK_POSITION_STEPS;
+        }else  if(level >= -20 && level <= 0){
+            level = 0;
         }
         if (level < BACK_POSITION_MAX_THRESHOLD && level > BACK_POSITION_MIN_THRESHOLD) {
             level = 0;

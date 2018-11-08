@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.visualization;
 
+import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +14,10 @@ public class Gui extends JFrame {
 
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
-
+    ArrayList<Integer> keysPressed;
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
-    ArrayList<Integer> keysPressed;
 
     /**
      * Initialize the GUI class
@@ -39,7 +40,7 @@ public class Gui extends JFrame {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
-        courseDisplay = new CourseDisplay();
+        courseDisplay = new CourseDisplay(this);
         add(courseDisplay);
 
         dashboard = new Dashboard(this);
@@ -53,13 +54,12 @@ public class Gui extends JFrame {
 
             @Override
             public void keyTyped(KeyEvent e) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                
+
                 if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
                     dashboard.wheelTurning.setIsTurning(false);
                 } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
@@ -95,6 +95,7 @@ public class Gui extends JFrame {
     }
 
     public void handleKeysPressedSlow() {
+
         if (keysPressed.contains(KeyEvent.VK_Q)) {
             dashboard.index.TurnLeft();
         } else if (keysPressed.contains(KeyEvent.VK_E)) {
@@ -104,11 +105,14 @@ public class Gui extends JFrame {
         } else if (keysPressed.contains(KeyEvent.VK_S)) {
             dashboard.index.SwitchBack();
         }
-        
+
+
         if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
             dashboard.autoTr.ShiftUp();
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_UP));
         } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
             dashboard.autoTr.ShiftDown();
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
         }
     }
 
