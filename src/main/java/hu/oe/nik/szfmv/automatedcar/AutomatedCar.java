@@ -87,15 +87,18 @@ public class AutomatedCar extends Car {
      */
     private Point2D calculateNewPosition(double carSpeed, double steeringAngle, double carHeading) {
         Point2D position = new Point2D.Double(
-                virtualFunctionBus.carPacket.getxPosition(),
-                virtualFunctionBus.carPacket.getyPosition());
+
+            virtualFunctionBus.carPacket.getxPosition(),
+            virtualFunctionBus.carPacket.getyPosition());
+
         Object[] positionWithHeading = SteeringHelpers.getCarPositionAndCarHead(
                 position, carHeading, carSpeed, steeringAngle, new int[] { width, height });
 
         if (positionWithHeading[0].getClass() == Point2D.Double.class) {
             position = new Point2D.Double(
-                    ((Point2D) positionWithHeading[0]).getX(),
-                    ((Point2D) positionWithHeading[0]).getY());
+                ((Point2D) positionWithHeading[0]).getX(),
+                ((Point2D) positionWithHeading[0]).getY());
+
         }
 
         if (positionWithHeading[1].getClass() == Double.class) {
@@ -106,6 +109,11 @@ public class AutomatedCar extends Car {
 
         return position;
     }
+
+    public void stopImmediately(){
+        this.powertrainSystem.stopImmediately();
+    }
+
 
     private void AddUltrasonicSensors() {
         int carWidth = virtualFunctionBus.carPacket.getCarWidth();
@@ -128,3 +136,4 @@ public class AutomatedCar extends Car {
 
     }
 }
+
