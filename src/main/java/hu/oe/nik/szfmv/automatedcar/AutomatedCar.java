@@ -11,6 +11,7 @@ import hu.oe.nik.szfmv.model.Classes.Car;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AutomatedCar extends Car {
@@ -34,6 +35,8 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         setCarPacket();
+
+        sensorList = new ArrayList<>();
         createSensors();
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
         cameraSensor = new CameraSensor(virtualFunctionBus);
