@@ -13,9 +13,9 @@ public class PowertrainSystem extends SystemComponent {
 
     private static final double GEAR_RATIOS = 1.1;
     private static final int PERCENTAGE_DIVISOR = 100;
-    private static final int SAMPLE_WEIGHT = 5000;
-    private static final double SAMPLE_RESISTANCE = 1.8;
-    private static final int ENGINE_BRAKE_TORQUE = 70;
+    private static final int SAMPLE_WEIGHT = 6000;
+    private static final double SAMPLE_RESISTANCE = 2;
+    private static final int ENGINE_BRAKE_TORQUE = 40;
     private static final double MAX_BRAKE_DECELERATION = 6;
     private static final double MAX_FORWARD_SPEED = 40;
     private static final double MIN_FORWARD_SPEED = 4.3888;
@@ -24,7 +24,6 @@ public class PowertrainSystem extends SystemComponent {
     private double speed;
     private int currentRPM;
     private int updatedRPM;
-    private double previousSpeedDifference;
     private double speedDifference;
     private int gasPedal;
     private int brakePedal;
@@ -57,7 +56,6 @@ public class PowertrainSystem extends SystemComponent {
 
         this.currentRPM = this.updatedRPM;
         this.updatedRPM = MIN_RPM;
-        this.previousSpeedDifference = this.speedDifference;
 
         this.virtualFunctionBus.powertrainPacket.setRpm(this.currentRPM);
         this.virtualFunctionBus.powertrainPacket.setSpeed(getSpeed());

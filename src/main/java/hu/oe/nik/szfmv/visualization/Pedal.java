@@ -1,6 +1,10 @@
 package hu.oe.nik.szfmv.visualization;
 
 public class Pedal {
+    public static final int STEPS = 4;
+    public static final int MAX = 100;
+    public static final int MAX_THRESHOLD = 96; // Should be MAX - STEPS.
+    public static final int DECREASE_STEPS = 20;
 
     int level;
     boolean isPressed;
@@ -13,18 +17,18 @@ public class Pedal {
     public void Pressed() {
         isPressed = true;
 
-        if (level >= 94) {
-            level = 100;
-        } else if (level < 94) {
-            level += 4;
+        if (level >= MAX_THRESHOLD) {
+            level = MAX;
+        } else if (level < MAX_THRESHOLD) {
+            level += STEPS;
         }
     }
 
     public void Decrease() {
         if (isPressed) return;
 
-        level -= 20;
-        if (level < 3) {
+        level -= DECREASE_STEPS;
+        if (level < DECREASE_STEPS) {
             level = 0;
         }
     }
