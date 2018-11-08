@@ -56,8 +56,13 @@ public class Main {
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
+
+        car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
+      //  w.addObjectToWorld(car2);
+
         w.addObjectToWorld(c);
         w.addObjectToWorld(car);
+
 
 
         //  w.addObjectToWorld(car2);
@@ -81,8 +86,14 @@ public class Main {
         t.initialize();
         while (true) {
             try {
-                if (Gameloop) {
 
+               
+              
+              
+              
+
+                if (Gameloop) {
+  //gui.handleKeysPressed(); //is it still necessary
                     gui.inputUpdate();
                     car.drive();
                     person.moveperson();
@@ -92,6 +103,7 @@ public class Main {
 
 
                 // car2.movecar2();
+
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());

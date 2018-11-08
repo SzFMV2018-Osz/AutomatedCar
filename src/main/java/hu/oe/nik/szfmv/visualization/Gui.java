@@ -86,6 +86,7 @@ public class Gui extends JFrame {
 
     }
 
+
     public void inputUpdate(){
         if (keysPressed.contains(KeyEvent.VK_UP)) {
             dashboard.gasPedal.Pressed();
@@ -94,6 +95,7 @@ public class Gui extends JFrame {
         if (keysPressed.contains(KeyEvent.VK_DOWN)) {
             dashboard.breakPedal.Pressed();
         }
+
 
         if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
             dashboard.wheelTurning.TurnRight();
@@ -110,6 +112,7 @@ public class Gui extends JFrame {
         } else if (keysPressed.contains(KeyEvent.VK_S)) {
             dashboard.index.SwitchBack();
         }
+
 
         if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
             dashboard.autoTr.ShiftUp();
