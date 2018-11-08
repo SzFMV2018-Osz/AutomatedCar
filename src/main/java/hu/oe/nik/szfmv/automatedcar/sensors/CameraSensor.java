@@ -93,7 +93,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
             }
         }
 
-        this.virtualFunctionBus.sensorPacket.setDetectedObjects(list);
+        this.virtualFunctionBus.sensorPacket.setCameraDetectedObjects(list);
 
         return list;
     }
@@ -105,7 +105,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private List<WorldObject> getDetectedRoadSigns() {
         List<WorldObject> detectedRoadSigns = new ArrayList<>();
 
-        for (WorldObject worldObject : this.virtualFunctionBus.sensorPacket.getDetectedObjects()) {
+        for (WorldObject worldObject : this.virtualFunctionBus.sensorPacket.getCameraDetectedObjects()) {
             if (worldObject.getClass().equals(RoadSign.class)) {
                 detectedRoadSigns.add(worldObject);
             }

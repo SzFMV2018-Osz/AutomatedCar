@@ -11,14 +11,14 @@ public interface ReadOnlySensorPacket {
      *
      * @return List<WorldObject>
      */
-    List<WorldObject> getDetectedObjects();
+    List<WorldObject> getCameraDetectedObjects();
 
     /**
      * Sets the objects of the list
      *
      * @param worldObjects in the angle of view of the camera sensor
      */
-    void setDetectedObjects(List<WorldObject> worldObjects);
+    void setCameraDetectedObjects(List<WorldObject> worldObjects);
 
     /**
      * Gets the detedted road sign
@@ -43,4 +43,16 @@ public interface ReadOnlySensorPacket {
      * @param distanceOfRoadSign distance of the rad sign
      */
     void setDistanceOfRoadSign(double distanceOfRoadSign);
+
+    /**
+     * Gets the world object in the angle of view of the radar sensor
+     * @return the list of the detected objects via camera
+     */
+    List<WorldObject> getRadarDetectedObjects();
+
+    /**
+     * ets the objects of the list
+     * @param radarDetectedObjects in the angle of view of the camera sensor
+     */
+    void setRadarDetectedObjects(List<WorldObject> radarDetectedObjects);
 }
