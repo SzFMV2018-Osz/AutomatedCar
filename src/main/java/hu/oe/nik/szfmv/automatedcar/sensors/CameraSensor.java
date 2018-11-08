@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.sensors;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Classes.RoadSign;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,7 +26,10 @@ public class CameraSensor extends SystemComponent implements ISensor {
      */
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+
+
         positionOnCar = new Point();
+
         triangle = new Polygon();
     }
 
@@ -70,7 +74,10 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
-        Point newPositon = new Point(newSensorPosition.x + positionOnCar.x, newSensorPosition.y + positionOnCar.y);
+
+        Point newPositon = new Point(newSensorPosition.x + positionOnCar.x,
+                newSensorPosition.y + positionOnCar.y);
+
         newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
         radarTriangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
     }
@@ -85,7 +92,65 @@ public class CameraSensor extends SystemComponent implements ISensor {
                 list.add(worldObject);
             }
         }
+
+        this.virtualFunctionBus.sensorPacket.setDetectedObjects(list);
+
         return list;
+    }
+
+    /**
+     * Gets the road signs, which the camera sees
+     * @return list of the road signs
+     */
+    private List<WorldObject> getDetectedRoadSigns() {
+        List<WorldObject> detectedRoadSigns = new ArrayList<>();
+
+        for (WorldObject worldObject : this.virtualFunctionBus.sensorPacket.getDetectedObjects()) {
+            if (worldObject.getClass().equals(RoadSign.class)) {
+                detectedRoadSigns.add(worldObject);
+            }
+        }
+
+        return detectedRoadSigns;
+    }
+
+
+    /**
+     * Search the nearest road sign in the list of the found road signs. If there are not any detected sign, set
+     * null.
+     */
+    private void searchNearestRoadSign() {
+        List<WorldObject> detectedRoadSigns = this.getDetectedRoadSigns();
+
+        if (detectedRoadSigns.size() > 0) {
+            double minDistance = Double.MAX_VALUE;
+            WorldObject nearest = null;
+
+            for (WorldObject sign : detectedRoadSigns) {
+                double distance = calculateDistanceFromCamera(sign);
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearest = sign;
+                }
+            }
+
+            this.virtualFunctionBus.sensorPacket.setDetectedRoadSign(nearest);
+            this.virtualFunctionBus.sensorPacket.setDistanceOfRoadSign(minDistance);
+        } else {
+            this.virtualFunctionBus.sensorPacket.setDetectedRoadSign(null);
+            this.virtualFunctionBus.sensorPacket.setDistanceOfRoadSign(0d);
+        }
+    }
+
+    /**
+     * Calculate the distance between the camera and the given worldObject
+     * @param worldObject world object
+     * @return the distance
+     */
+    private double calculateDistanceFromCamera(WorldObject worldObject) {
+        return Math.sqrt(Math.pow(virtualFunctionBus.carPacket.getxPosition() - worldObject.getX(), 2)
+                + Math.pow(virtualFunctionBus.carPacket.getyPosition() - worldObject.getY(), 2));
     }
 
     @Override
