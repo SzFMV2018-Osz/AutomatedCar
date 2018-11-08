@@ -31,12 +31,14 @@ public class WheelTurn {
     public void BackPosition() {
         if (isTurning) return;
 
-        if (level < 0) {
+        if (level < -20) {
             level += 20;
-        } else if (level > 0) {
+        } else if (level > 20) {
             level -= 20;
+        }else  if(level >= -20 && level <= 0){
+            level = 0;
         }
-        if (level < 3 && level > -3) {
+        else  if(level <= 20 && level > 0){
             level = 0;
         }
     }

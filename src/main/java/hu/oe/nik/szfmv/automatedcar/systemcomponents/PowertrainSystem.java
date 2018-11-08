@@ -177,10 +177,17 @@ public class PowertrainSystem extends SystemComponent {
             this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
         } else {
-            double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
-            int actual = (int) ((gasPedalPosition * multiplier) + this.currentRPM);
-            this.virtualFunctionBus.powertrainPacket.setRpm(actual);
-            return actual;
+            if (speed != 0) {
+                double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
+                int actual = (int) ((gasPedalPosition * multiplier) + this.currentRPM);
+                this.virtualFunctionBus.powertrainPacket.setRpm(actual);
+                return actual;
+            } else {
+                double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
+                int actual = (int) ((gasPedalPosition * multiplier));
+                this.virtualFunctionBus.powertrainPacket.setRpm(actual);
+                return actual;
+            }
         }
     }
 
@@ -225,11 +232,16 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Stops the car immediately.
      */
-    private void stopImmediately() {
+    public void stopImmediately() {
         this.speed = 0;
-        this.currentRPM = this.actualRPM;
+        if (actualRPM <= MAX_RPM) {
+            this.currentRPM = this.actualRPM;
+        } else {
+            this.currentRPM = MAX_RPM;
+        }
 
         this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
     }
+
 }
 

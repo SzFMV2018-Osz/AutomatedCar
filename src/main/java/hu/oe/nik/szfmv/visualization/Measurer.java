@@ -15,9 +15,10 @@ public class Measurer extends JPanel {
     int diameter;
     Point position;
     Point size;
+    int clockhandOffset = 69;
 
     public void setPower(int power) {
-        this.power = power - 69;
+        this.power = power - clockhandOffset;
     }
 
     public void setSize(Point size) {
