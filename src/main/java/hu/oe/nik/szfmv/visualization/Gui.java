@@ -78,6 +78,8 @@ public class Gui extends JFrame {
                 if (!keysPressed.contains(e.getKeyCode())) {
                     keysPressed.add(e.getKeyCode());
                 }
+
+                handleKeysPressedSlow();
             }
         };
 
@@ -85,21 +87,7 @@ public class Gui extends JFrame {
 
     }
 
-    public void handleKeysPressed() {
-        if (keysPressed.contains(KeyEvent.VK_UP)) {
-            dashboard.gasPedal.Pressed();
-        }
-        
-        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
-            dashboard.breakPedal.Pressed();
-        }
-        
-        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-            dashboard.wheelTurning.TurnRight();
-        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
-            dashboard.wheelTurning.TurnLeft();
-        }
-        
+    public void handleKeysPressedSlow() {
         if (keysPressed.contains(KeyEvent.VK_Q)) {
             dashboard.index.TurnLeft();
         } else if (keysPressed.contains(KeyEvent.VK_E)) {
@@ -115,6 +103,23 @@ public class Gui extends JFrame {
         } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
             dashboard.autoTr.ShiftDown();
         }
+    }
+
+    public void handleKeysPressedFast() {
+        if (keysPressed.contains(KeyEvent.VK_UP)) {
+            dashboard.gasPedal.Pressed();
+        }
+        
+        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+            dashboard.breakPedal.Pressed();
+        }
+        
+        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
+            dashboard.wheelTurning.TurnRight();
+        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+            dashboard.wheelTurning.TurnLeft();
+        }
+        
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
