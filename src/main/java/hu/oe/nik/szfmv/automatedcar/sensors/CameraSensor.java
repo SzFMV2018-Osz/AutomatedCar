@@ -27,6 +27,9 @@ public class CameraSensor extends SystemComponent implements ISensor {
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
+
+        positionOnCar = new Point();
+
         triangle = new Polygon();
     }
 
