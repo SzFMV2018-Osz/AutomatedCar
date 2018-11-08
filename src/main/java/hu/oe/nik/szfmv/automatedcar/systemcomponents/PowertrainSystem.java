@@ -112,7 +112,7 @@ public class PowertrainSystem extends SystemComponent {
                     acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
                 updateChanges(acceleration);
             }
-        } else if (this.gasPedal == 0) {
+        } else if (this.gasPedal == 0 || this.brakePedal > 0) {
             if (this.speed > 0) {
                 updateChanges(acceleration);
             }
@@ -150,7 +150,7 @@ public class PowertrainSystem extends SystemComponent {
                     speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
                 updateChanges(speedDelta);
             }
-        } else if (this.gasPedal == 0) {
+        } else if (this.gasPedal == 0 || this.brakePedal > 0) {
             if (this.speed < 0) {
                 updateChanges(speedDelta);
             }
@@ -172,7 +172,7 @@ public class PowertrainSystem extends SystemComponent {
         if (gasPedalPosition < 0) {
             throw new NegativeNumberException("The position of the gas pedal must be a non-negative number");
         }
-        if (gasPedalPosition == 0) {
+        if (gasPedalPosition == 0 || this.brakePedal > 0) {
             int actual = MIN_RPM;
             this.virtualFunctionBus.powertrainPacket.setRpm(actual);
             return actual;
@@ -194,7 +194,7 @@ public class PowertrainSystem extends SystemComponent {
 
         double isReverseDouble = isReverse ? -1 : 1;
 
-        if (this.actualRPM > this.currentRPM) {
+        if (this.actualRPM > this.currentRPM && this.brakePedal == 0) {
             // Acceleration.
             speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_RESISTANCE));
         } else if (this.brakePedal > 0) {
