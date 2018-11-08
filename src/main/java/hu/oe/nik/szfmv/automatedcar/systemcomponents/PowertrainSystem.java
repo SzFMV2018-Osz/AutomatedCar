@@ -210,7 +210,7 @@ public class PowertrainSystem extends SystemComponent {
     /**
      * Stops the car immediately.
      */
-    private void stopImmediately() {
+    public void stopImmediately() {
         this.speedDifference = 0;
         this.speed = 0;
         this.updatedRPM = MIN_RPM;
