@@ -79,6 +79,15 @@ public class PowertrainSystem extends SystemComponent {
     }
 
     /**
+     * Stops the car immediately.
+     */
+    public void stopImmediately() {
+        this.speedDifference = 0;
+        this.speed = 0;
+        this.updatedRPM = MIN_RPM;
+    }
+
+    /**
      * Do Power Train
      */
     private void doPowerTrain() {
@@ -174,22 +183,19 @@ public class PowertrainSystem extends SystemComponent {
     private void calculateSpeedDifference() {
         double isReverseModifier = this.isReverse ? -1 : 1;
 
-        // Braking.
         if (this.brakePedal > 0) {
+            // Braking.
             this.speedDifference = -1 * isReverseModifier * 
                 ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
-            return;
-        }
-        // Acceleration.
-        if (this.isInGear && this.gasPedal > 0) {
+        } else if (this.isInGear && this.gasPedal > 0) {
+            // Acceleration.
             this.speedDifference = isReverseModifier * this.updatedRPM * GEAR_RATIOS / 
                 (SAMPLE_WEIGHT * SAMPLE_RESISTANCE);
-            
-            return;
-        }
-        // Slowing down.
-        this.speedDifference =  -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
+        } else {
+            // Slowing down.
+            this.speedDifference =  -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
             (double) PERCENTAGE_DIVISOR;
+        }
     }
 
     /**
@@ -205,15 +211,6 @@ public class PowertrainSystem extends SystemComponent {
         if (!this.isReverse && updatedSpeed <= 0 || this.isReverse && updatedSpeed >= 0) {
             this.speed = 0;
         }
-    }
-
-    /**
-     * Stops the car immediately.
-     */
-    public void stopImmediately() {
-        this.speedDifference = 0;
-        this.speed = 0;
-        this.updatedRPM = MIN_RPM;
     }
 
     //#region Helpers
