@@ -137,15 +137,18 @@ public class CourseDisplay extends JPanel {
     }
 
     private void drawObjects(Graphics2D g2d,  World world) {
-        Rectangle collision;
-        Shape s;
+
+        //Rectangle collision;
+        //Shape s;
         for (WorldObject object : world.getWorldObjects()) {
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
 
-            // eredetileg ez volt az if ben object instanceof ICollidable && false ennek semmi értelme, ez akart lenni? !object instanceof ICollidable
+            // eredetileg ez volt az if ben object instanceof ICollidable && false ennek semmi értelme, ez akart lenni? !(object instanceof ICollidable)
+            // ennek így semmi értelme mert semmit nem csinál
 
-            if (!(object instanceof ICollidable)) {
+            /*
+            if (object instanceof ICollidable && false) {
                 collision = new Rectangle(
                         object.getWidth() / 2 - object.getPhysicsModel().getWidth() / 2,
                         object.getHeight() / 2 - object.getPhysicsModel().getHeight() / 2,
@@ -154,13 +157,16 @@ public class CourseDisplay extends JPanel {
                 s = object.getTransformation().createTransformedShape(collision);
 
                 //mire kellenek, ki akarta vki rajzolni? nem voltak használatban
-                g2d.draw(collision);
-                g2d.draw(s);
+                // g2d.draw(collision);
+                // g2d.draw(s);
+
                 g2d.setPaint(new Color(RED, 0, 0, ALPHA));
                 g2d.fill(s);
             }
+            */
 
         }
+
     }
 
     private void drawSensor(Graphics2D g, World world) {

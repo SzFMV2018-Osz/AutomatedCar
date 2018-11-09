@@ -68,7 +68,7 @@ public class Gui extends JFrame {
                 }
 
                 if (keysPressed.contains(e.getKeyCode())) {
-                    keysPressed.remove(e.getKeyCode());
+                    keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
                 }
 
             }
@@ -125,15 +125,15 @@ public class Gui extends JFrame {
     private void oncePressedKeys() {
         if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
             dashboard.autoTr.ShiftUp();
-            keysPressed.remove(KeyEvent.VK_PAGE_UP);
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_UP));
         } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
             dashboard.autoTr.ShiftDown();
-            keysPressed.remove(KeyEvent.VK_PAGE_DOWN);
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
         }
 
         if (keysPressed.contains(KeyEvent.VK_R)) {
             courseDisplay.setShowRadarSensor(!courseDisplay.getShowRadarSensor());
-            keysPressed.remove(KeyEvent.VK_R);
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_R));
         }
     }
 
