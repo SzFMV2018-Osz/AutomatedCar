@@ -119,7 +119,7 @@ public class Gui extends JFrame {
     }
 
     /**
-     * Handles keypresses without any delay (i.e. keys pressed down are processed in every gaming loop - 
+     * Handles keypresses without any delay (i.e. keys pressed down are processed in every gaming loop cycle -
      * required for navigating the car).
      */
     public void handleKeysPressedFast() {
