@@ -94,8 +94,10 @@ public class Gui extends JFrame {
 
     }
 
+    /**
+     * Handles keypresses in a normal way (i.e. handles second keypresses after a short delay).
+     */
     public void handleKeysPressedSlow() {
-
         if (keysPressed.contains(KeyEvent.VK_Q)) {
             dashboard.index.TurnLeft();
         } else if (keysPressed.contains(KeyEvent.VK_E)) {
@@ -116,6 +118,10 @@ public class Gui extends JFrame {
         }
     }
 
+    /**
+     * Handles keypresses without any delay (i.e. keys pressed down are processed in every gaming loop - 
+     * required for navigating the car).
+     */
     public void handleKeysPressedFast() {
         if (keysPressed.contains(KeyEvent.VK_UP)) {
             dashboard.gasPedal.Pressed();
@@ -130,7 +136,6 @@ public class Gui extends JFrame {
         } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
             dashboard.wheelTurning.TurnLeft();
         }
-        
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
