@@ -5,12 +5,15 @@ import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.sensors.CameraSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
+import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
+import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Car;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AutomatedCar extends Car {
@@ -21,9 +24,8 @@ public class AutomatedCar extends Car {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
-    private CameraSensor cameraSensor;
 
-    private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<UltrasonicSensor>();
+    private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
 
 
     /**
@@ -33,17 +35,17 @@ public class AutomatedCar extends Car {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public AutomatedCar(int x, int y, String imageFileName) {
+    public AutomatedCar(int x, int y, String imageFileName, List<WorldObject> worldObjects) {
         super(x, y, imageFileName);
 
-        setCarPacket();
+        virtualFunctionBus.worldObjects = worldObjects;
 
+        setCarPacket();
 
         sensorList = new ArrayList<>();
         createSensors();
 
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
-        cameraSensor = new CameraSensor(virtualFunctionBus);
 
         AddUltrasonicSensors();
         virtualFunctionBus.ultrasonicSensors = ultrasonicSensors;
@@ -74,7 +76,7 @@ public class AutomatedCar extends Car {
         CarPacket carPacket = new CarPacket();
         carPacket.setCarWidth(width);
         carPacket.setCarHeigth(height);
-        carPacket.setRotation(rotation);
+        carPacket.setCarRotation(rotation);
         carPacket.setxPosition(x);
         carPacket.setyPosition(y);
         carPacket.setPolygon(setPolygon(x, y, width, height));

@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.sensors;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.SensorPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Road;
@@ -16,8 +17,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private static final int VISUAL_RANGE = 80;
     private static final int ANGLE_OF_VIEW = 60;
     private Point positionOnCar;
-    private Polygon radarTriangle;
-    private boolean leftLane;
+    private Boolean leftLane;
     private double distanceFromBorder;
     private Polygon triangle;
     List<Road> roads;
@@ -32,11 +32,13 @@ public class CameraSensor extends SystemComponent implements ISensor {
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
+        this.virtualFunctionBus.sensorPacket = new SensorPacket();
+
         triangle = new Polygon();
         positionOnCar = new Point();
         roads = new ArrayList<>();
         this.worldObjects = virtualFunctionBus.worldObjects;
-        leftLane = false;
+        leftLane = null;
     }
 
     public Point getPositionOnCar() {
@@ -83,9 +85,8 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
         Point newPositon = new Point(newSensorPosition.x + positionOnCar.x,
                 newSensorPosition.y + positionOnCar.y);
-
         newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
-        radarTriangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
+        triangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
     }
 
     @Override
@@ -165,7 +166,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     public void giveRoadInformations(){
             if(onRoad()){
-                leftLane = wichLane();
+                leftLane = whichLane();
                 if(!currentRoad.getImageFileName().contains("parking")){
                     if(Road.roadPolyMap.containsKey(currentRoad.getImageFileName())){
                         distanceFromBorder = distanceFromPoly(new Point(virtualFunctionBus.carPacket.getxPosition(),
@@ -173,10 +174,14 @@ public class CameraSensor extends SystemComponent implements ISensor {
                                 new Point(currentRoad.getX(), currentRoad.getY()));
                     }
                 }
+
+                this.virtualFunctionBus.sensorPacket.setIfWeAreInLeftLane(leftLane);
+                this.virtualFunctionBus.sensorPacket.setDistanceFromBound(distanceFromBorder);
+
             }
     }
 
-    public boolean wichLane(){
+    public boolean whichLane(){
         Point carPosition = new Point(virtualFunctionBus.carPacket.getxPosition(), virtualFunctionBus.carPacket.getyPosition());
         Polygon polygon = setPoints(Road.roadPolyMap.get(currentRoad.getImageFileName()), new Point(currentRoad.getX(), currentRoad.getY()));
         if(currentRoad.getImageFileName().equals("road_2lane_straight.png")){

@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket;
 
+
 import java.awt.*;
 
 public class CarPacket implements ReadOnlyCarPacket {
@@ -8,10 +9,8 @@ public class CarPacket implements ReadOnlyCarPacket {
     private int carWidth;
     private int xPosition;
     private int yPosition;
-    private float rotation;
-    private Polygon polygon;
     private float carRotation;
-
+    private Polygon polygon;
 
     public int getxPosition() {
         return xPosition;
@@ -37,6 +36,16 @@ public class CarPacket implements ReadOnlyCarPacket {
         this.carRotation = carRotation;
     }
 
+    @Override
+    public Polygon getPolygon() {
+        return polygon;
+    }
+
+    @Override
+    public void setPolygon(Polygon polygon) {
+        this.polygon = polygon;
+    }
+
 
     @Override
     public int getCarHeigth() {
@@ -54,21 +63,5 @@ public class CarPacket implements ReadOnlyCarPacket {
 
     public void setCarWidth(int carWidth) {
         this.carWidth = carWidth;
-    }
-
-    @Override
-    public float getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
-    }
-
-    @Override
-    public Polygon getPolygon(){return polygon;}
-
-    public void setPolygon(Polygon polygon) {
-        this.polygon = polygon;
     }
 }
