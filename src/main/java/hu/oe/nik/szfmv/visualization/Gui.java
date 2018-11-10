@@ -66,6 +66,13 @@ public class Gui extends JFrame {
                     dashboard.wheelTurning.setIsTurning(false);
                 }
 
+                if (keysPressed.contains(KeyEvent.VK_UP)) {
+                    dashboard.gasPedal.setIsPressed(false);
+                }
+                if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+                    dashboard.breakPedal.setIsPressed(false);
+                }
+                
                 if (keysPressed.contains(e.getKeyCode())) {
                     keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
                 }
@@ -79,6 +86,7 @@ public class Gui extends JFrame {
                     keysPressed.add(e.getKeyCode());
                 }
 
+                handleKeysPressedSlow();
             }
         };
 
@@ -86,23 +94,10 @@ public class Gui extends JFrame {
 
     }
 
-
-    public void inputUpdate(){
-        if (keysPressed.contains(KeyEvent.VK_UP)) {
-            dashboard.gasPedal.Pressed();
-        }
-
-        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
-            dashboard.breakPedal.Pressed();
-        }
-
-
-        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-            dashboard.wheelTurning.TurnRight();
-        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
-            dashboard.wheelTurning.TurnLeft();
-        }
-
+    /**
+     * Handles keypresses in a normal way (i.e. handles second keypresses after a short delay).
+     */
+    public void handleKeysPressedSlow() {
         if (keysPressed.contains(KeyEvent.VK_Q)) {
             dashboard.index.TurnLeft();
         } else if (keysPressed.contains(KeyEvent.VK_E)) {
@@ -120,6 +115,26 @@ public class Gui extends JFrame {
         } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
             dashboard.autoTr.ShiftDown();
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
+        }
+    }
+
+    /**
+     * Handles keypresses without any delay (i.e. keys pressed down are processed in every gaming loop cycle -
+     * required for navigating the car).
+     */
+    public void handleKeysPressedFast() {
+        if (keysPressed.contains(KeyEvent.VK_UP)) {
+            dashboard.gasPedal.Pressed();
+        }
+        
+        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+            dashboard.breakPedal.Pressed();
+        }
+        
+        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
+            dashboard.wheelTurning.TurnRight();
+        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+            dashboard.wheelTurning.TurnLeft();
         }
     }
 
