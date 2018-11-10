@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket;
 
+import java.awt.*;
+
 public interface ReadOnlyCarPacket {
 
     /**
@@ -21,4 +23,8 @@ public interface ReadOnlyCarPacket {
     void setyPosition(int yPosition);
 
     float getRotation();
+
+    Polygon getPolygon();
+
+    void setPolygon(Polygon polygon);
 }
