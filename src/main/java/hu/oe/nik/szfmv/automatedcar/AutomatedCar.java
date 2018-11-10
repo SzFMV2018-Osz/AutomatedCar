@@ -11,6 +11,7 @@ import hu.oe.nik.szfmv.model.Classes.Car;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AutomatedCar extends Car {
@@ -19,9 +20,8 @@ public class AutomatedCar extends Car {
     private static final double RADAR_RELATIVE_POSITION_IN_PERCENT = 0.95;
 
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
-    private List<ISensor> sensorList;
+    private List<ISensor> sensorList = new ArrayList<>();
     private PowertrainSystem powertrainSystem;
-    private CameraSensor cameraSensor;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -34,18 +34,15 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         setCarPacket();
-        createSensors();
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
-        cameraSensor = new CameraSensor(virtualFunctionBus);
 
         new Driver(virtualFunctionBus);
     }
 
-
     /**
      * Create the car's sensors
      */
-    private void createSensors() {
+    public void createSensors() {
         RadarSensor radarSensor = new RadarSensor(virtualFunctionBus);
         radarSensor.getPositionOnCar().x = width / 2;
         radarSensor.getPositionOnCar().y = (int) (height * RADAR_RELATIVE_POSITION_IN_PERCENT);
@@ -67,6 +64,7 @@ public class AutomatedCar extends Car {
         carPacket.setRotation(rotation);
         carPacket.setxPosition(x);
         carPacket.setyPosition(y);
+        carPacket.setPolygon(setPolygon(x, y, width, height));
         virtualFunctionBus.carPacket = carPacket;
     }
 
@@ -139,5 +137,14 @@ public class AutomatedCar extends Car {
         rotation = (float) (-Math.toDegrees(Math.toRadians(THREE_QUARTER_CIRCLE) - carHeading));
 
         return position;
+    }
+
+    public Polygon setPolygon(int x, int y, int width, int height) {
+        Polygon polygon = new Polygon();
+        polygon.addPoint(x, y);
+        polygon.addPoint(x + width, y);
+        polygon.addPoint(x + width, y + height);
+        polygon.addPoint(x, y + height);
+        return polygon;
     }
 }
