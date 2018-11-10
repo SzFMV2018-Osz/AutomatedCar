@@ -10,6 +10,8 @@ public class CarPacket implements ReadOnlyCarPacket {
     private int yPosition;
     private float rotation;
     private Polygon polygon;
+    private float carRotation;
+
 
     public int getxPosition() {
         return xPosition;
@@ -26,6 +28,15 @@ public class CarPacket implements ReadOnlyCarPacket {
     public void setyPosition(int yPosition) {
         this.yPosition = yPosition;
     }
+
+    public float getCarRotation() {
+        return carRotation;
+    }
+
+    public void setCarRotation(float carRotation) {
+        this.carRotation = carRotation;
+    }
+
 
     @Override
     public int getCarHeigth() {

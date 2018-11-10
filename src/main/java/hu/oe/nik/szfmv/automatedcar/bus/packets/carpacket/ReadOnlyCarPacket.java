@@ -22,7 +22,9 @@ public interface ReadOnlyCarPacket {
 
     void setyPosition(int yPosition);
 
-    float getRotation();
+    float getCarRotation();
+
+    void setCarRotation(float rotation);
 
     Polygon getPolygon();
 

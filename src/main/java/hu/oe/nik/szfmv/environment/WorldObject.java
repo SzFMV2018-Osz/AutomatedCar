@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.environment;
 
 
+import hu.oe.nik.szfmv.model.Classes.PhysicsModel;
 import hu.oe.nik.szfmv.visualization.Camera;
 import hu.oe.nik.szfmv.visualization.IRender;
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +26,12 @@ public class WorldObject implements IRender {
     protected BufferedImage image;
     protected AffineTransform transformTheImageToCorrectPos;
     protected double[][] tMatrix;
+    protected int lastX;
+    protected int lastY;
+    protected int xVelocity;
+    protected int yVelocity;
+    protected boolean collide;
+    protected PhysicsModel physicsModel;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -39,8 +46,9 @@ public class WorldObject implements IRender {
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
-        InitImage();
+        initImage();
         tMatrix = new double[2][2];
+        collide = false;
     }
 
     /**
@@ -55,14 +63,52 @@ public class WorldObject implements IRender {
     public WorldObject(int x, int y, String imageFileName, double m11, double m12, double m21, double m22) {
         this.x = x;
         this.y = y;
+        this.lastX = x;
+        this.lastY = y;
         this.rotationPointX = 0;
         this.rotationPointY = 0;
         this.imageFileName = imageFileName;
-        InitImage();
+        initImage();
         tMatrix[1][1] = m11;
         tMatrix[1][2] = m12;
         tMatrix[2][1] = m21;
         tMatrix[2][2] = m22;
+    }
+
+    public void setxVelocity(int xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public void setyVelocity(int yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
+    public PhysicsModel getPhysicsModel() {
+        return physicsModel;
+    }
+
+    public boolean isCollide() {
+        return collide;
+    }
+
+    public void setCollide(boolean collide) {
+        this.collide = collide;
+    }
+
+    public int getLastX() {
+        return lastX;
+    }
+
+    public void setLastX(int lastX) {
+        this.lastX = lastX;
+    }
+
+    public int getLastY() {
+        return lastY;
+    }
+
+    public void setLastY(int lastY) {
+        this.lastY = lastY;
     }
 
     public double[][] getTMatrix() {
@@ -81,7 +127,9 @@ public class WorldObject implements IRender {
         this.rotationPointY = rotationPointY;
     }
 
-    public int getX() { return this.x; }
+    public int getX() {
+        return this.x;
+    }
 
     public void setX(int x) {
         this.x = x;
@@ -139,7 +187,7 @@ public class WorldObject implements IRender {
      * Create the image file for render
      */
     @Override
-    public void InitImage() {
+    public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
             this.width = image.getWidth();
@@ -151,14 +199,29 @@ public class WorldObject implements IRender {
 
     /**
      * Rotate the image to the correct pos
+     *
      * @param camera the camera object of the world
      */
     @Override
-    public void RotateImage(Camera camera) {
+    public void rotateImage(Camera camera) {
+        this.x += xVelocity;
+        this.y += yVelocity;
         transformTheImageToCorrectPos = new AffineTransform();
         transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
         transformTheImageToCorrectPos.rotate(Math.toRadians(rotation), camera.getX() + x, camera.getY() + y);
         transformTheImageToCorrectPos.translate(camera.getX() + x - rotationPointX, camera.getY() + y - rotationPointY);
+        if (0 < xVelocity) {
+            xVelocity--;
+        }
+        if (0 > xVelocity) {
+            xVelocity++;
+        }
+        if (0 < yVelocity) {
+            yVelocity--;
+        }
+        if (0 > yVelocity) {
+            yVelocity++;
+        }
 
     }
 }
