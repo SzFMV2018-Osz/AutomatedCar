@@ -93,7 +93,8 @@ public class Main {
               
 
                 if (Gameloop) {
-                    gui.handleKeysPressedFast(); //is it still necessary
+  //gui.handleKeysPressed(); //is it still necessary
+                    gui.inputUpdate();
                     car.drive();
                     person.moveperson();
                     car1.movecar1();
@@ -102,6 +103,7 @@ public class Main {
 
 
                 // car2.movecar2();
+
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());
