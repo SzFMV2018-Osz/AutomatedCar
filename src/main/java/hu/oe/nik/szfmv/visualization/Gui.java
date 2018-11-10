@@ -59,24 +59,25 @@ public class Gui extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
-                if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-                    dashboard.wheelTurning.setIsTurning(false);
-                } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+                int keyCode = e.getKeyCode();
+                
+                // Release turning and pedal pressing so the back positioning can run.
+                if (keyCode == KeyEvent.VK_RIGHT) {
                     dashboard.wheelTurning.setIsTurning(false);
                 }
-
-                if (keysPressed.contains(KeyEvent.VK_UP)) {
+                if (keyCode == KeyEvent.VK_LEFT) {
+                    dashboard.wheelTurning.setIsTurning(false);
+                }       
+                if (keyCode == KeyEvent.VK_UP) {
                     dashboard.gasPedal.setIsPressed(false);
                 }
-                if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+                if (keyCode == KeyEvent.VK_DOWN) {
                     dashboard.breakPedal.setIsPressed(false);
                 }
-                
-                if (keysPressed.contains(e.getKeyCode())) {
-                    keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
-                }
 
+                if (keysPressed.contains(keyCode)) {
+                    keysPressed.remove(keysPressed.indexOf(keyCode));
+                }
             }
 
             @Override
@@ -86,7 +87,6 @@ public class Gui extends JFrame {
                     keysPressed.add(e.getKeyCode());
                 }
 
-                handleKeysPressedSlow();
             }
         };
 
@@ -94,10 +94,23 @@ public class Gui extends JFrame {
 
     }
 
-    /**
-     * Handles keypresses in a normal way (i.e. handles second keypresses after a short delay).
-     */
-    public void handleKeysPressedSlow() {
+
+    public void inputUpdate(){
+        if (keysPressed.contains(KeyEvent.VK_UP)) {
+            dashboard.gasPedal.Pressed();
+        }
+
+        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+            dashboard.breakPedal.Pressed();
+        }
+
+
+        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
+            dashboard.wheelTurning.TurnRight();
+        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+            dashboard.wheelTurning.TurnLeft();
+        }
+
         if (keysPressed.contains(KeyEvent.VK_Q)) {
             dashboard.index.TurnLeft();
         } else if (keysPressed.contains(KeyEvent.VK_E)) {
@@ -115,26 +128,6 @@ public class Gui extends JFrame {
         } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
             dashboard.autoTr.ShiftDown();
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
-        }
-    }
-
-    /**
-     * Handles keypresses without any delay (i.e. keys pressed down are processed in every gaming loop cycle -
-     * required for navigating the car).
-     */
-    public void handleKeysPressedFast() {
-        if (keysPressed.contains(KeyEvent.VK_UP)) {
-            dashboard.gasPedal.Pressed();
-        }
-        
-        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
-            dashboard.breakPedal.Pressed();
-        }
-        
-        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-            dashboard.wheelTurning.TurnRight();
-        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
-            dashboard.wheelTurning.TurnLeft();
         }
     }
 
