@@ -44,12 +44,28 @@ public interface ReadOnlySensorPacket {
      */
     void setDistanceOfRoadSign(double distanceOfRoadSign);
 
+    /**
+     * Gets true if we are in the left lane
+     * @return boolean
+     */
     Boolean getIfWeAreInLeftLane();
 
+    /**
+     * Sets the value of we ar in the left lane
+     * @param leftLane boolean
+     */
     void setIfWeAreInLeftLane(Boolean leftLane);
 
+    /**
+     * Gets the distance from bound
+     * @return distance
+     */
     double getDistanceFromBound();
 
+    /**
+     * Sets the distance from bound
+     * @param distanceFromBound distance
+     */
     void setDistanceFromBound(double distanceFromBound);
 
     /**
