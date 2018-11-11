@@ -11,6 +11,8 @@ public class SensorPacket implements ReadOnlySensorPacket {
     private List<WorldObject> radarDetectedObjects;
     private WorldObject detectedRoadSign;
     private double distanceOfRoadSign;
+    private Boolean leftLane;
+    private double distanceFromBound;
 
     /**
      * PowertrainPacket consturctor
@@ -19,6 +21,7 @@ public class SensorPacket implements ReadOnlySensorPacket {
         this.cameraDetectedObjects = new ArrayList<>();
         this.radarDetectedObjects = new ArrayList<>();
         this.distanceOfRoadSign = 0d;
+        leftLane = null;
     }
     @Override
     public List<WorldObject> getCameraDetectedObjects() {
@@ -48,6 +51,26 @@ public class SensorPacket implements ReadOnlySensorPacket {
     @Override
     public void setDistanceOfRoadSign(double distanceOfRoadSign) {
         this.distanceOfRoadSign = distanceOfRoadSign;
+    }
+
+    @Override
+    public Boolean getIfWeAreInLeftLane() {
+        return leftLane;
+    }
+
+    @Override
+    public void setIfWeAreInLeftLane(Boolean leftLane) {
+        this.leftLane = leftLane;
+    }
+
+    @Override
+    public double getDistanceFromBound() {
+        return distanceFromBound;
+    }
+
+    @Override
+    public void setDistanceFromBound(double distanceFromBound) {
+        this.distanceFromBound = distanceFromBound;
     }
 
     @Override

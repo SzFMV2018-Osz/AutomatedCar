@@ -44,6 +44,14 @@ public interface ReadOnlySensorPacket {
      */
     void setDistanceOfRoadSign(double distanceOfRoadSign);
 
+    Boolean getIfWeAreInLeftLane();
+
+    void setIfWeAreInLeftLane(Boolean leftLane);
+
+    double getDistanceFromBound();
+
+    void setDistanceFromBound(double distanceFromBound);
+
     /**
      * Gets the world object in the angle of view of the radar sensor
      * @return the list of the detected objects via camera
