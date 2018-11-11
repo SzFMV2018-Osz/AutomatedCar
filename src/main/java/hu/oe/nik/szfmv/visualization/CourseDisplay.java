@@ -1,13 +1,20 @@
 package hu.oe.nik.szfmv.visualization;
 
+
+import hu.oe.nik.szfmv.Main;
+
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -17,8 +24,12 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     public Camera camera;
+    AffineTransform t = new AffineTransform();
+    private BufferedImage image;
+
     Gui parent;
     public Boolean drawTriangles;
+
 
     /**
      * Initialize the course display
@@ -28,8 +39,18 @@ public class CourseDisplay extends JPanel {
         setDoubleBuffered(true);
         setLayout(null);
         setBounds(0, 0, width, height);
+        try {
+            image = ImageIO.read(new File(ClassLoader.getSystemResource("gameover.png").getFile()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        t.scale(0.75, 0.75);
+        t.translate(width / 2 - image.getWidth() / 2 * 0.75, height / 2 - image.getHeight() / 2 * 0.75 - 50);
+
+
         parent = pt;
         drawTriangles = false;
+
     }
 
     /**
@@ -69,9 +90,19 @@ public class CourseDisplay extends JPanel {
 
 
         for (WorldObject object : world.getWorldObjects()) {
-            object.RotateImage(camera);
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
+            if (object instanceof ICollidable && false) {
+
+                Rectangle collision = new Rectangle(object.getWidth() / 2 - object.getPhysicsModel().getWidth() / 2, object.getHeight() / 2 - object.getPhysicsModel().getHeight() / 2, object.getPhysicsModel().getWidth(), object.getPhysicsModel().getHeight());
+                Shape s = object.getTransformation().createTransformedShape(collision);
+                g2d.setPaint(new Color(255, 0, 0, 128));
+                g2d.fill(s);
+            }
+
+        }
+        if (Main.Gameloop == false) {
+            g2d.drawImage(image, t, this);
         }
 
         if (drawTriangles) {
@@ -86,6 +117,8 @@ public class CourseDisplay extends JPanel {
     /**
      * Intended to use for refreshing the course display after redrawing the world
      */
+
+
     public void refreshFrame() {
         invalidate();
         validate();
@@ -108,7 +141,9 @@ public class CourseDisplay extends JPanel {
             g.drawPolygon(sensor.getPoly());
             g.setColor(Color.RED);
             if (closest != null) {
-                g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
+                closest.rotateImage(camera);
+                g.setTransform(closest.getTransformation());
+                g.drawRect(0,0, closest.getWidth(), closest.getHeight());
             }
 
 
