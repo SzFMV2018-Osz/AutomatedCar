@@ -1,6 +1,5 @@
 package hu.oe.nik.szfmv.visualization;
 
-import hu.oe.nik.szfmv.Main;
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 
 
@@ -12,12 +11,14 @@ import java.util.ArrayList;
 
 public class Gui extends JFrame {
 
+    private ArrayList<Integer> keysPressed;
+
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
-    ArrayList<Integer> keysPressed;
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
+
 
     /**
      * Initialize the GUI class
@@ -48,7 +49,7 @@ public class Gui extends JFrame {
 
         setVisible(true);
 
-        keysPressed = new ArrayList<Integer>();
+        keysPressed = new ArrayList<>();
 
         KeyListener listen = new KeyListener() {
 
@@ -94,22 +95,11 @@ public class Gui extends JFrame {
 
     }
 
-
-    public void inputUpdate(){
-        if (keysPressed.contains(KeyEvent.VK_UP)) {
-            dashboard.gasPedal.Pressed();
-        }
-
-        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
-            dashboard.breakPedal.Pressed();
-        }
-
-
-        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-            dashboard.wheelTurning.TurnRight();
-        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
-            dashboard.wheelTurning.TurnLeft();
-        }
+    /**
+     * Update input
+     */
+    public void inputUpdate() {
+        moveCar();
 
         if (keysPressed.contains(KeyEvent.VK_Q)) {
             dashboard.index.TurnLeft();
@@ -121,14 +111,7 @@ public class Gui extends JFrame {
             dashboard.index.SwitchBack();
         }
 
-
-        if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
-            dashboard.autoTr.ShiftUp();
-            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_UP));
-        } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
-            dashboard.autoTr.ShiftDown();
-            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
-        }
+        oncePressedKeys();
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -145,5 +128,34 @@ public class Gui extends JFrame {
 
     public Dashboard getDashboard() {
         return dashboard;
+    }
+
+    private void oncePressedKeys() {
+        if (keysPressed.contains(KeyEvent.VK_PAGE_UP)) {
+            dashboard.autoTr.ShiftUp();
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_UP));
+        } else if (keysPressed.contains(KeyEvent.VK_PAGE_DOWN)) {
+            dashboard.autoTr.ShiftDown();
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
+        }
+
+        if (keysPressed.contains(KeyEvent.VK_R)) {
+            courseDisplay.setShowRadarSensor(!courseDisplay.getShowRadarSensor());
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_R));
+        }
+    }
+
+    private void moveCar() {
+        if (keysPressed.contains(KeyEvent.VK_UP)) {
+            dashboard.gasPedal.Pressed();
+        }
+        if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+            dashboard.breakPedal.Pressed();
+        }
+        if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
+            dashboard.wheelTurning.TurnRight();
+        } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+            dashboard.wheelTurning.TurnLeft();
+        }
     }
 }

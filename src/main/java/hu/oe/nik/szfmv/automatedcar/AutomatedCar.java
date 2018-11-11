@@ -20,13 +20,20 @@ public class AutomatedCar extends Car {
     private static final int THREE_QUARTER_CIRCLE = 270;
     private static final double CAMERA_RELATIVE_POSITION_IN_PERCENT = 0.8;
     private static final double RADAR_RELATIVE_POSITION_IN_PERCENT = 0.95;
+    private static final int BACKFRONT_VERTSHIFT = 10;
+    private static final int RIGHTLEFT_VERTSHIFT = 30;
+    private static final int BACKFRONT_HORSHIFT = 30;
+    private static final int RIGHTLEFT_HORSHIFT = 5;
+    private static final int FRONT_VIEWDIRECTION = 0;
+    private static final int BACK_VIEWDIRECTION = 180;
+    private static final int RIGHT_VIEWDIRECTION = 90;
+    private static final int LEFT_VIEWDIRECTION = -90;
 
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
 
     private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
-
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -47,7 +54,7 @@ public class AutomatedCar extends Car {
 
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
 
-        AddUltrasonicSensors();
+        addUltrasonicSensors();
         virtualFunctionBus.ultrasonicSensors = ultrasonicSensors;
 
         new Driver(virtualFunctionBus);
@@ -62,6 +69,9 @@ public class AutomatedCar extends Car {
         radarSensor.getPositionOnCar().x = width / 2;
         radarSensor.getPositionOnCar().y = (int) (height * RADAR_RELATIVE_POSITION_IN_PERCENT);
         sensorList.add(radarSensor);
+
+        virtualFunctionBus.radarSensor = radarSensor;
+
         CameraSensor cameraSensor = new CameraSensor(virtualFunctionBus);
         cameraSensor.getPositionOnCar().x = width / 2;
         cameraSensor.getPositionOnCar().y = (int) (height * CAMERA_RELATIVE_POSITION_IN_PERCENT);
@@ -97,7 +107,7 @@ public class AutomatedCar extends Car {
      */
     private void calculatePositionAndOrientation() {
         double carSpeed = this.powertrainSystem.getSpeedWithDirection();
-        double steeringAngle = 0;
+        double steeringAngle;
         double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
         double halfWheelBase = (double) height / 2;
 
@@ -157,29 +167,40 @@ public class AutomatedCar extends Car {
         return position;
     }
 
-    public void stopImmediately(){
+    /**
+     * Stops immediately the power systems
+     */
+    public void stopImmediately() {
         this.powertrainSystem.stopImmediately();
     }
 
-
-    private void AddUltrasonicSensors() {
+    private void addUltrasonicSensors() {
         int carWidth = virtualFunctionBus.carPacket.getCarWidth();
         int carHeight = virtualFunctionBus.carPacket.getCarHeigth();
+
         //front sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 10, carWidth / 2 + 30, 0));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 10, carWidth / 2 - 30, 0));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, BACKFRONT_VERTSHIFT,
+                carWidth / 2 + BACKFRONT_HORSHIFT, FRONT_VIEWDIRECTION));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, BACKFRONT_VERTSHIFT,
+                carWidth / 2 - BACKFRONT_HORSHIFT, FRONT_VIEWDIRECTION));
 
         //back sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 10, carWidth / 2 + 30, 180));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 10, carWidth / 2 - 30, 180));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - BACKFRONT_VERTSHIFT,
+                carWidth / 2 + BACKFRONT_HORSHIFT, BACK_VIEWDIRECTION));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - BACKFRONT_VERTSHIFT,
+                carWidth / 2 - BACKFRONT_HORSHIFT, BACK_VIEWDIRECTION));
 
         //right sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 30, carWidth - 5, 90));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 30, carWidth - 5, 90));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, RIGHTLEFT_VERTSHIFT,
+                carWidth - RIGHTLEFT_HORSHIFT, RIGHT_VIEWDIRECTION));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - RIGHTLEFT_VERTSHIFT,
+                carWidth - RIGHTLEFT_HORSHIFT, RIGHT_VIEWDIRECTION));
 
         //left sensors
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, 30, 5, -90));
-        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - 30, 5, -90));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, RIGHTLEFT_VERTSHIFT,
+                RIGHTLEFT_HORSHIFT, LEFT_VIEWDIRECTION));
+        ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - RIGHTLEFT_VERTSHIFT,
+                RIGHTLEFT_HORSHIFT, LEFT_VIEWDIRECTION));
 
     }
 
