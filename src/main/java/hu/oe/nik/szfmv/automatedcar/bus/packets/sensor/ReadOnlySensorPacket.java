@@ -43,4 +43,12 @@ public interface ReadOnlySensorPacket {
      * @param distanceOfRoadSign distance of the rad sign
      */
     void setDistanceOfRoadSign(double distanceOfRoadSign);
+
+    Boolean getIfWeAreInLeftLane();
+
+    void setIfWeAreInLeftLane(Boolean leftLane);
+
+    double getDistanceFromBound();
+
+    void setDistanceFromBound(double distanceFromBound);
 }

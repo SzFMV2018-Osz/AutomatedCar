@@ -2,21 +2,18 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.CarPacket;
-
 import hu.oe.nik.szfmv.automatedcar.sensors.CameraSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
-
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
-
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
+import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Car;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-
 import java.util.List;
 
 public class AutomatedCar extends Car {
@@ -36,10 +33,7 @@ public class AutomatedCar extends Car {
     private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
 
-    private CameraSensor cameraSensor;
-
     private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
-
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -48,17 +42,17 @@ public class AutomatedCar extends Car {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public AutomatedCar(int x, int y, String imageFileName) {
+    public AutomatedCar(int x, int y, String imageFileName, List<WorldObject> worldObjects) {
         super(x, y, imageFileName);
 
-        setCarPacket();
+        virtualFunctionBus.worldObjects = worldObjects;
 
+        setCarPacket();
 
         sensorList = new ArrayList<>();
         createSensors();
 
         powertrainSystem = new PowertrainSystem(virtualFunctionBus);
-        cameraSensor = new CameraSensor(virtualFunctionBus);
 
         addUltrasonicSensors();
         virtualFunctionBus.ultrasonicSensors = ultrasonicSensors;
@@ -95,6 +89,7 @@ public class AutomatedCar extends Car {
         carPacket.setCarRotation(rotation);
         carPacket.setxPosition(x);
         carPacket.setyPosition(y);
+        carPacket.setPolygon(setPolygon(x, y, width, height));
         virtualFunctionBus.carPacket = carPacket;
     }
 
@@ -111,7 +106,7 @@ public class AutomatedCar extends Car {
      * Refresh the positions of the sensors
      */
     private void calculatePositionAndOrientation() {
-        double carSpeed = this.powertrainSystem.getSpeed();
+        double carSpeed = this.powertrainSystem.getSpeedWithDirection();
         double steeringAngle;
         double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
         double halfWheelBase = (double) height / 2;
@@ -207,6 +202,15 @@ public class AutomatedCar extends Car {
         ultrasonicSensors.add(new UltrasonicSensor(virtualFunctionBus, carHeight - RIGHTLEFT_VERTSHIFT,
                 RIGHTLEFT_HORSHIFT, LEFT_VIEWDIRECTION));
 
+    }
+
+    public Polygon setPolygon(int x, int y, int width, int height) {
+        Polygon polygon = new Polygon();
+        polygon.addPoint(x, y);
+        polygon.addPoint(x + width, y);
+        polygon.addPoint(x + width, y + height);
+        polygon.addPoint(x, y + height);
+        return polygon;
     }
 }
 
