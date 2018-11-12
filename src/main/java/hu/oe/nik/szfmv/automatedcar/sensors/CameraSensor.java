@@ -24,6 +24,8 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private List<WorldObject> worldObjects;
     private List<WorldObject> detectedObjects;
     private Road currentRoad;
+    private int angleOfTurning;
+    private Boolean leftTurning;
 
     /**
      * @param virtualFunctionBus This Bus help to communicate with other SystemComponent
@@ -167,7 +169,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
     /**
      * Look after road informations
      */
-    public void giveRoadInformations() {
+    private void giveRoadInformations() {
         if (onRoad()) {
             leftLane = whichLane();
             if (!currentRoad.getImageFileName().contains("parking")) {
@@ -188,7 +190,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
      * Which lane
      * @return boolean
      */
-    public boolean whichLane() {
+    private boolean whichLane() {
         boolean result = false;
 
         Point carPosition = new Point(virtualFunctionBus.carPacket.getxPosition(),
@@ -234,7 +236,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
     private boolean onRoad() {
         for (Road road : roads) {
-            if (!road.getImageFileName().contains("parking")) {
+            if (Road.roadPolyMap.get(road.getImageFileName()) != null) {
                 Polygon polygon = setPoints(Road.roadPolyMap.get(road.getImageFileName()),
                         new Point(road.getX(), road.getY()));
                 if (isPolygonIntersectPolygon(virtualFunctionBus.carPacket.getPolygon(), polygon)) {
@@ -334,10 +336,29 @@ public class CameraSensor extends SystemComponent implements ISensor {
         return polygon;
     }
 
+    private void getTurningInformations(){
+        if(Road.roadPolyMap.get(currentRoad.getImageFileName()) != null && !currentRoad.getImageFileName().contains("straight")){
+            String roadType = currentRoad.getImageFileName().substring(currentRoad.getImageFileName().lastIndexOf("_") + 1,
+                    currentRoad.getImageFileName().length()-4);
+            if(roadType.startsWith("6"))
+                angleOfTurning = 6;
+            else if(roadType.startsWith("4"))
+                angleOfTurning = 45;
+            else if(roadType.startsWith("9"))
+                angleOfTurning = 90;
+
+            if(roadType.endsWith("ft"))
+                leftTurning = true;
+            else
+                leftTurning = false;
+        }
+    }
+
     @Override
     public void loop() {
         detectedObjects = detectedObjects(worldObjects);
         giveRoadInformations();
+        getTurningInformations();
     }
 
 }
