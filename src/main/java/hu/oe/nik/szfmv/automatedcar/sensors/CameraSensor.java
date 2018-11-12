@@ -16,6 +16,9 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private static final int TRIANGLE_N = 3;
     private static final int VISUAL_RANGE = 80;
     private static final int ANGLE_OF_VIEW = 60;
+    private static final int DEGREE_90 = 90;
+    private static final int DEGREE_45 = 45;
+    private static final int DEGREE_6 = 6;
     private Point positionOnCar;
     private Boolean leftLane;
     private double distanceFromBorder;
@@ -42,7 +45,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
         roads = new ArrayList<>();
         this.worldObjects = virtualFunctionBus.worldObjects;
         leftLane = null;
-        degrees = new int[]{90, 45, 6};
+        degrees = new int[]{DEGREE_90, DEGREE_45, DEGREE_6};
     }
 
     public Point getPositionOnCar() {
@@ -338,15 +341,16 @@ public class CameraSensor extends SystemComponent implements ISensor {
         return polygon;
     }
 
-    private void getTurningInformations(){
-        if(Road.roadPolyMap.get(currentRoad.getImageFileName()) != null
+    private void getTurningInformations() {
+        if (Road.roadPolyMap.get(currentRoad.getImageFileName()) != null
                 && !currentRoad.getImageFileName().contains("straight")) {
             String roadType = currentRoad.getImageFileName()
                     .substring(currentRoad.getImageFileName().lastIndexOf("_"),
                     currentRoad.getImageFileName().lastIndexOf("."));
-            for(int degree : degrees){
-                if(roadType.contains(Integer.toString(degree)))
+            for (int degree : degrees) {
+                if (roadType.contains(Integer.toString(degree))) {
                     angleOfTurning = degree;
+                }
             }
 
             if (roadType.endsWith("ft")) {
