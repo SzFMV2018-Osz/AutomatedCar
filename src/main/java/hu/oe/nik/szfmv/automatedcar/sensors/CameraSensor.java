@@ -26,6 +26,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private Road currentRoad;
     private int angleOfTurning;
     private Boolean leftTurning;
+    private int[] degrees;
 
     /**
      * @param virtualFunctionBus This Bus help to communicate with other SystemComponent
@@ -41,6 +42,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
         roads = new ArrayList<>();
         this.worldObjects = virtualFunctionBus.worldObjects;
         leftLane = null;
+        degrees = new int[]{90, 45, 6};
     }
 
     public Point getPositionOnCar() {
@@ -337,20 +339,22 @@ public class CameraSensor extends SystemComponent implements ISensor {
     }
 
     private void getTurningInformations(){
-        if(Road.roadPolyMap.get(currentRoad.getImageFileName()) != null && !currentRoad.getImageFileName().contains("straight")){
-            String roadType = currentRoad.getImageFileName().substring(currentRoad.getImageFileName().lastIndexOf("_") + 1,
-                    currentRoad.getImageFileName().length()-4);
-            if(roadType.startsWith("6"))
-                angleOfTurning = 6;
-            else if(roadType.startsWith("4"))
-                angleOfTurning = 45;
-            else if(roadType.startsWith("9"))
-                angleOfTurning = 90;
+        if(Road.roadPolyMap.get(currentRoad.getImageFileName()) != null
+                && !currentRoad.getImageFileName().contains("straight")) {
+            String roadType = currentRoad.getImageFileName()
+                    .substring(currentRoad.getImageFileName().lastIndexOf("_"),
+                    currentRoad.getImageFileName().lastIndexOf("."));
+            for(int degree : degrees){
+                if(roadType.contains(Integer.toString(degree)))
+                    angleOfTurning = degree;
+            }
 
-            if(roadType.endsWith("ft"))
+            if (roadType.endsWith("ft")) {
                 leftTurning = true;
-            else
+            }
+            else {
                 leftTurning = false;
+            }
         }
     }
 
