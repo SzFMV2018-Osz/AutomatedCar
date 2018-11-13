@@ -101,7 +101,7 @@ public class CourseDisplay extends JPanel {
             }
 
         }
-        if (Main.Gameloop == false) {
+        if (Main.gameLoop == false) {
             g2d.drawImage(image, t, this);
         }
 
