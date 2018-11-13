@@ -16,7 +16,7 @@ import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
+
 import java.awt.event.WindowEvent;
 
 public class Main {
@@ -33,7 +33,6 @@ public class Main {
 
         // log the current debug mode in config
         LOGGER.info(ConfigProvider.provide().getBoolean("general.debug"));
-
         Physics physics = new Physics();
         // set timer for fps rate
         Timer t = new Timer();

@@ -11,23 +11,25 @@ public class PowertrainSystem extends SystemComponent {
     public static final int MAX_RPM = 6000;
     public static final int MIN_RPM = 750;
 
-    private static final double GEAR_RATIOS = 1.3;
+    private static final double GEAR_RATIOS = 1.1;
     private static final int PERCENTAGE_DIVISOR = 100;
-    private static final int SAMPLE_WEIGHT = 1000;
-    private static final double SAMPLE_RESISTANCE = 1.5;
-    private static final int ENGINE_BRAKE_TORQUE = 70;
-    private static final double MAX_BRAKE_DECELERATION = 25;
-    private static final double MAX_FORWARD_SPEED = 10;
+    private static final int SAMPLE_WEIGHT = 6000;
+    private static final double SAMPLE_RESISTANCE = 2;
+    private static final int ENGINE_BRAKE_TORQUE = 40;
+    private static final double MAX_BRAKE_DECELERATION = 6;
+    private static final double MAX_FORWARD_SPEED = 40;
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -10.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
     private double speed;
     private int currentRPM;
-    private int actualRPM;
+    private int updatedRPM;
+    private double speedDifference;
     private int gasPedal;
     private int brakePedal;
     private String gearState;
     private boolean isReverse;
+    private boolean isInGear;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
@@ -40,7 +42,7 @@ public class PowertrainSystem extends SystemComponent {
         this.virtualFunctionBus.powertrainPacket = new PowertrainPacket();
 
         this.currentRPM = MIN_RPM;
-        this.actualRPM = this.currentRPM;
+        this.updatedRPM = this.currentRPM;
     }
 
     @Override
@@ -49,13 +51,14 @@ public class PowertrainSystem extends SystemComponent {
         this.brakePedal = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
         this.gasPedal = this.virtualFunctionBus.samplePacket.getGaspedalPosition();
 
-        try {
-            this.actualRPM = calculateActualRpm(this.gasPedal);
-        } catch (NegativeNumberException e) {
-            e.printStackTrace();
-        }
 
         doPowerTrain();
+
+        this.currentRPM = this.updatedRPM;
+        this.updatedRPM = MIN_RPM;
+
+        this.virtualFunctionBus.powertrainPacket.setRpm(this.currentRPM);
+        this.virtualFunctionBus.powertrainPacket.setSpeed(getSpeed());
     }
 
     /**
@@ -64,30 +67,42 @@ public class PowertrainSystem extends SystemComponent {
      * @return Speed of the object.
      */
     public double getSpeed() {
-        return this.speed;
+        return Math.abs(speed);
+    }
+
+    /**
+     * Returns the speed of the object containing direction information (ie. negative means backwards).
+     * @return Speed of the object.
+     */
+    public double getSpeedWithDirection() {
+        return speed;
+    }
+
+    /**
+     * Stops the car immediately.
+     */
+    public void stopImmediately() {
+        this.speedDifference = 0;
+        this.speed = 0;
+        this.updatedRPM = MIN_RPM;
     }
 
     /**
      * Do Power Train
      */
     private void doPowerTrain() {
-        double speedDifference = calculateSpeedDifference();
-
-        // gearState : R(1), P(2), N(3), D(4)
         switch (gearState) {
             case "R":
-                this.isReverse = true;
-                reverse(speedDifference);
+                reverse();
                 break;
             case "P":
                 park();
                 break;
             case "N":
-                noGear(speedDifference);
+                noGear();
                 break;
             case "D":
-                this.isReverse = false;
-                drive(speedDifference);
+                drive();
                 break;
             default:
                 break;
@@ -98,150 +113,120 @@ public class PowertrainSystem extends SystemComponent {
      * Set speed when gearstate is P - park
      */
     private void park() {
-        stopImmediately();
+        this.updatedRPM = MIN_RPM;
+        this.isInGear = false;
+        calculateSpeedDifference();
+
+        updateSpeed();
     }
 
     /**
      * Set speed when gearstate is D - drive
-     *
-     * @param acceleration acceleration
      */
-    private void drive(double acceleration) {
-        if (this.brakePedal == 0 && this.gasPedal > 0) {
-            if (acceleration > 0 && this.speed < MAX_FORWARD_SPEED ||
-                    acceleration < 0 && this.speed > MIN_FORWARD_SPEED) {
-                updateChanges(acceleration);
-            }
-        } else if (this.gasPedal == 0) {
-            if (this.speed > 0) {
-                updateChanges(acceleration);
-            }
+    private void drive() {
+        this.isReverse = false;
+        this.isInGear = true;
 
-            if (this.speed < 0) {
-                stopImmediately();
-            }
+        try {
+            this.updatedRPM = calculateRpm(this.gasPedal);
+        } catch (NegativeNumberException e) {
+            e.printStackTrace();
+        }
+        
+        calculateSpeedDifference();
+        updateSpeed();
+
+        if (this.gasPedal == 0 && this.speed < MIN_FORWARD_SPEED) {
+            stopImmediately();
+        }
+    }
+
+
+    private void noGear() {
+        this.updatedRPM = MIN_RPM;
+        this.isInGear = false;
+        calculateSpeedDifference();
+
+        updateSpeed();
+    }
+
+
+    private void reverse() {
+        this.isReverse = true;
+        this.isInGear = true;
+
+        try {
+            this.updatedRPM = calculateRpm(this.gasPedal);
+        } catch (NegativeNumberException e) {
+            e.printStackTrace();
+        }
+        
+        calculateSpeedDifference();
+        updateSpeed();
+
+        if (this.gasPedal == 0 && this.speed < MIN_REVERSE_SPEED) {
+            stopImmediately();
         }
     }
 
     /**
-     * Set speed when gearstate is N - no gear
-     *
-     * @param acceleration acceleration
+     * Calculate the difference between the previous and the increased speed.
      */
-    private void noGear(double acceleration) {
-        if (brakePedal > 0) {
-            if (Math.abs(speed) > 0) {
-                updateChanges(acceleration);
-            }
-            if (this.speed < 0) {
-                stopImmediately();
-            }
-        }
-    }
+    private void calculateSpeedDifference() {
+        double isReverseModifier = this.isReverse ? -1 : 1;
 
-    /**
-     * Set speed when gearstate is R - reverse
-     *
-     * @param speedDelta Speed delta.
-     */
-    private void reverse(double speedDelta) {
-        if (this.brakePedal == 0 && this.gasPedal > 0) {
-            if (speedDelta < 0 && (this.speed > MAX_REVERSE_SPEED) ||
-                    speedDelta > 0 && this.speed < MIN_REVERSE_SPEED) {
-                updateChanges(speedDelta);
-            }
-        } else if (this.gasPedal == 0) {
-            if (this.speed < 0) {
-                updateChanges(speedDelta);
-            }
-
-            if (this.speed > 0) {
-                stopImmediately();
-            }
-        }
-    }
-
-    /**
-     * Calculate the actual rpm of the engine
-     *
-     * @param gasPedalPosition position of the gaspedal
-     * @return the actual rpm
-     * @throws NegativeNumberException the input value must be a non-negative number
-     */
-    public int calculateActualRpm(int gasPedalPosition) throws NegativeNumberException {
-        if (gasPedalPosition < 0) {
-            throw new NegativeNumberException("The position of the gas pedal must be a non-negative number");
-        }
-        if (gasPedalPosition == 0) {
-            int actual = MIN_RPM;
-            this.virtualFunctionBus.powertrainPacket.setRpm(actual);
-            return actual;
-        } else {
-            if (speed != 0) {
-                double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
-                int actual = (int) ((gasPedalPosition * multiplier) + this.currentRPM);
-                this.virtualFunctionBus.powertrainPacket.setRpm(actual);
-                return actual;
-            } else {
-                double multiplier = ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR);
-                int actual = (int) ((gasPedalPosition * multiplier));
-                this.virtualFunctionBus.powertrainPacket.setRpm(actual);
-                return actual;
-            }
-        }
-    }
-
-    /**
-     * Calculate the difference between the actual and the increased speed
-     *
-     * @return the speed delta
-     */
-    private double calculateSpeedDifference() {
-        double speedDelta = 0;
-
-        double isReverseDouble = isReverse ? -1 : 1;
-
-        if (this.actualRPM > this.currentRPM) {
-            // Acceleration.
-            speedDelta = isReverseDouble * (this.actualRPM * GEAR_RATIOS / (SAMPLE_WEIGHT * SAMPLE_RESISTANCE));
-        } else if (this.brakePedal > 0) {
+        if (this.brakePedal > 0) {
             // Braking.
-            speedDelta = -1 * isReverseDouble *
-                    ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
-        } else if (this.speed != 0) {
+            this.speedDifference = -1 * isReverseModifier * 
+                ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
+        } else if (this.isInGear && this.gasPedal > 0) {
+            // Acceleration.
+            this.speedDifference = isReverseModifier * this.updatedRPM * GEAR_RATIOS / 
+                (SAMPLE_WEIGHT * SAMPLE_RESISTANCE);
+        } else {
             // Slowing down.
-            speedDelta = -1 * isReverseDouble * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE /
-                    (double) PERCENTAGE_DIVISOR;
+            this.speedDifference =  -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
+            (double) PERCENTAGE_DIVISOR;
         }
-
-        return speedDelta;
     }
 
     /**
      * Change the current speed by the speed delta
-     *
-     * @param speedDelta The difference between the old and the new speed
      */
-    private void updateChanges(double speedDelta) {
-        this.speed += speedDelta;
-        this.currentRPM = this.actualRPM;
-
-        this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
-    }
-
-    /**
-     * Stops the car immediately.
-     */
-    public void stopImmediately() {
-        this.speed = 0;
-        if (actualRPM <= MAX_RPM) {
-            this.currentRPM = this.actualRPM;
-        } else {
-            this.currentRPM = MAX_RPM;
+    private void updateSpeed() {
+        double updatedSpeed = this.speed + this.speedDifference;
+        if (this.isReverse && (updatedSpeed >= MAX_REVERSE_SPEED) || 
+            !this.isReverse && (updatedSpeed <= MAX_FORWARD_SPEED)) {
+            this.speed += this.speedDifference;
         }
 
-        this.virtualFunctionBus.powertrainPacket.setSpeed(this.speed);
+        if (!this.isReverse && updatedSpeed <= 0 || this.isReverse && updatedSpeed >= 0) {
+            this.speed = 0;
+        }
     }
 
+    //#region Helpers
+
+    /**
+     * Calculate the RPM of the engine.
+     *
+     * @param gasPedalPosition Position of the gaspedal
+     * @return The calculated RPM
+     * @throws NegativeNumberException the input value must be a non-negative number
+     */
+    public int calculateRpm(int gasPedalPosition) throws NegativeNumberException {
+        if (gasPedalPosition < 0) {
+            throw new NegativeNumberException("The position of the gas pedal must be a non-negative number");
+        }
+
+        int updatedRPM = MIN_RPM;
+        if (gasPedalPosition > 0) {
+            updatedRPM = (int) ((gasPedalPosition * ((double) (MAX_RPM - MIN_RPM) / PERCENTAGE_DIVISOR)) + MIN_RPM);
+        }
+
+        return updatedRPM;
+    }
+
+    //#endregion
 }
 
