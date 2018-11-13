@@ -30,7 +30,7 @@ public class AutomatedCar extends Car {
 
     private CameraSensor cameraSensor;
 
-    private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<UltrasonicSensor>();
+    private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
 
 
     /**
