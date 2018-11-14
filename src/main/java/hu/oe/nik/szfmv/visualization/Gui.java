@@ -60,17 +60,25 @@ public class Gui extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
-                if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
-                    dashboard.wheelTurning.setIsTurning(false);
-                } else if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+                int keyCode = e.getKeyCode();
+                
+                // Release turning and pedal pressing so the back positioning can run.
+                if (keyCode == KeyEvent.VK_RIGHT) {
                     dashboard.wheelTurning.setIsTurning(false);
                 }
-
-                if (keysPressed.contains(e.getKeyCode())) {
-                    keysPressed.remove(keysPressed.indexOf(e.getKeyCode()));
+                if (keyCode == KeyEvent.VK_LEFT) {
+                    dashboard.wheelTurning.setIsTurning(false);
+                }       
+                if (keyCode == KeyEvent.VK_UP) {
+                    dashboard.gasPedal.setIsPressed(false);
+                }
+                if (keyCode == KeyEvent.VK_DOWN) {
+                    dashboard.breakPedal.setIsPressed(false);
                 }
 
+                if (keysPressed.contains(keyCode)) {
+                    keysPressed.remove(keysPressed.indexOf(keyCode));
+                }
             }
 
             @Override

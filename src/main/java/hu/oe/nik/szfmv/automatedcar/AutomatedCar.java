@@ -100,7 +100,7 @@ public class AutomatedCar extends Car {
      * Refresh the positions of the sensors
      */
     private void calculatePositionAndOrientation() {
-        double carSpeed = this.powertrainSystem.getSpeed();
+        double carSpeed = this.powertrainSystem.getSpeedWithDirection();
         double steeringAngle = 0;
         double carHeading = Math.toRadians(THREE_QUARTER_CIRCLE + rotation);
         double halfWheelBase = (double) height / 2;

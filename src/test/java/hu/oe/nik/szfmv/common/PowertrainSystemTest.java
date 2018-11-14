@@ -20,7 +20,7 @@ public class PowertrainSystemTest {
         int gaspedalPosition = 0;
         int result = PowertrainSystem.MIN_RPM;
 
-        int valueOfTestedMethod = ps.calculateActualRpm(gaspedalPosition);
+        int valueOfTestedMethod = ps.calculateRpm(gaspedalPosition);
 
         assertEquals(result, valueOfTestedMethod);
     }
@@ -36,7 +36,7 @@ public class PowertrainSystemTest {
         int result = (int) (gaspedalPosition * ((double) (PowertrainSystem.MAX_RPM - PowertrainSystem.MIN_RPM) / 100))
                 + PowertrainSystem.MIN_RPM;
 
-        int valueOfTestedMethod = ps.calculateActualRpm(gaspedalPosition);
+        int valueOfTestedMethod = ps.calculateRpm(gaspedalPosition);
 
         assertEquals(result, valueOfTestedMethod);
     }
@@ -48,6 +48,6 @@ public class PowertrainSystemTest {
 
         int wrongInput = -1;
 
-        int valueOfTestedMethod = ps.calculateActualRpm(wrongInput);
+        int valueOfTestedMethod = ps.calculateRpm(wrongInput);
     }
 }
