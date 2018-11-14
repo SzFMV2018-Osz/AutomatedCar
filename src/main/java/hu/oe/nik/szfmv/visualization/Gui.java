@@ -55,6 +55,7 @@ public class Gui extends JFrame {
             @Override
             public void keyTyped(KeyEvent e) {
 
+
             }
 
             @Override
@@ -129,6 +130,14 @@ public class Gui extends JFrame {
             dashboard.autoTr.ShiftDown();
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_PAGE_DOWN));
         }
+
+        if (keysPressed.contains(KeyEvent.VK_X)) {
+            this.courseDisplay.drawTriangles=!this.courseDisplay.drawTriangles;
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_X));
+        }
+
+
+
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
