@@ -184,7 +184,9 @@ public class CourseDisplay extends JPanel {
             g.drawPolygon(sensor.getPoly());
             g.setColor(Color.RED);
             if (closest != null) {
-                g.drawRect(closest.getX(), closest.getY(), closest.getWidth(), closest.getHeight());
+                closest.rotateImage(camera);
+                g.setTransform(closest.getTransformation());
+                g.drawRect(0,0, closest.getWidth(), closest.getHeight());
             }
         }
     }

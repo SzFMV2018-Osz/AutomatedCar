@@ -119,7 +119,7 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     public void loop() {
 
 
-        sensorRotation = 180 - (virtualFunctionBus.carPacket.getCarRotation() % 360);
+        sensorRotation = 180 - Math.abs(virtualFunctionBus.carPacket.getCarRotation() % 360);
         SensorPosCarToGlobal(this.vertshift, this.horizshift, sensorRotation);
         poly = locateSensorTriangle(sensorPositon, visualRange, angleOfView, sensorRotation + sensorViewDirection);
 

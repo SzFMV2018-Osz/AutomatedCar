@@ -56,6 +56,7 @@ public class Gui extends JFrame {
             @Override
             public void keyTyped(KeyEvent e) {
 
+
             }
 
             @Override
@@ -112,6 +113,7 @@ public class Gui extends JFrame {
         }
 
         oncePressedKeys();
+
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {

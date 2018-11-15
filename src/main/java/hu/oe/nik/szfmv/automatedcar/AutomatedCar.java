@@ -122,7 +122,7 @@ public class AutomatedCar extends Car {
 
         virtualFunctionBus.carPacket.setxPosition(this.getX());
         virtualFunctionBus.carPacket.setyPosition(this.getY());
-        virtualFunctionBus.carPacket.setCarRotation(this.rotation);
+        virtualFunctionBus.carPacket.setCarRotation(this.getRotation());
     }
 
     /**
