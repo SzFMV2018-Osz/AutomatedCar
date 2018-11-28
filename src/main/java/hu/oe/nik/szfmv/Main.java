@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.Physics;
 import hu.oe.nik.szfmv.environment.World;
@@ -76,6 +77,7 @@ public class Main {
         // create gui
         Gui gui = new Gui();
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
+        car.setGui(gui);
 
         // create camera
         CourseDisplay display = gui.getCourseDisplay();

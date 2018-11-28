@@ -7,9 +7,11 @@ import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Car;
+import hu.oe.nik.szfmv.visualization.Gui;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -32,6 +34,7 @@ public class AutomatedCar extends Car {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
+    private ParkingPilot parkingPilot;
 
     private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
 
@@ -58,6 +61,9 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.ultrasonicSensors = ultrasonicSensors;
 
         new Driver(virtualFunctionBus);
+
+        parkingPilot = new ParkingPilot(virtualFunctionBus);
+
     }
 
 
@@ -211,6 +217,11 @@ public class AutomatedCar extends Car {
         polygon.addPoint(x + width, y + height);
         polygon.addPoint(x, y + height);
         return polygon;
+    }
+
+    public void setGui(Gui gui)
+    {
+        parkingPilot.setGui(gui);
     }
 }
 

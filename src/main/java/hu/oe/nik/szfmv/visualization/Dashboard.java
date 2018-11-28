@@ -33,6 +33,9 @@ public class Dashboard extends JPanel {
     private JLabel debugLabel;
     private JLabel gearLabel;
     private JLabel carPositionLabel;
+    private JLabel parkingPilotInfoLabel;
+
+    private JButton parkingPilotButton;
 
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
@@ -109,6 +112,11 @@ public class Dashboard extends JPanel {
 
         autoTr = new AutoTransmission();
         index = new Index();
+
+        parkingPilotInfoLabel = addLabel(12,580, "<html>Parking pilot is activating when you <br/>stop next to the parking table!<br/></html>",20);
+
+        parkingPilotButton = addButton(12,620, "Parking Pilot", 100);
+        parkingPilotButton.setEnabled(false);
 
         gearLabel = addLabel((width / 2) - 30, 155, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
@@ -198,6 +206,18 @@ public class Dashboard extends JPanel {
         return label;
     }
 
+    private JButton addButton(int offsetX, int offsetY, String defaultText, int plusSize) {
+        JButton button = new JButton(defaultText);
+        Insets insets = getInsets();
+
+        Dimension buttonSize = button.getPreferredSize();
+        button.setBounds(insets.left + offsetX, insets.top + offsetY, buttonSize.width + plusSize, buttonSize.height);
+
+        add(button);
+
+        return button;
+    }
+
     private void setBreakProgress(int value) {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             breakProgressBar.setValue(value);
@@ -262,6 +282,14 @@ public class Dashboard extends JPanel {
 
     private void setWheel(int value) {
         steeringWheel.setText("steering wheel: " + value);
+    }
+
+    public void setPPButtonVisibility()
+    {
+        if (!this.parkingPilotButton.isEnabled())
+        {
+            this.parkingPilotButton.setEnabled(true);
+        }
     }
 
 }
