@@ -249,6 +249,8 @@ public class Dashboard extends JPanel {
 
     }
 
+    public Index getIndex(){return index;}
+
     private void setTurnSignal(boolean left, boolean right) {
         if (left && leftTurnSignal.color != Color.GREEN) {
             leftTurnSignal.setColor(Color.GREEN);

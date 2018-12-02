@@ -43,8 +43,11 @@ public class Main {
         // create the world
         World w = XMLReader.worldMaker();
 
+        // create gui
+        Gui gui = new Gui();
+
         // create an automated car
-        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects());
+        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects(), gui.getDashboard());
         //car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
         Person person = new Person(1500,500,"man.png");
     //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
@@ -74,8 +77,7 @@ public class Main {
 
         // person.setRoute(100,750,8,false);
 
-        // create gui
-        Gui gui = new Gui();
+
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
         car.setGui(gui);
 
