@@ -145,6 +145,12 @@ public class Gui extends JFrame {
             courseDisplay.setShowRadarSensor(!courseDisplay.getShowRadarSensor());
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_R));
         }
+
+        if (keysPressed.contains(KeyEvent.VK_X)) {
+            courseDisplay.drawTriangles=!courseDisplay.drawTriangles;
+            //courseDisplay.setShowRadarSensor(!courseDisplay.getShowRadarSensor());
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_X));
+        }
     }
 
     private void moveCar() {

@@ -30,7 +30,7 @@ public class CourseDisplay extends JPanel {
     private static final int ALPHA = 128;
 
     public Camera camera;
-    private Boolean drawTriangles;
+    public Boolean drawTriangles;
     private Boolean showRadarSensor;
 
     private AffineTransform t = new AffineTransform();
