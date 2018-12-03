@@ -148,7 +148,6 @@ public class Gui extends JFrame {
 
         if (keysPressed.contains(KeyEvent.VK_X)) {
             courseDisplay.drawTriangles=!courseDisplay.drawTriangles;
-            //courseDisplay.setShowRadarSensor(!courseDisplay.getShowRadarSensor());
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_X));
         }
     }
