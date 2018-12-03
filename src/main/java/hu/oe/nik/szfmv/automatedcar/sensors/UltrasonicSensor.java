@@ -26,6 +26,17 @@ public class UltrasonicSensor extends SystemComponent implements ISensor {
     double sensorRotation;
     double sensorViewDirection;
 
+    public WorldObject getClosest() {
+        return closest;
+    }
+
+    public void setClosest(WorldObject closest) {
+        this.closest = closest;
+    }
+
+    WorldObject closest;
+
+
     public void setSensorPositon(Point sensorPositon) {
         this.poly.translate(sensorPositon.x, sensorPositon.y);
     }

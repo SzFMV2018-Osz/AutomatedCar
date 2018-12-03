@@ -30,7 +30,7 @@ public class CourseDisplay extends JPanel {
     private static final int ALPHA = 128;
 
     public Camera camera;
-    private Boolean drawTriangles;
+    public Boolean drawTriangles;
     private Boolean showRadarSensor;
 
     private AffineTransform t = new AffineTransform();
@@ -177,7 +177,8 @@ public class CourseDisplay extends JPanel {
 
         for (UltrasonicSensor sensor : parent.getVirtualFunctionBus().ultrasonicSensors
         ) {
-            WorldObject closest = sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects()));
+            sensor.setClosest(sensor.closestObject(sensor.detectedObjects(world.getColladibleObjects())));
+            WorldObject closest=sensor.getClosest();
 
             g.setColor(Color.GREEN);
             g.setTransform(transformTheImageToCorrectPos);
