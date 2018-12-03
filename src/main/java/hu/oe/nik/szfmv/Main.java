@@ -43,14 +43,14 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects());
+        //car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
+        Person person = new Person(1500,500,"man.png");
+    //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
+        NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
+       // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
+       // car2.setSpeed(10);
         Car c = new Car(1500, 1500, "car_2_red.png");
-        Person person = new Person(1500, 500, "man.png");
-        //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
-        NonPlayableCar car1 = new NonPlayableCar(343, 1500, "car_2_red.png");
-        // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
-        // car2.setSpeed(10);
-
         // add car to the world
 
 
@@ -86,12 +86,6 @@ public class Main {
         t.initialize();
         while (true) {
             try {
-
-               
-              
-              
-              
-
                 if (Gameloop) {
   //gui.handleKeysPressed(); //is it still necessary
                     gui.inputUpdate();
