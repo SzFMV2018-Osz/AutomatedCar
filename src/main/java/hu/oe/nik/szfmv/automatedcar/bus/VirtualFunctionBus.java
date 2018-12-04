@@ -5,6 +5,7 @@ import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.ReadOnlyPowertrainPac
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.ReadOnlySamplePacket;
 
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.ReadOnlySensorPacket;
+import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
@@ -28,8 +29,9 @@ public class VirtualFunctionBus {
 
     public List<WorldObject> worldObjects = new ArrayList<>();
 
-    public ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<UltrasonicSensor>();
+    public ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
 
+    public RadarSensor radarSensor;
 
     private List<SystemComponent> components = new ArrayList<>();
 

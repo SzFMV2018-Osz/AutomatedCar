@@ -1,8 +1,10 @@
 package hu.oe.nik.szfmv.automatedcar.sensors;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.SensorPacket;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.environment.WorldObject;
+import hu.oe.nik.szfmv.model.Classes.Road;
 import hu.oe.nik.szfmv.model.Classes.RoadSign;
 
 import java.awt.*;
@@ -14,11 +16,20 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private static final int TRIANGLE_N = 3;
     private static final int VISUAL_RANGE = 80;
     private static final int ANGLE_OF_VIEW = 60;
+    private static final int DEGREE_90 = 90;
+    private static final int DEGREE_45 = 45;
+    private static final int DEGREE_6 = 6;
     private Point positionOnCar;
-    private Polygon radarTriangle;
-    private boolean rightLane;
-    private int distanceFromBorder;
+    private Boolean leftLane;
+    private double distanceFromBorder;
     private Polygon triangle;
+    private List<Road> roads;
+    private List<WorldObject> worldObjects;
+    private List<WorldObject> detectedObjects;
+    private Road currentRoad;
+    private int angleOfTurning;
+    private Boolean leftTurning;
+    private int[] degrees;
 
     /**
      * @param virtualFunctionBus This Bus help to communicate with other SystemComponent
@@ -27,10 +38,14 @@ public class CameraSensor extends SystemComponent implements ISensor {
     public CameraSensor(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
-
-        positionOnCar = new Point();
+        this.virtualFunctionBus.sensorPacket = new SensorPacket();
 
         triangle = new Polygon();
+        positionOnCar = new Point();
+        roads = new ArrayList<>();
+        this.worldObjects = virtualFunctionBus.worldObjects;
+        leftLane = null;
+        degrees = new int[]{DEGREE_90, DEGREE_45, DEGREE_6};
     }
 
     public Point getPositionOnCar() {
@@ -77,23 +92,26 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
         Point newPositon = new Point(newSensorPosition.x + positionOnCar.x,
                 newSensorPosition.y + positionOnCar.y);
-
         newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
-        radarTriangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
+        triangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
     }
 
     @Override
     public List<WorldObject> detectedObjects(List<WorldObject> worldObjects) {
         List<WorldObject> list = new ArrayList<>();
+        roads = new ArrayList<>();
         for (WorldObject worldObject : worldObjects) {
             Rectangle rectangle = new Rectangle(worldObject.getX(), worldObject.getY(),
                     worldObject.getWidth(), worldObject.getHeight());
             if (triangle.intersects(rectangle)) {
                 list.add(worldObject);
+                if (worldObject instanceof Road) {
+                    roads.add((Road)worldObject);
+                }
             }
         }
 
-        this.virtualFunctionBus.sensorPacket.setDetectedObjects(list);
+        this.virtualFunctionBus.sensorPacket.setCameraDetectedObjects(list);
 
         return list;
     }
@@ -105,7 +123,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private List<WorldObject> getDetectedRoadSigns() {
         List<WorldObject> detectedRoadSigns = new ArrayList<>();
 
-        for (WorldObject worldObject : this.virtualFunctionBus.sensorPacket.getDetectedObjects()) {
+        for (WorldObject worldObject : this.virtualFunctionBus.sensorPacket.getCameraDetectedObjects()) {
             if (worldObject.getClass().equals(RoadSign.class)) {
                 detectedRoadSigns.add(worldObject);
             }
@@ -153,8 +171,202 @@ public class CameraSensor extends SystemComponent implements ISensor {
                 + Math.pow(virtualFunctionBus.carPacket.getyPosition() - worldObject.getY(), 2));
     }
 
+    /**
+     * Look after road informations
+     */
+    private void giveRoadInformations() {
+        if (onRoad()) {
+            leftLane = whichLane();
+            if (!currentRoad.getImageFileName().contains("parking")) {
+                if (Road.roadPolyMap.containsKey(currentRoad.getImageFileName())) {
+                    distanceFromBorder = distanceFromPoly(new Point(virtualFunctionBus.carPacket.getxPosition(),
+                                    virtualFunctionBus.carPacket.getyPosition()),
+                            Road.roadPolyMap.get(currentRoad.getImageFileName()),
+                            new Point(currentRoad.getX(), currentRoad.getY()));
+                }
+            }
+            this.virtualFunctionBus.sensorPacket.setIfWeAreInLeftLane(leftLane);
+            this.virtualFunctionBus.sensorPacket.setDistanceFromBound(distanceFromBorder);
+
+        }
+    }
+
+    /**
+     * Which lane
+     * @return boolean
+     */
+    private boolean whichLane() {
+        boolean result = false;
+
+        Point carPosition = new Point(virtualFunctionBus.carPacket.getxPosition(),
+                virtualFunctionBus.carPacket.getyPosition());
+
+        Polygon polygon = setPoints(Road.roadPolyMap.get(currentRoad.getImageFileName()),
+                new Point(currentRoad.getX(), currentRoad.getY()));
+
+        if (currentRoad.getImageFileName().equals("road_2lane_straight.png")) {
+            if (carPosition.x < polygon.xpoints[1] / 2) {
+                result = true;
+            }
+        } else {
+            int index = getIndexOfClosestPoint(polygon, carPosition);
+
+            Point half = new Point((polygon.xpoints[index] + polygon.xpoints[polygon.npoints - index - 1]) / 2,
+                    (polygon.ypoints[index] + polygon.ypoints[polygon.npoints - index - 1]) / 2);
+
+            if (carPosition.x < half.x && carPosition.y < half.y) {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+    private int getIndexOfClosestPoint(Polygon polygon, Point carPosition) {
+        int index = 0;
+
+        for (int i = 0; i < polygon.npoints / 2; i++) {
+            Point oldPoint = new Point(polygon.xpoints[i], polygon.ypoints[i]);
+
+            Point closestPoint = closestPointOnLine(carPosition, new Point(polygon.xpoints[i], polygon.ypoints[i]),
+                    new Point(polygon.xpoints[i + 1], polygon.ypoints[i + 1]));
+
+            if (oldPoint.equals(closestPoint)) {
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private boolean onRoad() {
+        for (Road road : roads) {
+            if (Road.roadPolyMap.get(road.getImageFileName()) != null) {
+                Polygon polygon = setPoints(Road.roadPolyMap.get(road.getImageFileName()),
+                        new Point(road.getX(), road.getY()));
+                if (isPolygonIntersectPolygon(virtualFunctionBus.carPacket.getPolygon(), polygon)) {
+                    currentRoad = road;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isPolygonIntersectPolygon(Polygon p1, Polygon p2) {
+        boolean result = false;
+
+        for (int i = 0; i < p2.npoints; i++) {
+            Point p = new Point(p2.xpoints[i], p2.ypoints[i]);
+
+            if (p1.contains(p)) {
+                result = true;
+                break;
+            }
+        }
+
+        if (!result) {
+            for (int i = 0; i < p1.npoints; i++) {
+                Point p = new Point(p1.xpoints[i], p1.ypoints[i]);
+
+                if (p2.contains(p)) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private double distanceFromLine(Point point, Point line1, Point line2) {
+
+        Point closestPointOnLine = closestPointOnLine(point, line1, line2);
+
+        Point d = new Point(point.x - closestPointOnLine.x, point.y - closestPointOnLine.y);
+        return Math.sqrt(d.x * d.x + d.y * d.y);
+    }
+
+    private Point closestPointOnLine(Point point, Point line1, Point line2) {
+        float xDelta = line2.x - line1.x;
+        float yDelta = line2.y - line1.y;
+
+        float u = ((point.x - line1.x) * xDelta + (point.y - line1.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
+
+        Point closestPointOnLine;
+        if (u < 0) {
+            closestPointOnLine = line1;
+        } else if (u > 1) {
+            closestPointOnLine = line2;
+        } else {
+            closestPointOnLine = new Point((int)(line1.getX() + u * xDelta), (int)(line1.getY() + u * yDelta));
+        }
+
+        return closestPointOnLine;
+    }
+
+    private double distanceFromPoly(Point point, Polygon polygon, Point polygonPosition) {
+        double result = Double.MAX_VALUE;
+
+        Polygon temp = setPoints(polygon, polygonPosition);
+
+        for (int i = 0; i < temp.npoints; i++) {
+            int previousIndex = i - 1;
+            if (previousIndex < 0) {
+                previousIndex = temp.npoints - 1;
+            }
+
+            Point currentPoint = new Point(temp.xpoints[i], temp.ypoints[i]);
+            Point previousPoint = new Point(temp.xpoints[previousIndex], temp.ypoints[previousIndex]);
+
+            double segmentDistance = distanceFromLine(point, previousPoint, currentPoint);
+
+            if (segmentDistance < result) {
+                result = segmentDistance;
+            }
+        }
+
+        return result;
+    }
+
+    private Polygon setPoints(Polygon polygon, Point point) {
+        //set x coordinates
+        for (int i = 0; i < polygon.npoints; i++) {
+            polygon.xpoints[i] += point.getX();
+        }
+        //set y coordinates
+        for (int i = 0; i < polygon.npoints; i++) {
+            polygon.ypoints[i] += point.getY();
+        }
+        return polygon;
+    }
+
+    private void getTurningInformations() {
+        if (Road.roadPolyMap.get(currentRoad.getImageFileName()) != null
+                && !currentRoad.getImageFileName().contains("straight")) {
+            String roadType = currentRoad.getImageFileName()
+                    .substring(currentRoad.getImageFileName().lastIndexOf("_"),
+                    currentRoad.getImageFileName().lastIndexOf("."));
+            for (int degree : degrees) {
+                if (roadType.contains(Integer.toString(degree))) {
+                    angleOfTurning = degree;
+                }
+            }
+
+            if (roadType.endsWith("ft")) {
+                leftTurning = true;
+            }
+            else {
+                leftTurning = false;
+            }
+        }
+    }
+
     @Override
     public void loop() {
+        detectedObjects = detectedObjects(worldObjects);
+        giveRoadInformations();
+        getTurningInformations();
     }
 
 }

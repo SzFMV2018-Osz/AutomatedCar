@@ -16,9 +16,9 @@ import hu.oe.nik.szfmv.visualization.Timer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
     public static boolean gameLoop = true;
@@ -42,14 +42,14 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects());
+        //car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
+        Person person = new Person(1500,500,"man.png");
+    //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
+        NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
+       // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
+       // car2.setSpeed(10);
         Car c = new Car(1500, 1500, "car_2_red.png");
-        Person person = new Person(1500, 500, "man.png");
-        //NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
-        NonPlayableCar car1 = new NonPlayableCar(343, 1500, "car_2_red.png");
-        // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
-        // car2.setSpeed(10);
-
         // add car to the world
 
 
@@ -57,10 +57,11 @@ public class Main {
         w.addObjectToWorld(car1);
 
         car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
-        //  w.addObjectToWorld(car2);
+      //  w.addObjectToWorld(car2);
 
         w.addObjectToWorld(c);
         w.addObjectToWorld(car);
+
 
 
         //  w.addObjectToWorld(car2);
@@ -77,6 +78,8 @@ public class Main {
         for (WorldObject object : w.getWorldObjects()) {
             object.rotateImage(display.camera);
         }
+
+        gui.addKeyListener(new Keychecker(display.camera));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
         gui.addWindowListener(new java.awt.event.WindowAdapter(){
@@ -92,9 +95,13 @@ public class Main {
         while (!isClosing) {
             try {
 
+               
+              
+              
+              
 
                 if (gameLoop) {
-                    //gui.handleKeysPressed(); //is it still necessary
+  //gui.handleKeysPressed(); //is it still necessary
                     gui.inputUpdate();
                     car.drive();
                     if(person.getPhysicsModel().getDamage() == 0) {
@@ -119,4 +126,53 @@ public class Main {
 
     }
 
+}
+
+/**
+ * A key checker for camera debug porpuse
+ */
+class Keychecker extends KeyAdapter {
+    private final int movespeed = 10;
+    private Camera camera;
+
+    /**
+     * Init the key checker
+     *
+     * @param c the camera object to move the camera
+     */
+    public Keychecker(Camera c) {
+        this.camera = c;
+
+
+    }
+
+    /**
+     * Moving the camera
+     *
+     * @param event the key event tringered by pushing a button
+     */
+    @Override
+    public void keyPressed(KeyEvent event) {
+
+        if (event.getKeyChar() == 'a') {
+            camera.moveCamera(movespeed, 0);
+        }
+        if (event.getKeyChar() == 'd') {
+            camera.moveCamera(-movespeed, 0);
+        }
+        if (event.getKeyChar() == 'w') {
+            camera.moveCamera(0, movespeed);
+        }
+        if (event.getKeyChar() == 's') {
+            camera.moveCamera(0, -movespeed);
+        }
+        if (event.getKeyChar() == '+') {
+            camera.setScale(camera.getScale() + 0.1);
+        }
+        if (event.getKeyChar() == '-') {
+            camera.setScale(camera.getScale() - 0.1);
+        }
+
+
+    }
 }
