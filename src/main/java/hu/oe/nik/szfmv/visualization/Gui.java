@@ -147,7 +147,7 @@ public class Gui extends JFrame {
         }
 
         if (keysPressed.contains(KeyEvent.VK_X)) {
-            courseDisplay.drawTriangles=!courseDisplay.drawTriangles;
+            courseDisplay.showUltrasonicSensor=!courseDisplay.showUltrasonicSensor;
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_X));
         }
     }
