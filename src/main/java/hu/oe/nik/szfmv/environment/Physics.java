@@ -93,19 +93,22 @@ public class Physics {
      * @param camera camera az obijektum igazításhoz
      */
     private void staticColide(WorldObject a, Camera camera, int dmg) {
+        ((AutomatedCar) a).stopImmediately();
         if (dmg == 0) {
+            double deltaaX = a.getX() - a.lastX;
+            double deltaaY = a.getY() - a.lastY;
+            double deltaaSpeed = Math.sqrt(deltaaX * deltaaX + deltaaY * deltaaY);
+            a.setLastY(a.getLastY() - (int)deltaaY);
+            a.setLastX(a.getLastX() - (int)deltaaX);
             a.setX(a.getLastX());
             ((AutomatedCar) a).getVirtualFunctionBus().carPacket.setxPosition(a.getLastX());
             a.setY(a.getLastY());
             ((AutomatedCar) a).getVirtualFunctionBus().carPacket.setyPosition(a.getLastY());
-            double deltaaX = a.getX() - a.lastX;
-            double deltaaY = a.getY() - a.lastY;
-            double deltaaSpeed = Math.sqrt(deltaaX * deltaaX + deltaaY * deltaaY);
-            dmg = (int) deltaaSpeed * 4;
+            dmg = (int) deltaaSpeed * 2;
         }
         a.physicsModel.addDamage(dmg);
         System.out.println(a.physicsModel.getDamage());
-        ((AutomatedCar) a).stopImmediately();
+
 
 
         a.rotateImage(camera);
@@ -131,14 +134,22 @@ public class Physics {
         double deltaX = deltaaX + deltabX;
         double deltaY = deltaaY + deltabY;
         double deltaSpeed = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
+        double dmg = Math.abs(deltaaX) + Math.abs(deltabX) + Math.abs(deltaaY) + Math.abs(deltabY);
+        a.setLastX(a.lastX + (int)deltabX);
+        a.setLastY(a.lastY + (int)deltabY);
+        b.setLastX(b.lastX + (int)deltaaX);
+        b.setLastY(b.lastY + (int)deltaaX);
+        a.setLastY(a.getLastY() + 1);
+        a.setLastX(a.getLastX() + 1);
         returnLastCorrectPosition(a, b);
-        a.setxVelocity((int) -deltabX / 2);
-        b.setxVelocity((int) deltaaX / 2);
-        a.setyVelocity((int) -deltabY / 2);
-        b.setyVelocity((int) deltaaY / 2);
-        b.getPhysicsModel().addDamage((int) (deltaSpeed * 1.6));
-        staticColide(a, camera, (int) (deltaSpeed * 1.6));
+        a.setxVelocity((int) deltaX / 2);
+        b.setxVelocity((int) deltaX / 2);
+        a.setyVelocity((int) deltaY / 2);
+        b.setyVelocity((int) deltaY / 2);
+        b.getPhysicsModel().addDamage((int) (dmg / 2));
+        b.getPhysicsModel().setDamage(1);
+        staticColide(a, camera, (int) (dmg/2));
+        if(b instanceof Car)
         ((Car) b).setNewImage();
         b.rotateImage(camera);
 

@@ -89,7 +89,7 @@ public class Main {
             }
         });
         t.initialize();
-        while (isClosing == false) {
+        while (!isClosing) {
             try {
 
 
@@ -97,9 +97,12 @@ public class Main {
                     //gui.handleKeysPressed(); //is it still necessary
                     gui.inputUpdate();
                     car.drive();
-                    person.moveperson();
-                    if (car1.getPhysicsModel().getDamage() == 0)
+                    if(person.getPhysicsModel().getDamage() == 0) {
+                        person.moveperson();
+                    }
+                    if (car1.getPhysicsModel().getDamage() == 0) {
                         car1.movecar1();
+                    }
                     physics.update(w, display.camera);
                 }
 
