@@ -44,6 +44,8 @@ public class AutomatedCar extends Car {
 
     private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
 
+    private List<WorldObject> worldObjects;
+
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
@@ -51,7 +53,7 @@ public class AutomatedCar extends Car {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public AutomatedCar(int x, int y, String imageFileName, List<WorldObject> worldObjects, Dashboard db) {
+    public AutomatedCar(int x, int y, String imageFileName, List<WorldObject> worldObjects) {
         super(x, y, imageFileName);
 
         virtualFunctionBus.worldObjects = worldObjects;
@@ -70,9 +72,12 @@ public class AutomatedCar extends Car {
 
         parkingPilot = new ParkingPilot(virtualFunctionBus);
 
-        ownDashboardData = db;
+        this.worldObjects = worldObjects;
     }
 
+    public void setOwnDashBoardData(Dashboard d){
+        ownDashboardData = d;
+    }
 
     /**
      * Create the car's sensors
@@ -232,6 +237,7 @@ public class AutomatedCar extends Car {
     }
 
 
+
     public void parkingSpotSeeking(List<WorldObject> worldObjects) {
         //region<ParkingZoneSize>
         int parkingZoneHorizontalStart = 100;
@@ -243,6 +249,8 @@ public class AutomatedCar extends Car {
 
         //region<If we are in the parking zone>
         if(this.y < parkingZoneVerticalEnd && this.y > parkingZoneVerticalStart && this.x < parkingZoneHorizontalEnd && this.x > parkingZoneHorizontalStart ) {
+
+            ownDashboardData.getParkinZoneCursor().setText("PARKING ZONE");
 
             WorldObject closest = null; //The closest object from the car
             List<WorldObject> detected = new ArrayList<>();
@@ -266,55 +274,78 @@ public class AutomatedCar extends Car {
                 //"No side"
             }
 
-            for (int i = 4; i < ultrasonicSensors.size(); i++){
+            /*for (int i = 4; i < ultrasonicSensors.size(); i++){
                 if((side == 1 && (i==4 || i== 5)) || (side == 2 && (i==6 || i== 7))){
                     for (int j = 0; j < ultrasonicSensors.get(i).detectedObjects(worldObjects).size(); j++){
                         WorldObject actual = ultrasonicSensors.get(i).detectedObjects(worldObjects).get(j);
                         if(actual.getX()+actual.getWidth()/2 >= parkingZoneHorizontalStart && actual.getX()-actual.getWidth()/2 <= parkingZoneHorizontalEnd
                                 && actual.getY()+actual.getHeight()/2 >= parkingZoneVerticalStart && actual.getY()-actual.getHeight()/2 <= parkingZoneVerticalEnd){
-                            detected.add(actual);
+                            detected.add(ultrasonicSensors.get(i).detectedObjects(worldObjects).get(j));
                         }
                     }
                 }
+            }*/
+
+            for(int i = 0; i < worldObjects.size(); i++){
+
+                if(side == 1 && worldObjects.get(i).getX() >= this.getX()){
+                    detected.add(worldObjects.get(i));
+                }
+                if(side == 2 && worldObjects.get(i).getX() < this.getX()){
+                    detected.add(worldObjects.get(i));
+                }
+
             }
 
             //endregion<>
 
             //region<The closest object from the "detected"
             for(int i = 0; i < detected.size(); i++){
-                if(detected.get(i).getClass() == Dynamic.class || detected.get(i).getClass() == RoadObsticle.class){
-                    obstacles.add((WorldObject) detected.get(i));
+
+                if(detected.get(i) instanceof Dynamic || detected.get(i) instanceof RoadObsticle){
+                    obstacles.add(detected.get(i));
                 }
             }
 
-            closest = obstacles.get(0);
-            for(int i = 1; i < obstacles.size(); i++){
-                int cx = closest.getX();
-                int cy = closest.getY();
+            if(obstacles.size() > 0){
 
-                int ix = obstacles.get(i).getX();
-                int iy = obstacles.get(i).getY();
+                closest = obstacles.get(0);
 
-                int acx = this.getX();
-                int acy = this.getY();
+                for(int i = 0; i < obstacles.size(); i++){
 
-                double distanceC = Math.abs(Math.sqrt((cy-acy)*(cy-acy)+(cx-acx)*(cx-acx)));
-                double distanceI = Math.abs(Math.sqrt((iy-acy)*(iy-acy)+(ix-acx)*(ix-acx)));
+                    if(i == 0)
+                    {
+                        closest = obstacles.get(0);
+                    }
+                    else{
+                        int cx = closest.getX();
+                        int cy = closest.getY();
 
-                if(distanceI < distanceC){
-                    closest = obstacles.get(i);
+                        int ix = obstacles.get(i).getX();
+                        int iy = obstacles.get(i).getY();
+
+                        int acx = this.getX();
+                        int acy = this.getY();
+
+                        double distanceC = Math.abs(Math.sqrt((cy-acy)*(cy-acy)+(cx-acx)*(cx-acx)));
+                        double distanceI = Math.abs(Math.sqrt((iy-acy)*(iy-acy)+(ix-acx)*(ix-acx)));
+
+                        if(distanceI < distanceC){
+                            closest = obstacles.get(i);
+                        }
+                    }
                 }
             }
             //endregion<>
 
 
             //check the parking size
-            if(side != 0){
+            if(side != 0 && closest != null){
 
                 //Is there any object in the searching area
                 boolean thereIs = false;
 
-                //region<If the parking spot is vertical>
+                //region<If the parking zone is vertical>
                 if(parkingZoneVerticalEnd-parkingZoneVerticalStart > parkingZoneHorizontalEnd-parkingZoneHorizontalStart) {
 
                     //region<vertical check>
@@ -367,7 +398,7 @@ public class AutomatedCar extends Car {
                     //endregion<>
                 }
                 //endregion<>
-                //region<If the parking spot is horizontal>
+                //region<If the parking zone is horizontal>
                 if (parkingZoneVerticalEnd - parkingZoneVerticalStart < parkingZoneHorizontalEnd - parkingZoneHorizontalStart) {
                     //region<The left from the closest>
                     if (closest.getX() >= this.getX()) {
@@ -434,19 +465,31 @@ public class AutomatedCar extends Car {
                 //region<"The parking size is suitable?"
                 //If the parking size is suitable
                 if (!thereIs) {
+                    //P = true;
+                    ownDashboardData.closestParkingSpotCursor.setText("YES");
                     //The parking size is suitable
                     //auto parking can be started
                 }
                 else {
+                    ownDashboardData.closestParkingSpotCursor.setText("NO");
                     //"The parking size is not suitable"
                 }
                 //endregion<>
             }
+            else if(side != 0 && closest == null){
+                ownDashboardData.closestParkingSpotCursor.setText("FREE");
+            }
+            else{
+                ownDashboardData.closestParkingSpotCursor.setText("X");
+            }
+
         }
         //endregion<>
         //region<if we are not in the parking zone>
         else{
             //"Not a parking zone"!"
+            ownDashboardData.getParkinZoneCursor().setText("--------");
+            ownDashboardData.closestParkingSpotCursor.setText("X");
         }
         //endregion<>
     }

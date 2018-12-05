@@ -43,11 +43,8 @@ public class Main {
         // create the world
         World w = XMLReader.worldMaker();
 
-        // create gui
-        Gui gui = new Gui();
-
         // create an automated car
-        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects(), gui.getDashboard());
+        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects());
         //car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
         Person person = new Person(1500,500,"man.png");
     //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
@@ -68,15 +65,17 @@ public class Main {
         car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
       //  w.addObjectToWorld(car2);
 
-
         w.addObjectToWorld(car);
-
-
 
         //  w.addObjectToWorld(car2);
 
         // person.setRoute(100,750,8,false);
 
+        // create gui
+        Gui gui = new Gui();
+
+        //Give automated car the dashboard as paramter to use it's data
+        car.setOwnDashBoardData(gui.getDashboard());
 
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
         car.setGui(gui);
@@ -101,8 +100,12 @@ public class Main {
                     person.moveperson();
                     car1.movecar1();
                     physics.update(w, display.camera);
-                }
 
+                    //PARKOLÁSVIZSGÁLAT
+
+                    car.parkingSpotSeeking(w.getWorldObjects());
+
+                }
 
                 // car2.movecar2();
 
@@ -113,7 +116,6 @@ public class Main {
                 LOGGER.error(e.getMessage());
             }
         }
-
     }
 
 }
@@ -132,8 +134,6 @@ class Keychecker extends KeyAdapter {
      */
     public Keychecker(Camera c) {
         this.camera = c;
-
-
     }
 
     /**
