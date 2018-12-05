@@ -1,11 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.PowertrainPacket;
 import hu.oe.nik.szfmv.visualization.Gui;
 
 public class ParkingPilot extends SystemComponent {
 
     Gui gui = new Gui();
+    PowertrainPacket powertrainPacket = new PowertrainPacket();
 
     public void setGui(Gui gui)
     {
@@ -39,6 +41,6 @@ public class ParkingPilot extends SystemComponent {
     }
 
     private void automaticalParking() {
-        
+        powertrainPacket.setSpeed(15);
     }
 }

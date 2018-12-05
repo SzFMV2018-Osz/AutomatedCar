@@ -47,7 +47,7 @@ public class Gui extends JFrame {
         dashboard = new Dashboard(this);
         add(dashboard);
 
-        setVisible(true);
+        setVisible(false);
 
         keysPressed = new ArrayList<>();
 

@@ -232,7 +232,6 @@ public class AutomatedCar extends Car {
     }
 
 
-    //Parkolóhely keresést elindító gomb hatására hívódik meg DE CSAK AKKOR AMIKOR MÉG NEM MEGY MAGA A AUTOMATIKUS PARKOLAS
     public void parkingSpotSeeking(List<WorldObject> worldObjects) {
         //region<ParkingZoneSize>
         int parkingZoneHorizontalStart = 100;
@@ -242,29 +241,29 @@ public class AutomatedCar extends Car {
         int parkingZoneVerticalEnd = 1950;
         //endregion<>
 
-        //region<Ha parkolózónán belül vagyunk>
+        //region<If we are in the parking zone>
         if(this.y < parkingZoneVerticalEnd && this.y > parkingZoneVerticalStart && this.x < parkingZoneHorizontalEnd && this.x > parkingZoneHorizontalStart ) {
 
-            WorldObject closest = null; //Az az object ami az adott pillanatban épp a legközelebb van az autónkhoz
+            WorldObject closest = null; //The closest object from the car
             List<WorldObject> detected = new ArrayList<>();
             List<WorldObject> obstacles = new ArrayList<>();
 
-            //1 ha jobb, 2 ha bal
+            //1 if left, 2 if right side
             int side = 0;
 
-            //region<Oldal ellenőrzés>
+            //region<side check>
 
             if(ownDashboardData.getIndex().actIndex == Index.Direction.right) {
                 side = 1;
-                //Ki kell írni, hogy "Jobb oldalon vizsgál"
+                //"Searching on the right side"
             }
             else if (ownDashboardData.getIndex().actIndex == Index.Direction.left) {
                 side = 2;
-                //Ki kell írni, hogy "Bal oldalon vizsgál"
+                //"Searching on the left side"
             }
             else{
                 side = 0;
-                //Ki kell írni, hogy "nincs oldal megadva"
+                //"No side"
             }
 
             for (int i = 4; i < ultrasonicSensors.size(); i++){
@@ -281,7 +280,7 @@ public class AutomatedCar extends Car {
 
             //endregion<>
 
-            //region<legközelebbi object meghatározása a "detected"-be kigyűjtött elemek közül (ugye az oldalnak megfelelően)
+            //region<The closest object from the "detected"
             for(int i = 0; i < detected.size(); i++){
                 if(detected.get(i).getClass() == Dynamic.class || detected.get(i).getClass() == RoadObsticle.class){
                     obstacles.add((WorldObject) detected.get(i));
@@ -309,18 +308,18 @@ public class AutomatedCar extends Car {
             //endregion<>
 
 
-            //parkolóhely méret ellenőrzés
+            //check the parking size
             if(side != 0){
 
-                //az jelöli, hogy van-e bármilyen útban levő objektum az adott parkolóhely vizsgálatánál
+                //Is there any object in the searching area
                 boolean thereIs = false;
 
-                //region<Ha a parkololó függőleges állású>
+                //region<If the parking spot is vertical>
                 if(parkingZoneVerticalEnd-parkingZoneVerticalStart > parkingZoneHorizontalEnd-parkingZoneHorizontalStart) {
 
-                    //region<függőleges ellenőrzés>
+                    //region<vertical check>
                     for (int i = 0; i < detected.size(); i++) {
-                        //region<segédváltozók megadása>
+                        //region<auxiliary variables>
                         int iHeightEnd = detected.get(i).getY() + detected.get(i).getHeight() / 2 + detected.get(i).getHeight() / 10;
                         int iHeightStart = detected.get(i).getLastY() - detected.get(i).getHeight() / 2 - detected.get(i).getHeight() / 10;
                         int closestHeightStart = closest.getY() - closest.getHeight() / 2;
@@ -336,7 +335,7 @@ public class AutomatedCar extends Car {
                         int acWidth = this.getWidth() + this.getWidth() / 10;
                         //endregion<>
 
-                        //region<A legközelebbi "Fölött">
+                        //region<Above the closest">
                         if (closest.getY() >= this.getY()) {
                             if ((side == 1 && this.rotation >= -45f && this.rotation < 45f) || (side == 2 && this.rotation >= 135f && this.rotation < 225f )) {
                                 if (closestHeightStart-acHeight > parkingZoneVerticalStart || (iHeightEnd > closestHeightStart - acHeight && iHeightStart < closestHeightStart) || (iWidthLeft < closestWidthRight && iWidthRight > closestWidthLeft - acWidth - acWidth / 2)) {
@@ -350,7 +349,7 @@ public class AutomatedCar extends Car {
                             }
                         }
                         //endregion<>
-                        //region<A legközelebbi "Alatt">
+                        //region<Below the closest>
                         else{
                             if ((side == 1 && this.rotation >= -45f && this.rotation <= 45f) || (side == 2 && this.rotation >= 135f && this.rotation <= 225f )) {
                                 if (closestHeightEnd + acHeight < parkingZoneVerticalEnd || (iHeightStart < closestHeightEnd + acHeight && iHeightEnd > closestHeightEnd) || (iWidthLeft < closestWidthRight && iWidthRight > closestWidthLeft - acWidth - acWidth / 2)) {
@@ -368,11 +367,11 @@ public class AutomatedCar extends Car {
                     //endregion<>
                 }
                 //endregion<>
-                //region<Ha a parkololó vízszintes állású>
+                //region<If the parking spot is horizontal>
                 if (parkingZoneVerticalEnd - parkingZoneVerticalStart < parkingZoneHorizontalEnd - parkingZoneHorizontalStart) {
-                    //region<A legközelebbi-től balra>
+                    //region<The left from the closest>
                     if (closest.getX() >= this.getX()) {
-                        //meg kell nézni, hogy a (vízszintes nézetben) "balra" lévő hely mekkora
+                        //size of the spot
                         for (int k = 0; k < detected.size(); k++) {
 
                             int kHeightEnd = detected.get(k).getX() + detected.get(k).getHeight() / 2 + detected.get(k).getHeight() / 10;
@@ -400,7 +399,7 @@ public class AutomatedCar extends Car {
                         }
                     }
                     //endregion<>
-                    //region<A legközelebbi-től jobbra>
+                    //region<The left from the closest>
                     else {
                         for (int k = 0; k < detected.size(); k++) {
 
@@ -432,31 +431,24 @@ public class AutomatedCar extends Car {
                 }
                 //endregion<>
 
-                //region<"Parkolóhelyméret végülis jó vagy nem?"
-                //Ha a parkolóhely méret megfelelő
+                //region<"The parking size is suitable?"
+                //If the parking size is suitable
                 if (!thereIs) {
-                    //ki kell írni, hogy parkolóhely mefelelő méretű
-                    //automatikus parkolást el lehet indítani
+                    //The parking size is suitable
+                    //auto parking can be started
                 }
                 else {
-                    //Ki kell írni, hogy nem jó méretű a parkolóhely
+                    //"The parking size is not suitable"
                 }
                 //endregion<>
             }
         }
         //endregion<>
-        //region<Ha nem parkoló zónában vagyunk>
+        //region<if we are not in the parking zone>
         else{
-            //Ki kell írni, hogy "Nem parkolózóna!"
+            //"Not a parking zone"!"
         }
         //endregion<>
-    }
-
-
-
-    //automatikus parkolást elindító gomb hatására hívódik meg
-    public void automatedParking(){
-
     }
 }
 
