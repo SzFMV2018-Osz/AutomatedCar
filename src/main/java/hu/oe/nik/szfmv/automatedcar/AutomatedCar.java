@@ -11,7 +11,10 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Car;
 import hu.oe.nik.szfmv.model.Classes.NonPlayableCar;
+import hu.oe.nik.szfmv.model.Classes.Person;
 import hu.oe.nik.szfmv.model.Classes.RoadSign;
+import hu.oe.nik.szfmv.model.Classes.Tree;
+import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -102,13 +105,8 @@ public class AutomatedCar extends Car {
      * Driving the Car
      */
     public void drive() {
-        calculateSpeed();
-        if(virtualFunctionBus.DangerOfCollision) {
-            stopImmediately();
-            calculatePositionAndOrientation();
-        }
-        else
-            calculatePositionAndOrientation();
+        detectDangerOfCollision();
+        calculatePositionAndOrientation();
         virtualFunctionBus.loop();
     }
 
@@ -232,7 +230,7 @@ public class AutomatedCar extends Car {
         return polygon;
     }
 
-    public void calculateSpeed()
+    public void detectDangerOfCollision()
     {
         this.virtualFunctionBus.DangerOfCollision = false;
         for(WorldObject worldObject : this.virtualFunctionBus.radarSensor.detectedObjects(virtualFunctionBus.worldObjects))
@@ -247,19 +245,16 @@ public class AutomatedCar extends Car {
                     //TODO
                 }
             }
-            if(worldObject instanceof NonPlayableCar)
+            else if(worldObject instanceof NonPlayableCar)
             {
-                if(((NonPlayableCar)worldObject).getSpeed() < this.powertrainSystem.getSpeedWithDirection())
+                double npcSpeed = Math.abs(((NonPlayableCar)worldObject).getSpeed());
+                if(npcSpeed < this.powertrainSystem.getSpeed())
                 {
-                    virtualFunctionBus.DangerOfCollision = true;
-                    //TODO
-                    //powertrainSystem.stopImmediately();
-                    //this.virtualFunctionBus.powertrainPacket.setSpeed(powertrainSystem.getSpeed()-10);
-                   // this.virtualFunctionBus.powertrainPacket.setSpeed(((NonPlayableCar)worldObject).getSpeed());
+                    powertrainSystem.setSpeedLimit(npcSpeed);
                 }
-                else {
-                    virtualFunctionBus.DangerOfCollision = false;
-                }
+            }
+            else if (worldObject instanceof Tree || worldObject instanceof Person) {
+                this.virtualFunctionBus.DangerOfCollision = true;
             }
         }
     }
