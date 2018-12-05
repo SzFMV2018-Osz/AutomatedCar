@@ -4,11 +4,11 @@ package hu.oe.nik.szfmv.visualization;
 import hu.oe.nik.szfmv.Main;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.sensors.CameraSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.environment.World;
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,6 +36,7 @@ public class CourseDisplay extends JPanel {
     public Camera camera;
     public Boolean drawTriangles;
     private Boolean showRadarSensor;
+    private Boolean showCameraSensor;
 
     private AffineTransform t = new AffineTransform();
     private Gui parent;
@@ -70,6 +71,7 @@ public class CourseDisplay extends JPanel {
         parent = pt;
         drawTriangles = false;
         showRadarSensor = false;
+        showCameraSensor = false;
     }
 
     Boolean getShowRadarSensor() {
@@ -78,6 +80,18 @@ public class CourseDisplay extends JPanel {
 
     void setShowRadarSensor(Boolean showRadarSensor) {
         this.showRadarSensor = showRadarSensor;
+    }
+
+    Boolean getShowCameraSensor() {
+        return showCameraSensor;
+    }
+
+    /**
+     * set debug mod for camera sensor
+     * @param showCameraSensor showCameraSensor
+     */
+    void setshowCameraSensor(Boolean showCameraSensor) {
+        this.showCameraSensor = showCameraSensor;
     }
 
     /**
@@ -120,6 +134,14 @@ public class CourseDisplay extends JPanel {
             g2d.drawImage(image, t, this);
         }
 
+        showSensors(g2d, world);
+
+
+
+        return doubleBufferedScreen;
+    }
+
+    private void showSensors(Graphics2D g2d,  World world) {
         if (drawTriangles) {
             drawSensor(g2d, world);
         }
@@ -129,7 +151,9 @@ public class CourseDisplay extends JPanel {
         }
         drawText(g2d, parent.getVirtualFunctionBus().automaticBreak.msg, parent.getVirtualFunctionBus().automaticBreak.state);
 
-        return doubleBufferedScreen;
+        if (showCameraSensor) {
+            drawCameraSensor(g2d, world);
+        }
     }
 
     /**
@@ -149,7 +173,8 @@ public class CourseDisplay extends JPanel {
 
             g2d.drawImage(object.getImage(), object.getTransformation(), this);
 
-            // eredetileg ez volt az if ben object instanceof ICollidable && false ennek semmi értelme, ez akart lenni? !(object instanceof ICollidable)
+            // eredetileg ez volt az if ben object instanceof ICollidable && false ennek semmi értelme, ez akart lenni?
+            // !(object instanceof ICollidable)
             // ennek így semmi értelme mert semmit nem csinál
 
             /*
@@ -259,6 +284,27 @@ public class CourseDisplay extends JPanel {
                     Shape t = item.getTransformation().createTransformedShape(r);
                     g.draw(t);
                 });
+
+    }
+
+    private void drawCameraSensor(Graphics2D g, World w) {
+        AffineTransform transformTheImageToCorrectPos;
+        transformTheImageToCorrectPos = new AffineTransform();
+        transformTheImageToCorrectPos.scale(camera.getScale(), camera.getScale());
+        transformTheImageToCorrectPos.translate(camera.getX(), camera.getY());
+
+        CameraSensor camera = parent.getVirtualFunctionBus().cameraSensor;
+
+        g.setColor(Color.CYAN);
+        g.setStroke(new BasicStroke(STROKE_WIDTH));
+        g.setTransform(transformTheImageToCorrectPos);
+        g.drawPolygon(camera.getPolygon());
+
+        g.setColor(Color.RED);
+        camera.detectedObjects(w.getColladibleObjects())
+                .stream()
+                .filter(item -> !(item instanceof AutomatedCar))
+                .forEach(item -> g.drawRect(item.getX(), item.getY(), item.getWidth(), item.getHeight()));
 
     }
 }

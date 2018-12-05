@@ -2,7 +2,6 @@ package hu.oe.nik.szfmv.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.bus.VirtualFunctionBus;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -11,10 +10,9 @@ import java.util.ArrayList;
 
 public class Gui extends JFrame {
 
-    private ArrayList<Integer> keysPressed;
-
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
+    private ArrayList<Integer> keysPressed;
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
@@ -62,14 +60,14 @@ public class Gui extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 int keyCode = e.getKeyCode();
-                
+
                 // Release turning and pedal pressing so the back positioning can run.
                 if (keyCode == KeyEvent.VK_RIGHT) {
                     dashboard.wheelTurning.setIsTurning(false);
                 }
                 if (keyCode == KeyEvent.VK_LEFT) {
                     dashboard.wheelTurning.setIsTurning(false);
-                }       
+                }
                 if (keyCode == KeyEvent.VK_UP) {
                     dashboard.gasPedal.setIsPressed(false);
                 }
@@ -146,9 +144,26 @@ public class Gui extends JFrame {
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_R));
         }
 
+
+        if (keysPressed.contains(KeyEvent.VK_C)) {
+            courseDisplay.setshowCameraSensor(!courseDisplay.getShowCameraSensor());
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_C));
+        }
+
         if (keysPressed.contains(KeyEvent.VK_X)) {
             courseDisplay.drawTriangles=!courseDisplay.drawTriangles;
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_X));
+
+        }
+
+        if (keysPressed.contains(KeyEvent.VK_T)) {
+            if (virtualFunctionBus.powertrainPacket.isSpeedLimited()) {
+                virtualFunctionBus.powertrainPacket.unlockSpeedLimit();
+            }
+            else {
+                getVirtualFunctionBus().powertrainPacket.setSpeedLimit(getVirtualFunctionBus().powertrainPacket.getSpeed());
+            }
+            keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_T));
         }
     }
 
@@ -158,6 +173,7 @@ public class Gui extends JFrame {
         }
         if (keysPressed.contains(KeyEvent.VK_DOWN)) {
             dashboard.breakPedal.Pressed();
+            getVirtualFunctionBus().powertrainPacket.unlockSpeedLimit();
         }
         if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
             dashboard.wheelTurning.TurnRight();
