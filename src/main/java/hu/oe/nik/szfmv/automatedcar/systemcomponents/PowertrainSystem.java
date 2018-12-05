@@ -100,7 +100,8 @@ public class PowertrainSystem extends SystemComponent {
      */
     private void doPowerTrain() {
         double speedThreshold = calculateSpeedThreshold();
-        if (Math.abs(this.speed) > Math.abs(speedThreshold)) {
+        if ((virtualFunctionBus.DangerOfCollision && !this.isReverse) || 
+            (Math.abs(this.speed) > Math.abs(speedThreshold))) {
             this.brakePedal = EMERGENCY_BRAKE_PEDAL;
         }
 
