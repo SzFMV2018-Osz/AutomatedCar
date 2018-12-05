@@ -10,9 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Classes.Car;
-import hu.oe.nik.szfmv.model.Classes.Dynamic;
-import hu.oe.nik.szfmv.model.Classes.RoadObsticle;
+import hu.oe.nik.szfmv.model.Classes.*;
 import hu.oe.nik.szfmv.visualization.Dashboard;
 import hu.oe.nik.szfmv.visualization.Gui;
 import hu.oe.nik.szfmv.visualization.Index;
@@ -237,7 +235,7 @@ public class AutomatedCar extends Car {
     }
 
 
-
+    //region<parkingSpotSeeking>
     public void parkingSpotSeeking(List<WorldObject> worldObjects) {
         //region<ParkingZoneSize>
         int parkingZoneHorizontalStart = 100;
@@ -493,5 +491,6 @@ public class AutomatedCar extends Car {
         }
         //endregion<>
     }
+    //endregion<>
 }
 
