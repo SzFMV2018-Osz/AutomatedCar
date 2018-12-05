@@ -18,7 +18,7 @@ public class RadarSensor extends SystemComponent implements ISensor {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final int TRIANGLE_N = 3;
-    private static final int VISUAL_RANGE = 200;
+    private static final int VISUAL_RANGE = 600;
     private static final int ANGLE_OF_VIEW = 60;
     private static final int HALF_CIRCLE = 180;
     private static final int WHOLE_CIRCLE = 360;

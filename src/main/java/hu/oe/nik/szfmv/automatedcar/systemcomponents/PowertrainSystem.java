@@ -204,7 +204,6 @@ public class PowertrainSystem extends SystemComponent {
             this.speed = 0;
         }
     }
-
     //#region Helpers
 
     /**
