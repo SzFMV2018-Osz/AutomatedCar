@@ -33,6 +33,8 @@ public class VirtualFunctionBus {
 
     public RadarSensor radarSensor;
 
+    public boolean DangerOfCollision = false;
+
     private List<SystemComponent> components = new ArrayList<>();
 
 

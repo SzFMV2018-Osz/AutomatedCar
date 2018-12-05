@@ -10,6 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.Car;
+import hu.oe.nik.szfmv.model.Classes.NonPlayableCar;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -97,7 +98,13 @@ public class AutomatedCar extends Car {
      * Driving the Car
      */
     public void drive() {
-        calculatePositionAndOrientation();
+        calculateSpeed();
+        if(virtualFunctionBus.DangerOfCollision) {
+            stopImmediately();
+            calculatePositionAndOrientation();
+        }
+        else
+            calculatePositionAndOrientation();
         virtualFunctionBus.loop();
     }
 
@@ -211,6 +218,27 @@ public class AutomatedCar extends Car {
         polygon.addPoint(x + width, y + height);
         polygon.addPoint(x, y + height);
         return polygon;
+    }
+
+    public void calculateSpeed()
+    {
+        this.virtualFunctionBus.DangerOfCollision = false;
+        for(WorldObject worldObject : this.virtualFunctionBus.radarSensor.detectedObjects(virtualFunctionBus.worldObjects))
+        {
+            if(worldObject instanceof NonPlayableCar)
+            {
+                if(((NonPlayableCar)worldObject).getSpeed() < this.powertrainSystem.getSpeedWithDirection())
+                {
+                    virtualFunctionBus.DangerOfCollision = true;
+                    //powertrainSystem.stopImmediately();
+                    //this.virtualFunctionBus.powertrainPacket.setSpeed(powertrainSystem.getSpeed()-10);
+                   // this.virtualFunctionBus.powertrainPacket.setSpeed(((NonPlayableCar)worldObject).getSpeed());
+                }
+                else {
+                    virtualFunctionBus.DangerOfCollision = false;
+                }
+            }
+        }
     }
 }
 
