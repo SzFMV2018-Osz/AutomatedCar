@@ -4,6 +4,8 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
 
     private int rmp;
     private double speed;
+    private double speedLimit;
+    private Boolean isSpeedLimited;
 
     /**
      * PowertrainPacket consturctor
@@ -11,6 +13,8 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     public PowertrainPacket() {
         this.rmp = 0;
         this.speed = 0d;
+        this.speedLimit = 0d;
+        this.isSpeedLimited = false;
     }
 
     @Override
@@ -31,5 +35,27 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     @Override
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public void setSpeedLimit(double speedLimit) {
+        this.isSpeedLimited = true;
+        this.speedLimit = speedLimit;
+    }
+
+    @Override
+    public void unlockSpeedLimit() {
+        this.isSpeedLimited = false;
+        this.speedLimit = 0;
+    }
+    
+    @Override
+    public Boolean isSpeedLimited() {
+        return this.isSpeedLimited;
+    }
+    
+    @Override
+    public double getSpeedLimit() {
+        return this.speedLimit;
     }
 }

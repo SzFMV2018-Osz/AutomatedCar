@@ -21,6 +21,7 @@ public class PowertrainSystem extends SystemComponent {
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -10.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
+    private static final int EMERGENCY_BRAKE_PEDAL = 80;
     private double speed;
     private int currentRPM;
     private int updatedRPM;
@@ -50,7 +51,6 @@ public class PowertrainSystem extends SystemComponent {
         this.gearState = this.virtualFunctionBus.samplePacket.getGear();
         this.brakePedal = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
         this.gasPedal = this.virtualFunctionBus.samplePacket.getGaspedalPosition();
-
 
         doPowerTrain();
 
@@ -87,10 +87,23 @@ public class PowertrainSystem extends SystemComponent {
         this.updatedRPM = MIN_RPM;
     }
 
+    public void setSpeedLimit(double speedLimit) {
+        this.virtualFunctionBus.powertrainPacket.setSpeedLimit(speedLimit);
+    }
+
+    public void unlockSpeedLimit() {
+        this.virtualFunctionBus.powertrainPacket.unlockSpeedLimit();;
+    }
+
     /**
      * Do Power Train
      */
     private void doPowerTrain() {
+        double speedThreshold = calculateSpeedThreshold();
+        if (Math.abs(this.speed) > Math.abs(speedThreshold)) {
+            this.brakePedal = EMERGENCY_BRAKE_PEDAL;
+        }
+
         switch (gearState) {
             case "R":
                 reverse();
@@ -177,6 +190,17 @@ public class PowertrainSystem extends SystemComponent {
         }
     }
 
+    // Calculates maximum or minimum (maximum in reverse) speed.
+    private double calculateSpeedThreshold() {
+        boolean isSpeedLimited = this.virtualFunctionBus.powertrainPacket.isSpeedLimited();
+        double speedLimit = this.virtualFunctionBus.powertrainPacket.getSpeedLimit();
+        double speedThreshold = !this.isReverse ? 
+            (isSpeedLimited ? Math.min(speedLimit, MAX_FORWARD_SPEED) : MAX_FORWARD_SPEED) :
+            (isSpeedLimited ? Math.max(speedLimit, MAX_REVERSE_SPEED) : MAX_REVERSE_SPEED);
+
+        return speedThreshold;
+    }
+
     /**
      * Calculate the difference between the previous and the increased speed.
      */
@@ -199,12 +223,14 @@ public class PowertrainSystem extends SystemComponent {
     }
 
     /**
-     * Change the current speed by the speed delta
+     * Change the current speed by the speed delta.
      */
     private void updateSpeed() {
         double updatedSpeed = this.speed + this.speedDifference;
-        if (this.isReverse && (updatedSpeed >= MAX_REVERSE_SPEED) || 
-            !this.isReverse && (updatedSpeed <= MAX_FORWARD_SPEED)) {
+        double speedThreshold = calculateSpeedThreshold();
+
+        if (this.isReverse && (updatedSpeed >= speedThreshold || this.speedDifference > 0) || 
+            !this.isReverse && (updatedSpeed <= speedThreshold || this.speedDifference < 0)) {
             this.speed += this.speedDifference;
         }
 
@@ -212,8 +238,6 @@ public class PowertrainSystem extends SystemComponent {
             this.speed = 0;
         }
     }
-
-    //#region Helpers
 
     /**
      * Calculate the RPM of the engine.
@@ -234,7 +258,5 @@ public class PowertrainSystem extends SystemComponent {
 
         return updatedRPM;
     }
-
-    //#endregion
 }
 
