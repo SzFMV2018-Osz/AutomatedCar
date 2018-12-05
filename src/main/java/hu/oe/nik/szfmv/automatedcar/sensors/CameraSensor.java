@@ -11,6 +11,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.round;
+import static java.lang.Math.tan;
+
 public class CameraSensor extends SystemComponent implements ISensor {
 
     private static final int TRIANGLE_N = 3;
@@ -19,6 +22,8 @@ public class CameraSensor extends SystemComponent implements ISensor {
     private static final int DEGREE_90 = 90;
     private static final int DEGREE_45 = 45;
     private static final int DEGREE_6 = 6;
+    private static final int HALF_CIRCLE = 180;
+    private static final int WHOLE_CIRCLE = 360;
     private Point positionOnCar;
     private Boolean leftLane;
     private double distanceFromBorder;
@@ -52,29 +57,31 @@ public class CameraSensor extends SystemComponent implements ISensor {
         return positionOnCar;
     }
 
+    public Polygon getPolygon() {
+        return triangle;
+    }
+
     @Override
     public Polygon locateSensorTriangle(Point sensorPosition, double visualRange,
                                         double angelOfView, double sensorRotation) {
-        Point leftPoint = new Point();
-        Point rightPoint = new Point();
+        Polygon triangle;
 
-        double angleInRadian = Math.toRadians(angelOfView);
-        double sensorRotationInRadian = Math.toRadians(sensorRotation);
+        double angleInRadian = Math.toRadians(ANGLE_OF_VIEW);
+        double rotationInRadian = Math.toRadians(sensorRotation);
 
-        leftPoint.x = (int) (Math.round(sensorPosition.x + Math.tan(angleInRadian / 2)) * visualRange);
-        leftPoint.y = (int) Math.round(sensorPosition.y + visualRange);
-        rightPoint.x = (int) (Math.round(sensorPosition.x - Math.tan(angleInRadian / 2)) * visualRange);
-        rightPoint.y = (int) Math.round(sensorPosition.y + visualRange);
+        Point a = new Point((int) round(sensorPosition.x - tan(angleInRadian / 2) * visualRange),
+                (int) round(sensorPosition.y + visualRange));
+        Point b =  new Point((int) round(sensorPosition.x + tan(angleInRadian / 2) * visualRange),
+                (int) round(sensorPosition.y + visualRange));
 
-        leftPoint = rotate(leftPoint, sensorPosition, sensorRotationInRadian);
-        rightPoint = rotate(rightPoint, sensorPosition, sensorRotationInRadian);
+        a = rotate(a, sensorPosition, rotationInRadian);
+        b = rotate(b, sensorPosition, rotationInRadian);
 
-        triangle = new Polygon();
-        triangle.npoints = TRIANGLE_N;
-        triangle.xpoints = new int[]{sensorPosition.x, leftPoint.x, rightPoint.x};
-        triangle.ypoints = new int[]{sensorPosition.y, leftPoint.y, rightPoint.y};
+        triangle = new Polygon(new int[]{sensorPosition.x, a.x, b.x},
+                new int[]{sensorPosition.y, a.y, b.y}, TRIANGLE_N);
 
         return triangle;
+
     }
 
     private Point rotate(Point point, Point sennsorLocation, double rotation) {
@@ -90,10 +97,12 @@ public class CameraSensor extends SystemComponent implements ISensor {
     @Override
     public void refreshSensor(Point newSensorPosition, double newSensorRotation) {
 
+        /*
         Point newPositon = new Point(newSensorPosition.x + positionOnCar.x,
                 newSensorPosition.y + positionOnCar.y);
         newPositon = rotate(newPositon, newSensorPosition, newSensorRotation);
         triangle = locateSensorTriangle(newPositon, VISUAL_RANGE, ANGLE_OF_VIEW, newSensorRotation);
+        */
     }
 
     @Override
@@ -355,8 +364,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
 
             if (roadType.endsWith("ft")) {
                 leftTurning = true;
-            }
-            else {
+            } else {
                 leftTurning = false;
             }
         }
@@ -366,7 +374,24 @@ public class CameraSensor extends SystemComponent implements ISensor {
     public void loop() {
         detectedObjects = detectedObjects(worldObjects);
         giveRoadInformations();
-        getTurningInformations();
+        //getTurningInformations();
+
+        double cameraRotation =  HALF_CIRCLE + (virtualFunctionBus.carPacket.getCarRotation() % WHOLE_CIRCLE);
+
+        // LOGGER.info("car rotation"  + virtualFunctionBus.carPacket.getCarRotation());
+
+        sensorPosition(cameraRotation);
+        triangle = locateSensorTriangle(positionOnCar, VISUAL_RANGE, ANGLE_OF_VIEW, cameraRotation);
+    }
+
+
+    private void sensorPosition(double cameraRotation) {
+        double carWidth = virtualFunctionBus.carPacket.getCarWidth();
+        positionOnCar.x = (int) (virtualFunctionBus.carPacket.getxPosition() -
+                Math.cos(Math.toRadians(cameraRotation)) * (carWidth / 2));
+        positionOnCar.y = (int) (virtualFunctionBus.carPacket.getyPosition() -
+                Math.sin(Math.toRadians(cameraRotation)) * (carWidth / 2));
+
     }
 
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AutomatedCar extends Car {
     private static final int THREE_QUARTER_CIRCLE = 270;
-    private static final double CAMERA_RELATIVE_POSITION_IN_PERCENT = 0.8;
+    private static final double CAMERA_RELATIVE_POSITION_IN_PERCENT = 0.5;
     private static final double RADAR_RELATIVE_POSITION_IN_PERCENT = 0.95;
     private static final int BACKFRONT_VERTSHIFT = 10;
     private static final int RIGHTLEFT_VERTSHIFT = 30;
@@ -41,6 +41,7 @@ public class AutomatedCar extends Car {
      * @param x             the initial x coordinate of the object
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
+     * @param worldObjects worldObjects
      */
     public AutomatedCar(int x, int y, String imageFileName, List<WorldObject> worldObjects) {
         super(x, y, imageFileName);
@@ -73,9 +74,11 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.radarSensor = radarSensor;
 
         CameraSensor cameraSensor = new CameraSensor(virtualFunctionBus);
-        cameraSensor.getPositionOnCar().x = width / 2;
+        cameraSensor.getPositionOnCar().x = width / 2 ;
         cameraSensor.getPositionOnCar().y = (int) (height * CAMERA_RELATIVE_POSITION_IN_PERCENT);
         sensorList.add(cameraSensor);
+
+        virtualFunctionBus.cameraSensor = cameraSensor;
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -204,6 +207,14 @@ public class AutomatedCar extends Car {
 
     }
 
+    /**
+     * set polyigon
+     * @param x x
+     * @param y y
+     * @param width width
+     * @param height height
+     * @return returns new polygon
+     */
     public Polygon setPolygon(int x, int y, int width, int height) {
         Polygon polygon = new Polygon();
         polygon.addPoint(x, y);
