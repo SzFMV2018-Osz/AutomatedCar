@@ -238,11 +238,14 @@ public class AutomatedCar extends Car {
             if(worldObject instanceof RoadSign){
                 int numberBeginning = 6;
                 int numberEnding = 4;
-                int speedDouble = 2;
-                if(worldObject.getImageFileName().contains("0") &&
-                        Integer.parseInt(worldObject.getImageFileName().substring(worldObject.getImageFileName().length()-numberBeginning,
-                                worldObject.getImageFileName().length()-numberEnding)) < (int)this.powertrainSystem.getSpeed()*speedDouble){
-                    //TODO
+                if(worldObject.getImageFileName().contains("0")) {
+                    double signLimit = Double.parseDouble(worldObject.getImageFileName().substring(worldObject
+                    .getImageFileName().length() - numberBeginning, worldObject.getImageFileName().length() - 
+                    numberEnding));
+
+                    // For demonstration purposes it will be half of the value
+                    // since the car will be too fast with the given value.
+                    powertrainSystem.setSpeedLimit(signLimit / 2);
                 }
             }
             else if(worldObject instanceof NonPlayableCar)
