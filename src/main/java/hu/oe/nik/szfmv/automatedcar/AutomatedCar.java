@@ -9,12 +9,7 @@ import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
-import hu.oe.nik.szfmv.model.Classes.Car;
-import hu.oe.nik.szfmv.model.Classes.NonPlayableCar;
-import hu.oe.nik.szfmv.model.Classes.Person;
-import hu.oe.nik.szfmv.model.Classes.RoadSign;
-import hu.oe.nik.szfmv.model.Classes.Tree;
-import hu.oe.nik.szfmv.model.Interfaces.ICollidable;
+import hu.oe.nik.szfmv.model.Classes.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -33,6 +28,8 @@ public class AutomatedCar extends Car {
     private static final int BACK_VIEWDIRECTION = 180;
     private static final int RIGHT_VIEWDIRECTION = 90;
     private static final int LEFT_VIEWDIRECTION = -90;
+    private static final int NUMBER_BEGINNING = 6;
+    private static final int NUMBER_ENDING = 4;
 
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
@@ -46,7 +43,7 @@ public class AutomatedCar extends Car {
      * @param x             the initial x coordinate of the object
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
-     * @param worldObjects worldObjects
+     * @param worldObjects  worldObjects
      */
     public AutomatedCar(int x, int y, String imageFileName, List<WorldObject> worldObjects) {
         super(x, y, imageFileName);
@@ -79,7 +76,7 @@ public class AutomatedCar extends Car {
         virtualFunctionBus.radarSensor = radarSensor;
 
         CameraSensor cameraSensor = new CameraSensor(virtualFunctionBus);
-        cameraSensor.getPositionOnCar().x = width / 2 ;
+        cameraSensor.getPositionOnCar().x = width / 2;
         cameraSensor.getPositionOnCar().y = (int) (height * CAMERA_RELATIVE_POSITION_IN_PERCENT);
         sensorList.add(cameraSensor);
 
@@ -215,13 +212,14 @@ public class AutomatedCar extends Car {
 
     /**
      * set polyigon
-     * @param x x
-     * @param y y
-     * @param width width
+     *
+     * @param x      x
+     * @param y      y
+     * @param width  width
      * @param height height
      * @return returns new polygon
      */
-    public Polygon setPolygon(int x, int y, int width, int height) {
+    private Polygon setPolygon(int x, int y, int width, int height) {
         Polygon polygon = new Polygon();
         polygon.addPoint(x, y);
         polygon.addPoint(x + width, y);
@@ -230,33 +228,31 @@ public class AutomatedCar extends Car {
         return polygon;
     }
 
-    public void detectDangerOfCollision()
-    {
+    /**
+     * Detect the DAANNGEEERR :D
+     */
+    private void detectDangerOfCollision() {
         this.virtualFunctionBus.DangerOfCollision = false;
-        for(WorldObject worldObject : this.virtualFunctionBus.radarSensor.detectedObjects(virtualFunctionBus.worldObjects))
-        {
-            if(worldObject instanceof RoadSign){
-                int numberBeginning = 6;
-                int numberEnding = 4;
-                if(worldObject.getImageFileName().contains("0")) {
+        for (WorldObject worldObject
+                : this.virtualFunctionBus.radarSensor.detectedObjects(virtualFunctionBus.worldObjects)) {
+            if (worldObject instanceof RoadSign) {
+                if (worldObject.getImageFileName().contains("0")) {
                     double signLimit = Double.parseDouble(worldObject.getImageFileName().substring(worldObject
-                    .getImageFileName().length() - numberBeginning, worldObject.getImageFileName().length() - 
-                    numberEnding));
+                            .getImageFileName().length() - NUMBER_BEGINNING, worldObject.getImageFileName().length() -
+                            NUMBER_ENDING));
 
                     // For demonstration purposes it will be half of the value
                     // since the car will be too fast with the given value.
-                    powertrainSystem.setSpeedLimit(signLimit / 2);
+                    if (virtualFunctionBus.powertrainPacket.isSpeedLimited()) {
+                        powertrainSystem.setSpeedLimit(signLimit / 2);
+                    }
                 }
-            }
-            else if(worldObject instanceof NonPlayableCar)
-            {
-                double npcSpeed = Math.abs(((NonPlayableCar)worldObject).getSpeed());
-                if(npcSpeed < this.powertrainSystem.getSpeed())
-                {
+            } else if (worldObject instanceof NonPlayableCar) {
+                double npcSpeed = Math.abs(((NonPlayableCar) worldObject).getSpeed());
+                if (npcSpeed < this.powertrainSystem.getSpeed()) {
                     powertrainSystem.setSpeedLimit(npcSpeed);
                 }
-            }
-            else if (worldObject instanceof Tree || worldObject instanceof Person) {
+            } else if (worldObject instanceof Tree || worldObject instanceof Person) {
                 this.virtualFunctionBus.DangerOfCollision = true;
             }
         }
