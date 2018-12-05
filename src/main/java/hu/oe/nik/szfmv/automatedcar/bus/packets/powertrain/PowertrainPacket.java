@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain;
 
 public class PowertrainPacket implements ReadOnlyPowertrainPacket {
 
+    public static final int MIN_SPEEDLIMIT = 30;
     private int rmp;
     private double speed;
     private double speedLimit;
@@ -38,24 +39,27 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     }
 
     @Override
-    public void setSpeedLimit(double speedLimit) {
-        this.isSpeedLimited = true;
-        this.speedLimit = speedLimit;
-    }
-
-    @Override
     public void unlockSpeedLimit() {
         this.isSpeedLimited = false;
         this.speedLimit = 0;
     }
-    
+
     @Override
     public Boolean isSpeedLimited() {
         return this.isSpeedLimited;
     }
-    
+
     @Override
     public double getSpeedLimit() {
         return this.speedLimit;
+    }
+
+    @Override
+    public void setSpeedLimit(double speedLimit) {
+        this.isSpeedLimited = true;
+        if (speedLimit < MIN_SPEEDLIMIT)
+            this.speedLimit = MIN_SPEEDLIMIT;
+        else
+            this.speedLimit = speedLimit;
     }
 }
