@@ -18,12 +18,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.awt.event.WindowEvent;
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
-    public static boolean Gameloop = true;
-    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
+    public static boolean gameLoop = true;
+    private static boolean isClosing = false;
 
     /**
      * Main entrypoint of the software
@@ -43,21 +42,26 @@ public class Main {
         World w = XMLReader.worldMaker();
 
         // create an automated car
-        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(480, 840, "car_2_white.png", w.getWorldObjects());
+        //car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
+        Person person = new Person(1500,500,"man.png");
+    //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
+        NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
+       // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
+       // car2.setSpeed(10);
         Car c = new Car(1500, 1500, "car_2_red.png");
-        Person person = new Person(1500, 500, "man.png");
-        //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
-        NonPlayableCar car1 = new NonPlayableCar(343, 1500, "car_2_red.png");
-        // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
-        // car2.setSpeed(10);
-
         // add car to the world
 
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
+
+        car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
+      //  w.addObjectToWorld(car2);
+
         w.addObjectToWorld(c);
         w.addObjectToWorld(car);
+
 
 
         //  w.addObjectToWorld(car2);
@@ -78,20 +82,40 @@ public class Main {
         gui.addKeyListener(new Keychecker(display.camera));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
-        t.initialize();
-        while (true) {
-            try {
-                if (Gameloop) {
+        gui.addWindowListener(new java.awt.event.WindowAdapter(){
 
+            @Override
+            public void windowClosing(WindowEvent e) {
+                isClosing = true;
+                super.windowClosing(e);
+
+            }
+        });
+        t.initialize();
+        while (!isClosing) {
+            try {
+
+               
+              
+              
+              
+
+                if (gameLoop) {
+  //gui.handleKeysPressed(); //is it still necessary
                     gui.inputUpdate();
                     car.drive();
-                    person.moveperson();
-                    car1.movecar1();
+                    if(person.getPhysicsModel().getDamage() == 0) {
+                        person.moveperson();
+                    }
+                    if (car1.getPhysicsModel().getDamage() == 0) {
+                        car1.movecar1();
+                    }
                     physics.update(w, display.camera);
                 }
 
 
                 // car2.movecar2();
+
                 gui.getCourseDisplay().drawWorld(w);
                 t.updateFPS();
                 Thread.sleep(t.getCyclePeriod());

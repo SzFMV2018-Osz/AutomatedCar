@@ -1,6 +1,10 @@
 package hu.oe.nik.szfmv.visualization;
 
 public class WheelTurn {
+    public static final int TURNING_STEPS = 6;
+    public static final int MIN = -100;
+    public static final int MAX = 100;
+    public static final int BACK_POSITION_STEPS = 25;
 
     int level;
     boolean isTurning;
@@ -12,33 +16,30 @@ public class WheelTurn {
 
     public void TurnRight() {
         isTurning = true;
-        if (level >= 95) {
-            level = 100;
-        } else if (level < 95) {
-            level += 8;
+
+        level += TURNING_STEPS;
+        if (level > MAX) {
+            level = MAX;
         }
     }
 
     public void TurnLeft() {
         isTurning = true;
-        if (level <= -95) {
-            level = -100;
-        } else if (level > -95) {
-            level -= 8;
+
+        level -= TURNING_STEPS;
+        if (level < MIN) {
+            level = MIN;
         }
     }
 
     public void BackPosition() {
         if (isTurning) return;
 
-        if (level < -20) {
-            level += 20;
-        } else if (level > 20) {
-            level -= 20;
-        }else  if(level >= -20 && level <= 0){
-            level = 0;
-        }
-        else  if(level <= 20 && level > 0){
+        if (level < -BACK_POSITION_STEPS) {
+            level += BACK_POSITION_STEPS;
+        } else if (level > BACK_POSITION_STEPS) {
+            level -= BACK_POSITION_STEPS;
+        } else {
             level = 0;
         }
     }

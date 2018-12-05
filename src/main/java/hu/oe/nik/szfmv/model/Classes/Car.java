@@ -284,7 +284,7 @@ public class Car extends Dynamic implements ICollidable {
         if (physicsModel.getDamage() >= this.damageLimit) {
             if (!imageFileName.contains("_full"))
                 this.imageFileName = imageFileName.replace(".png", "_full.png");
-            Main.Gameloop = false;
+            Main.gameLoop = false;
         }
 
 

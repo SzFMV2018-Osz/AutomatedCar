@@ -3,8 +3,14 @@ package hu.oe.nik.szfmv.automatedcar.bus;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.carpacket.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.powertrain.ReadOnlyPowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.ReadOnlySamplePacket;
+
+import hu.oe.nik.szfmv.automatedcar.bus.packets.sensor.ReadOnlySensorPacket;
+import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
+
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.AEB;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
+import hu.oe.nik.szfmv.environment.WorldObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +26,12 @@ public class VirtualFunctionBus {
     public ReadOnlySamplePacket samplePacket;
     public ReadOnlyPowertrainPacket powertrainPacket;
     public ReadOnlyCarPacket carPacket;
-    public ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<UltrasonicSensor>();
+    public ReadOnlySensorPacket sensorPacket;
 
+    public List<WorldObject> worldObjects = new ArrayList<>();
+    public ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
+    public RadarSensor radarSensor;
+    public AEB automaticBreak;
     private List<SystemComponent> components = new ArrayList<>();
 
 
