@@ -156,8 +156,6 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Set speed when gearstate is N - no gear
-     *
-     * @param acceleration acceleration
      */
     private void noGear() {
         this.updatedRPM = MIN_RPM;
@@ -169,8 +167,6 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Set speed when gearstate is R - reverse
-     *
-     * @param speedDelta Speed delta.
      */
     private void reverse() {
         this.isReverse = true;
