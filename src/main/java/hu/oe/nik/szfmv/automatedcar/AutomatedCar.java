@@ -6,6 +6,7 @@ import hu.oe.nik.szfmv.automatedcar.sensors.CameraSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.ISensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.AEB;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
@@ -59,6 +60,8 @@ public class AutomatedCar extends Car {
 
         addUltrasonicSensors();
         virtualFunctionBus.ultrasonicSensors = ultrasonicSensors;
+
+        addAEB();
 
         new Driver(virtualFunctionBus);
     }
@@ -256,6 +259,11 @@ public class AutomatedCar extends Car {
                 this.virtualFunctionBus.DangerOfCollision = true;
             }
         }
+    }
+
+    private void addAEB(){
+        AEB aeb = new AEB(virtualFunctionBus);
+        virtualFunctionBus.automaticBreak = aeb;
     }
 }
 
