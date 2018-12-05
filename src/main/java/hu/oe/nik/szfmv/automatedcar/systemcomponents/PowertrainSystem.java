@@ -161,6 +161,7 @@ public class PowertrainSystem extends SystemComponent {
         }
     }
 
+
     /**
      * Set speed when gearstate is N - no gear
      */
@@ -171,6 +172,7 @@ public class PowertrainSystem extends SystemComponent {
 
         updateSpeed();
     }
+
 
     /**
      * Set speed when gearstate is R - reverse
@@ -246,7 +248,6 @@ public class PowertrainSystem extends SystemComponent {
             this.speed = 0;
         }
     }
-
     /**
      * Calculate the RPM of the engine.
      *
