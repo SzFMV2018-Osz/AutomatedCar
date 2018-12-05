@@ -30,6 +30,8 @@ public class PowertrainSystem extends SystemComponent {
     private String gearState;
     private boolean isReverse;
     private boolean isInGear;
+    private double speedLimit;
+    private boolean isSpeedLimited;
 
     /**
      * Creates a powertrain system that connects the Virtual Function Bus
@@ -85,6 +87,16 @@ public class PowertrainSystem extends SystemComponent {
         this.speedDifference = 0;
         this.speed = 0;
         this.updatedRPM = MIN_RPM;
+    }
+
+    public void setSpeedLimit(double speedLimit) {
+        this.isSpeedLimited = true;
+        this.speedLimit = speedLimit;
+    }
+
+    public void unlockSpeedLimit() {
+        this.isSpeedLimited = false;
+        this.speedLimit = 0;
     }
 
     /**
@@ -203,8 +215,12 @@ public class PowertrainSystem extends SystemComponent {
      */
     private void updateSpeed() {
         double updatedSpeed = this.speed + this.speedDifference;
-        if (this.isReverse && (updatedSpeed >= MAX_REVERSE_SPEED) || 
-            !this.isReverse && (updatedSpeed <= MAX_FORWARD_SPEED)) {
+        double speedThreshold = !this.isReverse ? 
+            (this.isSpeedLimited ? Math.min(this.speedLimit, MAX_FORWARD_SPEED) : MAX_FORWARD_SPEED) :
+            (this.isSpeedLimited ? Math.max(-this.speedLimit, MAX_REVERSE_SPEED) : MAX_REVERSE_SPEED);
+
+        if (this.isReverse && (updatedSpeed >= speedThreshold) || 
+            !this.isReverse && (updatedSpeed <= speedThreshold)) {
             this.speed += this.speedDifference;
         }
 
