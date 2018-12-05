@@ -72,6 +72,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Returns the speed of the object containing direction information (ie. negative means backwards).
+     *
      * @return Speed of the object.
      */
     public double getSpeedWithDirection() {
@@ -87,12 +88,18 @@ public class PowertrainSystem extends SystemComponent {
         this.updatedRPM = MIN_RPM;
     }
 
+    /**
+     * @param speedLimit Set the speed limit on the virtualfunctionbus
+     */
     public void setSpeedLimit(double speedLimit) {
         this.virtualFunctionBus.powertrainPacket.setSpeedLimit(speedLimit);
     }
 
+    /**
+     * Unlock the Speedlimit on the virtualfunctionbus
+     */
     public void unlockSpeedLimit() {
-        this.virtualFunctionBus.powertrainPacket.unlockSpeedLimit();;
+        this.virtualFunctionBus.powertrainPacket.unlockSpeedLimit();
     }
 
     /**
@@ -145,7 +152,7 @@ public class PowertrainSystem extends SystemComponent {
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
-        
+
         calculateSpeedDifference();
         updateSpeed();
 
@@ -177,7 +184,7 @@ public class PowertrainSystem extends SystemComponent {
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
-        
+
         calculateSpeedDifference();
         updateSpeed();
 
@@ -190,11 +197,10 @@ public class PowertrainSystem extends SystemComponent {
     private double calculateSpeedThreshold() {
         boolean isSpeedLimited = this.virtualFunctionBus.powertrainPacket.isSpeedLimited();
         double speedLimit = this.virtualFunctionBus.powertrainPacket.getSpeedLimit();
-        double speedThreshold = !this.isReverse ? 
-            (isSpeedLimited ? Math.min(speedLimit, MAX_FORWARD_SPEED) : MAX_FORWARD_SPEED) :
-            (isSpeedLimited ? Math.max(speedLimit, MAX_REVERSE_SPEED) : MAX_REVERSE_SPEED);
 
-        return speedThreshold;
+        return !this.isReverse ?
+                (isSpeedLimited ? Math.min(speedLimit, MAX_FORWARD_SPEED) : MAX_FORWARD_SPEED) :
+                (isSpeedLimited ? Math.max(speedLimit, MAX_REVERSE_SPEED) : MAX_REVERSE_SPEED);
     }
 
     /**
@@ -203,18 +209,24 @@ public class PowertrainSystem extends SystemComponent {
     private void calculateSpeedDifference() {
         double isReverseModifier = this.isReverse ? -1 : 1;
 
+        if (virtualFunctionBus.powertrainPacket.isSpeedLimited()
+                && this.speed <= virtualFunctionBus.powertrainPacket.getSpeedLimit()) {
+            this.speedDifference = 0;
+            return;
+        }
+
         if (this.brakePedal > 0) {
             // Braking.
-            this.speedDifference = -1 * isReverseModifier * 
-                ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
+            this.speedDifference = -1 * isReverseModifier *
+                    ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
         } else if (this.isInGear && this.gasPedal > 0) {
             // Acceleration.
-            this.speedDifference = isReverseModifier * this.updatedRPM * GEAR_RATIOS / 
-                (SAMPLE_WEIGHT * SAMPLE_RESISTANCE);
+            this.speedDifference = isReverseModifier * this.updatedRPM * GEAR_RATIOS /
+                    (SAMPLE_WEIGHT * SAMPLE_RESISTANCE);
         } else {
             // Slowing down.
-            this.speedDifference =  -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
-            (double) PERCENTAGE_DIVISOR;
+            this.speedDifference = -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE /
+                    (double) PERCENTAGE_DIVISOR;
         }
     }
 
@@ -225,8 +237,8 @@ public class PowertrainSystem extends SystemComponent {
         double updatedSpeed = this.speed + this.speedDifference;
         double speedThreshold = calculateSpeedThreshold();
 
-        if (this.isReverse && (updatedSpeed >= speedThreshold || this.speedDifference > 0) || 
-            !this.isReverse && (updatedSpeed <= speedThreshold || this.speedDifference < 0)) {
+        if (this.isReverse && (updatedSpeed >= speedThreshold || this.speedDifference > 0) ||
+                !this.isReverse && (updatedSpeed <= speedThreshold || this.speedDifference < 0)) {
             this.speed += this.speedDifference;
         }
 
