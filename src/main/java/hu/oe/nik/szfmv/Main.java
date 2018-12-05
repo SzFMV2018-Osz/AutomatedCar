@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -29,8 +30,9 @@ public class Main {
      * Main entrypoint of the software
      *
      * @param args command line arguments
+     * @throws IOException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         // log the current debug mode in config
         LOGGER.info(ConfigProvider.provide().getBoolean("general.debug"));

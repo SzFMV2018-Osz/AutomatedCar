@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Gui extends JFrame {
@@ -22,8 +23,9 @@ public class Gui extends JFrame {
 
     /**
      * Initialize the GUI class
+     * @throws IOException 
      */
-    public Gui() {
+    public Gui() throws IOException {
         setTitle("AutomatedCar");
         setLocation(0, 0); // default is 0,0 (top left corner)
         addWindowListener(new GuiAdapter());

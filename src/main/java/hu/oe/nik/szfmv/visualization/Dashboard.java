@@ -1,9 +1,14 @@
 package hu.oe.nik.szfmv.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
+import hu.oe.nik.szfmv.environment.WorldObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Dashboard shows the state of the ego car, thus helps in debugging.
@@ -39,8 +44,12 @@ public class Dashboard extends JPanel {
 
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
+    
+    private WorldObject lastSawRoadSign;
+    
+    private BufferedImage roadSignImage;
+    
     private Thread Timer = new Thread() {
-        int difference;
 
         public void run() {
             while (true) {
@@ -78,14 +87,25 @@ public class Dashboard extends JPanel {
                 setGear(autoTr.actGear.toString());
                 sp.setGear(autoTr.actGear.toString());
                 parent.getVirtualFunctionBus().samplePacket = sp;
+
+                lastSawRoadSign = parent.getVirtualFunctionBus().sensorPacket.getDetectedRoadSign();
+                if (lastSawRoadSign != null) {
+                    try {
+                        roadSignImage = CreateRoadSignImage();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     };
 
     /**
      * Initialize the dashboard
+     * @throws IOException 
      */
-    public Dashboard(Gui pt) {
+    public Dashboard(Gui pt) throws IOException {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
         setBackground(new Color(backgroundColor));
@@ -116,6 +136,16 @@ public class Dashboard extends JPanel {
         carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 200);
 
         Timer.start();
+    }
+
+    private BufferedImage CreateRoadSignImage() throws IOException {
+        BufferedImage image = ImageIO.read(new File(lastSawRoadSign.getImageFileName()));
+        JLabel picLabel = new JLabel(new ImageIcon(image));
+        Insets insets = getInsets();
+        Dimension labelSize = picLabel.getPreferredSize();
+        picLabel.setBounds(insets.left, insets.top, labelSize.width , labelSize.height);
+        add(picLabel);
+        return image;
     }
 
     private Measurer CreateTachometer() {
