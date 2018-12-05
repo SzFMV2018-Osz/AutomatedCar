@@ -3,11 +3,9 @@ package hu.oe.nik.szfmv.visualization;
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
 import hu.oe.nik.szfmv.environment.WorldObject;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -47,7 +45,7 @@ public class Dashboard extends JPanel {
     
     private WorldObject lastSawRoadSign;
     
-    private BufferedImage roadSignImage;
+    private JLabel roadSignImage;
     
     private Thread Timer = new Thread() {
 
@@ -88,15 +86,17 @@ public class Dashboard extends JPanel {
                 sp.setGear(autoTr.actGear.toString());
                 parent.getVirtualFunctionBus().samplePacket = sp;
 
-                lastSawRoadSign = parent.getVirtualFunctionBus().sensorPacket.getDetectedRoadSign();
-                if (lastSawRoadSign != null) {
-                    try {
-                        roadSignImage = CreateRoadSignImage();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                try {
+                    lastSawRoadSign = parent.getVirtualFunctionBus().sensorPacket.getDetectedRoadSign();
+                    BufferedImage image=lastSawRoadSign.getImage();
+                    roadSignImage.setIcon(new ImageIcon(image));
+                    roadSignImage.setBounds(10,300,image.getHeight(),image.getWidth());
+
+
+                } catch (NullPointerException e) {
+                    // TODO Auto-generated catch block
                 }
+
             }
         }
     };
@@ -105,7 +105,7 @@ public class Dashboard extends JPanel {
      * Initialize the dashboard
      * @throws IOException 
      */
-    public Dashboard(Gui pt) throws IOException {
+    public Dashboard(Gui pt) {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
         setBackground(new Color(backgroundColor));
@@ -135,17 +135,19 @@ public class Dashboard extends JPanel {
         steeringWheel = addLabel(5, 500, "steering wheel: " + 0, 20);
         carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 200);
 
+        roadSignImage=CreateRoadSignImage();
+
+
+
         Timer.start();
     }
 
-    private BufferedImage CreateRoadSignImage() throws IOException {
-        BufferedImage image = ImageIO.read(new File(lastSawRoadSign.getImageFileName()));
-        JLabel picLabel = new JLabel(new ImageIcon(image));
-        Insets insets = getInsets();
-        Dimension labelSize = picLabel.getPreferredSize();
-        picLabel.setBounds(insets.left, insets.top, labelSize.width , labelSize.height);
+    private JLabel CreateRoadSignImage() {
+
+        JLabel picLabel = new JLabel();
         add(picLabel);
-        return image;
+
+        return picLabel;
     }
 
     private Measurer CreateTachometer() {
