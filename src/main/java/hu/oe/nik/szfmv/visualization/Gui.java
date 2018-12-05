@@ -148,6 +148,7 @@ public class Gui extends JFrame {
         if (keysPressed.contains(KeyEvent.VK_C)) {
             courseDisplay.setshowCameraSensor(!courseDisplay.getShowCameraSensor());
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_C));
+        }
 
         if (keysPressed.contains(KeyEvent.VK_X)) {
             courseDisplay.drawTriangles=!courseDisplay.drawTriangles;
