@@ -367,6 +367,7 @@ public class CameraSensor extends SystemComponent implements ISensor {
         detectedObjects = detectedObjects(worldObjects);
         giveRoadInformations();
         getTurningInformations();
+        searchNearestRoadSign();
     }
 
 }

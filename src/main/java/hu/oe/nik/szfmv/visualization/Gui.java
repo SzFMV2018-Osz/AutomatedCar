@@ -23,7 +23,7 @@ public class Gui extends JFrame {
     /**
      * Initialize the GUI class
      */
-    public Gui() {
+    public Gui()  {
         setTitle("AutomatedCar");
         setLocation(0, 0); // default is 0,0 (top left corner)
         addWindowListener(new GuiAdapter());
@@ -147,7 +147,7 @@ public class Gui extends JFrame {
         }
 
         if (keysPressed.contains(KeyEvent.VK_X)) {
-            courseDisplay.drawTriangles=!courseDisplay.drawTriangles;
+            courseDisplay.showUltrasonicSensor=!courseDisplay.showUltrasonicSensor;
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_X));
         }
     }

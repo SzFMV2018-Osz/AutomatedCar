@@ -1,9 +1,12 @@
 package hu.oe.nik.szfmv.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.bus.packets.sample.SamplePacket;
+import hu.oe.nik.szfmv.environment.WorldObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * Dashboard shows the state of the ego car, thus helps in debugging.
@@ -39,8 +42,12 @@ public class Dashboard extends JPanel {
 
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
+    
+    private WorldObject lastSawRoadSign;
+    
+    private JLabel roadSignImage;
+    
     private Thread Timer = new Thread() {
-        int difference;
 
         public void run() {
             while (true) {
@@ -78,12 +85,25 @@ public class Dashboard extends JPanel {
                 setGear(autoTr.actGear.toString());
                 sp.setGear(autoTr.actGear.toString());
                 parent.getVirtualFunctionBus().samplePacket = sp;
+
+                try {
+                    lastSawRoadSign = parent.getVirtualFunctionBus().sensorPacket.getDetectedRoadSign();
+                    BufferedImage image=lastSawRoadSign.getImage();
+                    roadSignImage.setIcon(new ImageIcon(image));
+                    roadSignImage.setBounds(10,300,image.getHeight(),image.getWidth());
+
+
+                } catch (NullPointerException e) {
+                    // TODO Auto-generated catch block
+                }
+
             }
         }
     };
 
     /**
      * Initialize the dashboard
+     * @throws IOException 
      */
     public Dashboard(Gui pt) {
         // Not using any layout manager, but fixed coordinates
@@ -115,7 +135,19 @@ public class Dashboard extends JPanel {
         steeringWheel = addLabel(5, 500, "steering wheel: " + 0, 20);
         carPositionLabel = addLabel(10, 520, "X: 0, Y: 0", 200);
 
+        roadSignImage=CreateRoadSignImage();
+
+
+
         Timer.start();
+    }
+
+    private JLabel CreateRoadSignImage() {
+
+        JLabel picLabel = new JLabel();
+        add(picLabel);
+
+        return picLabel;
     }
 
     private Measurer CreateTachometer() {

@@ -30,7 +30,7 @@ public class CourseDisplay extends JPanel {
     private static final int ALPHA = 128;
 
     public Camera camera;
-    public Boolean drawTriangles;
+    public Boolean showUltrasonicSensor;
     private Boolean showRadarSensor;
 
     private AffineTransform t = new AffineTransform();
@@ -63,7 +63,7 @@ public class CourseDisplay extends JPanel {
 
 
         parent = pt;
-        drawTriangles = false;
+        showUltrasonicSensor = false;
         showRadarSensor = false;
     }
 
@@ -116,7 +116,7 @@ public class CourseDisplay extends JPanel {
             g2d.drawImage(image, t, this);
         }
 
-        if (drawTriangles) {
+        if (showUltrasonicSensor) {
             drawSensor(g2d, world);
         }
 
