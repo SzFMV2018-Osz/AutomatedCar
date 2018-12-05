@@ -157,7 +157,12 @@ public class Gui extends JFrame {
         }
 
         if (keysPressed.contains(KeyEvent.VK_T)) {
-            getVirtualFunctionBus().powertrainPacket.setSpeedLimit(getVirtualFunctionBus().powertrainPacket.getSpeed());
+            if (virtualFunctionBus.powertrainPacket.isSpeedLimited()) {
+                virtualFunctionBus.powertrainPacket.unlockSpeedLimit();
+            }
+            else {
+                getVirtualFunctionBus().powertrainPacket.setSpeedLimit(getVirtualFunctionBus().powertrainPacket.getSpeed());
+            }
             keysPressed.remove(keysPressed.indexOf(KeyEvent.VK_T));
         }
     }
