@@ -19,12 +19,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.awt.event.WindowEvent;
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int[] yS = {875, 875, 875, 0, 525, 525, 371, 371, 367, 367, 104, 104};
-    public static boolean Gameloop = true;
-    private static int[] xS = {0, 0, 0, 874, 175, 349, 51, 351, 17, 350, 51, 51};
+    public static boolean gameLoop = true;
+    private static boolean isClosing = false;
 
     /**
      * Main entrypoint of the software
@@ -90,15 +89,34 @@ public class Main {
         gui.addKeyListener(new Keychecker(display.camera));
         // draw world to course display
         gui.getCourseDisplay().drawWorld(w);
+        gui.addWindowListener(new java.awt.event.WindowAdapter(){
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                isClosing = true;
+                super.windowClosing(e);
+
+            }
+        });
         t.initialize();
-        while (true) {
+        while (!isClosing) {
             try {
-                if (Gameloop) {
+
+               
+              
+              
+              
+
+                if (gameLoop) {
   //gui.handleKeysPressed(); //is it still necessary
                     gui.inputUpdate();
                     car.drive();
-                    person.moveperson();
-                    car1.movecar1();
+                    if(person.getPhysicsModel().getDamage() == 0) {
+                        person.moveperson();
+                    }
+                    if (car1.getPhysicsModel().getDamage() == 0) {
+                        car1.movecar1();
+                    }
                     physics.update(w, display.camera);
 
                     //PARKOLÁSVIZSGÁLAT

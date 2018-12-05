@@ -31,4 +31,27 @@ public interface ReadOnlyPowertrainPacket {
      * @param speed the speed of the car
      */
     void setSpeed(double speed);
+
+    /**
+     * Sets a speed limit to the car. If the speed is lower than the current speed
+     * then the car will brake until reaches the speed limit.
+     */
+    void setSpeedLimit(double speedLimit);
+
+    /**
+     * Removes speed limitation.
+     */
+    void unlockSpeedLimit();
+
+    /**
+     * Determines whether there is a speed limitation.
+     * @return True if there is a speed limitation.
+     */
+    Boolean isSpeedLimited();
+
+    /**
+     * Returns the speed limit.
+     * @return Speed limit.
+     */
+    double getSpeedLimit();
 }

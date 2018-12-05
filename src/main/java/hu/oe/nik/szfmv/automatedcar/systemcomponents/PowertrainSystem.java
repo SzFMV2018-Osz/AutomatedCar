@@ -21,6 +21,7 @@ public class PowertrainSystem extends SystemComponent {
     private static final double MIN_FORWARD_SPEED = 4.3888;
     private static final double MAX_REVERSE_SPEED = -10.278;
     private static final double MIN_REVERSE_SPEED = -3.3888;
+    private static final int EMERGENCY_BRAKE_PEDAL = 80;
     private double speed;
     private int currentRPM;
     private int updatedRPM;
@@ -51,7 +52,6 @@ public class PowertrainSystem extends SystemComponent {
         this.brakePedal = this.virtualFunctionBus.samplePacket.getBreakpedalPosition();
         this.gasPedal = this.virtualFunctionBus.samplePacket.getGaspedalPosition();
 
-
         doPowerTrain();
 
         this.currentRPM = this.updatedRPM;
@@ -72,6 +72,7 @@ public class PowertrainSystem extends SystemComponent {
 
     /**
      * Returns the speed of the object containing direction information (ie. negative means backwards).
+     *
      * @return Speed of the object.
      */
     public double getSpeedWithDirection() {
@@ -88,9 +89,28 @@ public class PowertrainSystem extends SystemComponent {
     }
 
     /**
+     * @param speedLimit Set the speed limit on the virtualfunctionbus
+     */
+    public void setSpeedLimit(double speedLimit) {
+        this.virtualFunctionBus.powertrainPacket.setSpeedLimit(speedLimit);
+    }
+
+    /**
+     * Unlock the Speedlimit on the virtualfunctionbus
+     */
+    public void unlockSpeedLimit() {
+        this.virtualFunctionBus.powertrainPacket.unlockSpeedLimit();
+    }
+
+    /**
      * Do Power Train
      */
     private void doPowerTrain() {
+        double speedThreshold = calculateSpeedThreshold();
+        if (Math.abs(this.speed) > Math.abs(speedThreshold)) {
+            this.brakePedal = EMERGENCY_BRAKE_PEDAL;
+        }
+
         switch (gearState) {
             case "R":
                 reverse();
@@ -132,7 +152,7 @@ public class PowertrainSystem extends SystemComponent {
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
-        
+
         calculateSpeedDifference();
         updateSpeed();
 
@@ -141,10 +161,9 @@ public class PowertrainSystem extends SystemComponent {
         }
     }
 
+
     /**
      * Set speed when gearstate is N - no gear
-     *
-     * @param acceleration acceleration
      */
     private void noGear() {
         this.updatedRPM = MIN_RPM;
@@ -154,10 +173,9 @@ public class PowertrainSystem extends SystemComponent {
         updateSpeed();
     }
 
+
     /**
      * Set speed when gearstate is R - reverse
-     *
-     * @param speedDelta Speed delta.
      */
     private void reverse() {
         this.isReverse = true;
@@ -168,7 +186,7 @@ public class PowertrainSystem extends SystemComponent {
         } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
-        
+
         calculateSpeedDifference();
         updateSpeed();
 
@@ -177,34 +195,52 @@ public class PowertrainSystem extends SystemComponent {
         }
     }
 
+    // Calculates maximum or minimum (maximum in reverse) speed.
+    private double calculateSpeedThreshold() {
+        boolean isSpeedLimited = this.virtualFunctionBus.powertrainPacket.isSpeedLimited();
+        double speedLimit = this.virtualFunctionBus.powertrainPacket.getSpeedLimit();
+
+        return !this.isReverse ?
+                (isSpeedLimited ? Math.min(speedLimit, MAX_FORWARD_SPEED) : MAX_FORWARD_SPEED) :
+                (isSpeedLimited ? Math.max(speedLimit, MAX_REVERSE_SPEED) : MAX_REVERSE_SPEED);
+    }
+
     /**
      * Calculate the difference between the previous and the increased speed.
      */
     private void calculateSpeedDifference() {
         double isReverseModifier = this.isReverse ? -1 : 1;
 
+        if (virtualFunctionBus.powertrainPacket.isSpeedLimited()
+                && this.speed <= virtualFunctionBus.powertrainPacket.getSpeedLimit()) {
+            this.speedDifference = 0;
+            return;
+        }
+
         if (this.brakePedal > 0) {
             // Braking.
-            this.speedDifference = -1 * isReverseModifier * 
-                ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
+            this.speedDifference = -1 * isReverseModifier *
+                    ((MAX_BRAKE_DECELERATION / (double) PERCENTAGE_DIVISOR) * this.brakePedal);
         } else if (this.isInGear && this.gasPedal > 0) {
             // Acceleration.
-            this.speedDifference = isReverseModifier * this.updatedRPM * GEAR_RATIOS / 
-                (SAMPLE_WEIGHT * SAMPLE_RESISTANCE);
+            this.speedDifference = isReverseModifier * this.updatedRPM * GEAR_RATIOS /
+                    (SAMPLE_WEIGHT * SAMPLE_RESISTANCE);
         } else {
             // Slowing down.
-            this.speedDifference =  -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE / 
-            (double) PERCENTAGE_DIVISOR;
+            this.speedDifference = -1 * isReverseModifier * (double) ENGINE_BRAKE_TORQUE * SAMPLE_RESISTANCE /
+                    (double) PERCENTAGE_DIVISOR;
         }
     }
 
     /**
-     * Change the current speed by the speed delta
+     * Change the current speed by the speed delta.
      */
     private void updateSpeed() {
         double updatedSpeed = this.speed + this.speedDifference;
-        if (this.isReverse && (updatedSpeed >= MAX_REVERSE_SPEED) || 
-            !this.isReverse && (updatedSpeed <= MAX_FORWARD_SPEED)) {
+        double speedThreshold = calculateSpeedThreshold();
+
+        if (this.isReverse && (updatedSpeed >= speedThreshold || this.speedDifference > 0) ||
+                !this.isReverse && (updatedSpeed <= speedThreshold || this.speedDifference < 0)) {
             this.speed += this.speedDifference;
         }
 
@@ -212,9 +248,6 @@ public class PowertrainSystem extends SystemComponent {
             this.speed = 0;
         }
     }
-
-    //#region Helpers
-
     /**
      * Calculate the RPM of the engine.
      *
@@ -234,7 +267,5 @@ public class PowertrainSystem extends SystemComponent {
 
         return updatedRPM;
     }
-
-    //#endregion
 }
 
