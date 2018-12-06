@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.common.ConfigProvider;
 import hu.oe.nik.szfmv.environment.Physics;
 import hu.oe.nik.szfmv.environment.World;
@@ -47,22 +48,23 @@ public class Main {
         Person person = new Person(1500,500,"man.png");
     //    NonPlayableCar car1 = new NonPlayableCar(340,1500,"car_2_red.png") ; // 1800
         NonPlayableCar car1 = new NonPlayableCar(343,1500,"car_2_red.png") ;
+        NonPlayableCar parking1 = new NonPlayableCar(475,1750,"car_2_red.png") ;
+        NonPlayableCar parking2 = new NonPlayableCar(475,1150,"car_2_blue.png") ;
        // NonPlayableCar car2 = new NonPlayableCar(343-175,1800,"car_1_blue.png") ;
        // car2.setSpeed(10);
-        Car c = new Car(1500, 1500, "car_2_red.png");
+
         // add car to the world
 
 
         w.addObjectToWorld(person);
         w.addObjectToWorld(car1);
+        w.addObjectToWorld(parking1);
+        w.addObjectToWorld(parking2);
 
         car.getVirtualFunctionBus().worldObjects = w.getWorldObjects();
       //  w.addObjectToWorld(car2);
 
-        w.addObjectToWorld(c);
         w.addObjectToWorld(car);
-
-
 
         //  w.addObjectToWorld(car2);
 
@@ -70,7 +72,12 @@ public class Main {
 
         // create gui
         Gui gui = new Gui();
+
+        //Give automated car the dashboard as paramter to use it's data
+        car.setOwnDashBoardData(gui.getDashboard());
+
         gui.setVirtualFunctionBus(car.getVirtualFunctionBus());
+        car.setGui(gui);
 
         // create camera
         CourseDisplay display = gui.getCourseDisplay();
@@ -111,8 +118,12 @@ public class Main {
                         car1.movecar1();
                     }
                     physics.update(w, display.camera);
-                }
 
+                    //PARKOLÁSVIZSGÁLAT
+
+                    car.parkingSpotSeeking(w.getWorldObjects());
+
+                }
 
                 // car2.movecar2();
 
@@ -123,7 +134,6 @@ public class Main {
                 LOGGER.error(e.getMessage());
             }
         }
-
     }
 
 }
@@ -142,8 +152,6 @@ class Keychecker extends KeyAdapter {
      */
     public Keychecker(Camera c) {
         this.camera = c;
-
-
     }
 
     /**

@@ -21,6 +21,8 @@ public class TurnSignal extends JPanel {
         this.isRightArrow = isRightArrow;
     }
 
+    public boolean getOrientation() { return isRightArrow; }
+
     public Dimension getPreferedSize() {
         return new Dimension(30, 30);
     }

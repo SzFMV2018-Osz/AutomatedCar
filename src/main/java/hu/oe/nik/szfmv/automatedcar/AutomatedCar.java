@@ -8,14 +8,17 @@ import hu.oe.nik.szfmv.automatedcar.sensors.RadarSensor;
 import hu.oe.nik.szfmv.automatedcar.sensors.UltrasonicSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.AEB;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.PowertrainSystem;
 import hu.oe.nik.szfmv.environment.WorldObject;
 import hu.oe.nik.szfmv.model.Classes.*;
-
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import hu.oe.nik.szfmv.visualization.Dashboard;
+import hu.oe.nik.szfmv.visualization.Gui;
+import hu.oe.nik.szfmv.visualization.Index;
 
 public class AutomatedCar extends Car {
     private static final int THREE_QUARTER_CIRCLE = 270;
@@ -35,8 +38,13 @@ public class AutomatedCar extends Car {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private List<ISensor> sensorList;
     private PowertrainSystem powertrainSystem;
+    private ParkingPilot parkingPilot;
+
+    private Dashboard ownDashboardData;
 
     private ArrayList<UltrasonicSensor> ultrasonicSensors = new ArrayList<>();
+
+    private List<WorldObject> worldObjects;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -64,8 +72,15 @@ public class AutomatedCar extends Car {
         addAEB();
 
         new Driver(virtualFunctionBus);
+
+        parkingPilot = new ParkingPilot(virtualFunctionBus);
+
+        this.worldObjects = worldObjects;
     }
 
+    public void setOwnDashBoardData(Dashboard d){
+        ownDashboardData = d;
+    }
 
     /**
      * Create the car's sensors
@@ -265,5 +280,271 @@ public class AutomatedCar extends Car {
             }
         }
     }
+
+  
+  public void setGui(Gui gui)
+    {
+        parkingPilot.setGui(gui);
+    }
+
+
+    //region<parkingSpotSeeking>
+    public void parkingSpotSeeking(List<WorldObject> worldObjects) {
+        //region<ParkingZoneSize>
+        int parkingZoneHorizontalStart = 100;
+        int parkingZoneHorizontalEnd = 700;
+
+        int parkingZoneVerticalStart = 650;
+        int parkingZoneVerticalEnd = 1950;
+        //endregion<>
+
+        //region<If we are in the parking zone>
+        if(this.y < parkingZoneVerticalEnd && this.y > parkingZoneVerticalStart && this.x < parkingZoneHorizontalEnd && this.x > parkingZoneHorizontalStart ) {
+
+            ownDashboardData.getParkinZoneCursor().setText("PARKING ZONE");
+
+            WorldObject closest = null; //The closest object from the car
+            List<WorldObject> detected = new ArrayList<>();
+            List<WorldObject> obstacles = new ArrayList<>();
+
+            //1 if left, 2 if right side
+            int side = 0;
+
+            //region<side check>
+
+            if(ownDashboardData.getIndex().actIndex == Index.Direction.right) {
+                side = 1;
+                //"Searching on the right side"
+            }
+            else if (ownDashboardData.getIndex().actIndex == Index.Direction.left) {
+                side = 2;
+                //"Searching on the left side"
+            }
+            else{
+                side = 0;
+                //"No side"
+            }
+
+            /*for (int i = 4; i < ultrasonicSensors.size(); i++){
+                if((side == 1 && (i==4 || i== 5)) || (side == 2 && (i==6 || i== 7))){
+                    for (int j = 0; j < ultrasonicSensors.get(i).detectedObjects(worldObjects).size(); j++){
+                        WorldObject actual = ultrasonicSensors.get(i).detectedObjects(worldObjects).get(j);
+                        if(actual.getX()+actual.getWidth()/2 >= parkingZoneHorizontalStart && actual.getX()-actual.getWidth()/2 <= parkingZoneHorizontalEnd
+                                && actual.getY()+actual.getHeight()/2 >= parkingZoneVerticalStart && actual.getY()-actual.getHeight()/2 <= parkingZoneVerticalEnd){
+                            detected.add(ultrasonicSensors.get(i).detectedObjects(worldObjects).get(j));
+                        }
+                    }
+                }
+            }*/
+
+            for(int i = 0; i < worldObjects.size(); i++){
+
+                if(side == 1 && worldObjects.get(i).getX() >= this.getX()){
+                    detected.add(worldObjects.get(i));
+                }
+                if(side == 2 && worldObjects.get(i).getX() < this.getX()){
+                    detected.add(worldObjects.get(i));
+                }
+
+            }
+
+            //endregion<>
+
+            //region<The closest object from the "detected"
+            for(int i = 0; i < detected.size(); i++){
+
+                if(detected.get(i) instanceof Dynamic || detected.get(i) instanceof RoadObsticle){
+                    obstacles.add(detected.get(i));
+                }
+            }
+
+            if(obstacles.size() > 0){
+
+                closest = obstacles.get(0);
+
+                for(int i = 0; i < obstacles.size(); i++){
+
+                    if(i == 0)
+                    {
+                        closest = obstacles.get(0);
+                    }
+                    else{
+                        int cx = closest.getX();
+                        int cy = closest.getY();
+
+                        int ix = obstacles.get(i).getX();
+                        int iy = obstacles.get(i).getY();
+
+                        int acx = this.getX();
+                        int acy = this.getY();
+
+                        double distanceC = Math.abs(Math.sqrt((cy-acy)*(cy-acy)+(cx-acx)*(cx-acx)));
+                        double distanceI = Math.abs(Math.sqrt((iy-acy)*(iy-acy)+(ix-acx)*(ix-acx)));
+
+                        if(distanceI < distanceC){
+                            closest = obstacles.get(i);
+                        }
+                    }
+                }
+            }
+            //endregion<>
+
+
+            //check the parking size
+            if(side != 0 && closest != null){
+
+                //Is there any object in the searching area
+                boolean thereIs = false;
+
+                //region<If the parking zone is vertical>
+                if(parkingZoneVerticalEnd-parkingZoneVerticalStart > parkingZoneHorizontalEnd-parkingZoneHorizontalStart) {
+
+                    //region<vertical check>
+                    for (int i = 0; i < detected.size(); i++) {
+                        //region<auxiliary variables>
+                        int iHeightEnd = detected.get(i).getY() + detected.get(i).getHeight() / 2 + detected.get(i).getHeight() / 10;
+                        int iHeightStart = detected.get(i).getLastY() - detected.get(i).getHeight() / 2 - detected.get(i).getHeight() / 10;
+                        int closestHeightStart = closest.getY() - closest.getHeight() / 2;
+                        int closestHeightEnd = closest.getY() + closest.getHeight() / 2;
+
+                        int acHeight = this.getHeight() + this.getHeight() / 10;
+
+                        int iWidthLeft = detected.get(i).getX() - detected.get(i).getWidth() / 2 - detected.get(i).getWidth() / 10;
+                        int iWidthRight = detected.get(i).getX() + detected.get(i).getHeight() / 2 + detected.get(i).getHeight() / 10;
+                        int closestWidthLeft = closest.getX() - closest.getWidth() / 2 - closest.getWidth() / 10;
+                        int closestWidthRight = closest.getX() + closest.getWidth() / 2 + closest.getWidth() / 10;
+
+                        int acWidth = this.getWidth() + this.getWidth() / 10;
+                        //endregion<>
+
+                        //region<Above the closest">
+                        if (closest.getY() >= this.getY()) {
+                            if ((side == 1 && this.rotation >= -45f && this.rotation < 45f) || (side == 2 && this.rotation >= 135f && this.rotation < 225f )) {
+                                if (closestHeightStart-acHeight > parkingZoneVerticalStart || (iHeightEnd > closestHeightStart - acHeight && iHeightStart < closestHeightStart) || (iWidthLeft < closestWidthRight && iWidthRight > closestWidthLeft - acWidth - acWidth / 2)) {
+                                    thereIs = true;
+                                }
+                            }
+                            if ((side == 2 && this.rotation >= -45f && this.rotation < 45f) || (side == 1 && this.rotation >= 135f && this.rotation < 225f )) {
+                                if (closestHeightStart-acHeight > parkingZoneVerticalStart || (iHeightEnd > closestHeightStart - acHeight && iHeightStart < closestHeightStart) || (iWidthRight > closestWidthLeft && iWidthLeft < closestWidthRight + acWidth + acWidth / 2)) {
+                                    thereIs = true;
+                                }
+                            }
+                        }
+                        //endregion<>
+                        //region<Below the closest>
+                        else{
+                            if ((side == 1 && this.rotation >= -45f && this.rotation <= 45f) || (side == 2 && this.rotation >= 135f && this.rotation <= 225f )) {
+                                if (closestHeightEnd + acHeight < parkingZoneVerticalEnd || (iHeightStart < closestHeightEnd + acHeight && iHeightEnd > closestHeightEnd) || (iWidthLeft < closestWidthRight && iWidthRight > closestWidthLeft - acWidth - acWidth / 2)) {
+                                    thereIs = true;
+                                }
+                            }
+                            if ((side == 2 && this.rotation >= -45f && this.rotation <= 45f) || (side == 1 && this.rotation >= 135f && this.rotation <= 225f )) {
+                                if (closestHeightEnd+acHeight < parkingZoneVerticalEnd || (iHeightStart > closestHeightEnd + acHeight && iHeightEnd > closestHeightEnd) || (iWidthRight > closestWidthLeft && iWidthLeft < closestWidthRight + acWidth + acWidth / 2)) {
+                                    thereIs = true;
+                                }
+                            }
+                        }
+                        //endregion<>
+                    }
+                    //endregion<>
+                }
+                //endregion<>
+                //region<If the parking zone is horizontal>
+                if (parkingZoneVerticalEnd - parkingZoneVerticalStart < parkingZoneHorizontalEnd - parkingZoneHorizontalStart) {
+                    //region<The left from the closest>
+                    if (closest.getX() >= this.getX()) {
+                        //size of the spot
+                        for (int k = 0; k < detected.size(); k++) {
+
+                            int kHeightEnd = detected.get(k).getX() + detected.get(k).getHeight() / 2 + detected.get(k).getHeight() / 10;
+                            int closestHeightStart = closest.getX() - closest.getHeight() / 2;
+                            int acHeight = this.getHeight() + this.getHeight() / 10;
+
+                            int kWidthLeft = detected.get(k).getY() - detected.get(k).getWidth() / 2 - detected.get(k).getWidth() / 10;
+                            int KWidthRight = detected.get(k).getY() + detected.get(k).getHeight() / 2 + detected.get(k).getHeight() / 10;
+                            int closestWidthRight = closest.getY() + closest.getWidth() / 2 + closest.getWidth() / 10;
+                            int closestWidthLeft = closest.getY() - closest.getWidth() / 2 - closest.getWidth() / 10;
+
+                            int acWidth = this.getWidth() + this.getWidth() / 10;
+
+                            if((side == 1 && this.rotation >= 225f && this.rotation < 315f) || (side == 2 && this.rotation >= 45f && this.rotation < 135f )){
+                                if (kHeightEnd > closestHeightStart - acHeight || (kWidthLeft < closestWidthRight && KWidthRight > closestWidthLeft)) {
+                                    thereIs = true;
+                                }
+                            }
+
+                            if((side == 1 && this.rotation >= 45f && this.rotation <= 135f) || (side == 2 && this.rotation >= 225f && this.rotation <= 315f )){
+                                if (kHeightEnd > closestHeightStart - acHeight || (kWidthLeft < closestWidthRight && KWidthRight > closestWidthLeft)) {
+                                    thereIs = true;
+                                }
+                            }
+                        }
+                    }
+                    //endregion<>
+                    //region<The left from the closest>
+                    else {
+                        for (int k = 0; k < detected.size(); k++) {
+
+                            int kHeightStart = detected.get(k).getX() - detected.get(k).getHeight() / 2 - detected.get(k).getHeight() / 10;
+                            int closestHeightEnd = closest.getX() + closest.getHeight() / 2;
+                            int acHeight = this.getHeight() + this.getHeight() / 10;
+
+                            int kWidthLeft = detected.get(k).getY() - detected.get(k).getWidth() / 2 - detected.get(k).getWidth() / 10;
+                            int KWidthRight = detected.get(k).getY() + detected.get(k).getHeight() / 2 + detected.get(k).getHeight() / 10;
+                            int closestWidthRight = closest.getY() + closest.getWidth() / 2 + closest.getWidth() / 10;
+                            int closestWidthLeft = closest.getY() - closest.getWidth() / 2 - closest.getWidth() / 10;
+
+                            int acWidth = this.getWidth() + this.getWidth() / 10;
+
+                            if((side == 1 && this.rotation >= 225f && this.rotation < 315f) || (side == 2 && this.rotation >= 45f && this.rotation < 135f )) {
+                                if (kHeightStart < closestHeightEnd + acHeight || (kWidthLeft < closestWidthRight && KWidthRight > closestWidthLeft)) {
+                                    thereIs = true;
+                                }
+                            }
+
+                            if((side == 2 && this.rotation >= 225f && this.rotation < 315f) || (side == 1 && this.rotation >= 45f && this.rotation < 135f )) {
+                                if (kHeightStart < closestHeightEnd + acHeight || (kWidthLeft < closestWidthRight && KWidthRight > closestWidthLeft)) {
+                                    thereIs = true;
+                                }
+                            }
+                        }
+                    }
+                    //endregion<>
+                }
+                //endregion<>
+
+                //region<"The parking size is suitable?"
+                //If the parking size is suitable
+                if (!thereIs) {
+                    //P = true;
+                    ownDashboardData.closestParkingSpotCursor.setText("YES");
+                    //The parking size is suitable
+                    //auto parking can be started
+                }
+                else {
+                    ownDashboardData.closestParkingSpotCursor.setText("NO");
+                    //"The parking size is not suitable"
+                }
+                //endregion<>
+            }
+            else if(side != 0 && closest == null){
+                ownDashboardData.closestParkingSpotCursor.setText("FREE");
+            }
+            else{
+                ownDashboardData.closestParkingSpotCursor.setText("X");
+            }
+
+        }
+        //endregion<>
+        //region<if we are not in the parking zone>
+        else{
+            //"Not a parking zone"!"
+            ownDashboardData.getParkinZoneCursor().setText("--------");
+            ownDashboardData.closestParkingSpotCursor.setText("X");
+        }
+        //endregion<>
+    }
+    //endregion<>
+  
 }
 

@@ -33,6 +33,11 @@ public class Dashboard extends JPanel {
     private JLabel debugLabel;
     private JLabel gearLabel;
     private JLabel carPositionLabel;
+    private JLabel parkingPilotInfoLabel;
+    public JLabel closestParkingSpotCursor;
+    private JLabel parkingZoneCursor;
+
+    private JButton parkingPilotButton;
 
     private JProgressBar breakProgressBar;
     private JProgressBar gasProgressBar;
@@ -98,6 +103,8 @@ public class Dashboard extends JPanel {
         breakPedal = new Pedal();
         wheelTurning = new WheelTurn();
 
+
+
         breakProgressBar = addProgressBar(10, 400, "Break pedal", MIN_BREAK_VALUE, MAX_BREAK_VALUE);
         gasProgressBar = addProgressBar(10, 430, "Gas pedal", MIN_GAS_VALUE, MAX_GAS_VALUE);
 
@@ -109,6 +116,13 @@ public class Dashboard extends JPanel {
 
         autoTr = new AutoTransmission();
         index = new Index();
+
+        parkingPilotInfoLabel = addLabel(12,550, "<html>In the parking zone hit P to start <br/>analyzing the size of the closest <br/>parking spot!<br/></html>",20);
+        closestParkingSpotCursor = addLabel(170, 620,"NO",20);
+        parkingZoneCursor = addLabel(140, 640,"PARKING ZONE",20);
+
+        parkingPilotButton = addButton(12,620, "Parking Pilot", 10);
+        parkingPilotButton.setEnabled(false);
 
         gearLabel = addLabel((width / 2) - 30, 155, "Gear: N", 0);
         debugLabel = addLabel(5, 480, "debug:", 0);
@@ -198,6 +212,18 @@ public class Dashboard extends JPanel {
         return label;
     }
 
+    private JButton addButton(int offsetX, int offsetY, String defaultText, int plusSize) {
+        JButton button = new JButton(defaultText);
+        Insets insets = getInsets();
+
+        Dimension buttonSize = button.getPreferredSize();
+        button.setBounds(insets.left + offsetX, insets.top + offsetY, buttonSize.width + plusSize, buttonSize.height);
+
+        add(button);
+
+        return button;
+    }
+
     private void setBreakProgress(int value) {
         if (value >= MIN_BREAK_VALUE && value <= MAX_BREAK_VALUE) {
             breakProgressBar.setValue(value);
@@ -228,6 +254,8 @@ public class Dashboard extends JPanel {
         }
 
     }
+
+    public Index getIndex(){return index;}
 
     private void setTurnSignal(boolean left, boolean right) {
         if (left && leftTurnSignal.color != Color.GREEN) {
@@ -262,6 +290,18 @@ public class Dashboard extends JPanel {
 
     private void setWheel(int value) {
         steeringWheel.setText("steering wheel: " + value);
+    }
+
+    public void setPPButtonVisibility()
+    {
+        if (!this.parkingPilotButton.isEnabled())
+        {
+            this.parkingPilotButton.setEnabled(true);
+        }
+    }
+
+    public JLabel getParkinZoneCursor() {
+        return parkingZoneCursor;
     }
 
 }
